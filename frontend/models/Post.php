@@ -15,6 +15,9 @@ use Yii;
  * @property string|null $img
  * @property string|null $keywords
  * @property int $active
+ * @property int $created_at
+ * @property int|null $updated_at
+ * @property int|null $deleted_at
  *
  * @property Category $category
  */
@@ -25,7 +28,7 @@ class Post extends \yii\db\ActiveRecord
      */
     public static function tableName()
     {
-        return 'bsip_post';
+        return '{{%post}}';
     }
 
     /**
@@ -34,8 +37,9 @@ class Post extends \yii\db\ActiveRecord
     public function rules()
     {
         return [
-            [['category_id', 'active'], 'integer'],
+            [['category_id', 'active', 'created_at', 'updated_at', 'deleted_at'], 'integer'],
             [['description'], 'string'],
+            [['created_at'], 'required'],
             [['name', 'slug', 'img', 'keywords'], 'string', 'max' => 255],
             [['category_id'], 'exist', 'skipOnError' => true, 'targetClass' => Category::className(), 'targetAttribute' => ['category_id' => 'id']],
         ];
@@ -55,6 +59,9 @@ class Post extends \yii\db\ActiveRecord
             'img' => 'Img',
             'keywords' => 'Keywords',
             'active' => 'Active',
+            'created_at' => 'Created At',
+            'updated_at' => 'Updated At',
+            'deleted_at' => 'Deleted At',
         ];
     }
 

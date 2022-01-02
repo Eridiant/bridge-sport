@@ -24,7 +24,7 @@ class Category extends \yii\db\ActiveRecord
      */
     public static function tableName()
     {
-        return 'bsip_category';
+        return '{{%category}}';
     }
 
     /**

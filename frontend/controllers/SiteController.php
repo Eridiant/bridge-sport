@@ -15,6 +15,9 @@ use frontend\models\PasswordResetRequestForm;
 use frontend\models\ResetPasswordForm;
 use frontend\models\SignupForm;
 use frontend\models\ContactForm;
+use frontend\models\Post;
+use frontend\models\PostSearch;
+use yii\web\NotFoundHttpException;
 
 /**
  * Site controller
@@ -75,7 +78,9 @@ class SiteController extends Controller
      */
     public function actionIndex()
     {
-        return $this->render('index');
+        $model = Post::find()-all();
+
+        return $this->render('index', compact('model'));
     }
 
     /**
