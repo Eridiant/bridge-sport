@@ -14,7 +14,7 @@ class m220102_183314_create_post_table extends Migration
     {
         $this->createTable('{{%post}}', [
             'id' => $this->primaryKey(),
-            'category_id' => $this->integer(),
+            'category_id' => $this->integer()->notNull(),
             'name' => $this->string(255)->notNull(),
             'slug' => $this->string(255)->notNull()->unique(),
             'description' => $this->text(),

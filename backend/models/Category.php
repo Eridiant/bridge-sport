@@ -1,6 +1,6 @@
 <?php
 
-namespace frontend\models;
+namespace backend\models;
 
 use Yii;
 
@@ -38,6 +38,7 @@ class Category extends \yii\db\ActiveRecord
             [['name', 'slug'], 'required'],
             [['description'], 'string'],
             [['name', 'slug', 'keywords'], 'string', 'max' => 255],
+            [['slug'], 'unique'],
         ];
     }
 
