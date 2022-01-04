@@ -21,6 +21,7 @@ class m220102_183314_create_post_table extends Migration
             'img' => $this->string(255),
             'keywords' => $this->string(255),
             'active' => $this->smallInteger(1)->notNull()->defaultValue(0),
+            'author_id' => $this->smallInteger(),
             'created_at' => $this->integer()->notNull(),
             'updated_at' => $this->integer(),
             'deleted_at' => $this->integer(),

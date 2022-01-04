@@ -8,13 +8,14 @@ use Yii;
  * This is the model class for table "bsip_post".
  *
  * @property int $id
- * @property int|null $category_id
+ * @property int $category_id
  * @property string $name
  * @property string $slug
  * @property string|null $description
  * @property string|null $img
  * @property string|null $keywords
  * @property int $active
+ * @property int|null $author_id
  * @property int $created_at
  * @property int|null $updated_at
  * @property int|null $deleted_at
@@ -37,8 +38,8 @@ class Post extends \yii\db\ActiveRecord
     public function rules()
     {
         return [
-            [['category_id', 'active', 'created_at', 'updated_at', 'deleted_at'], 'integer'],
-            [['name', 'slug', 'created_at', 'category_id'], 'required'],
+            [['category_id', 'name', 'slug', 'created_at'], 'required'],
+            [['category_id', 'active', 'author_id', 'created_at', 'updated_at', 'deleted_at'], 'integer'],
             [['description'], 'string'],
             [['name', 'slug', 'img', 'keywords'], 'string', 'max' => 255],
             [['slug'], 'unique'],
@@ -60,6 +61,7 @@ class Post extends \yii\db\ActiveRecord
             'img' => 'Img',
             'keywords' => 'Keywords',
             'active' => 'Active',
+            'author_id' => 'Author ID',
             'created_at' => 'Created At',
             'updated_at' => 'Updated At',
             'deleted_at' => 'Deleted At',
@@ -73,6 +75,6 @@ class Post extends \yii\db\ActiveRecord
      */
     public function getCategory()
     {
-        return $this->hasOne(Category::class, ['id' => 'category_id']);
+        return $this->hasOne(Category::className(), ['id' => 'category_id']);
     }
 }

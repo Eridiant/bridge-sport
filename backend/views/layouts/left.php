@@ -36,6 +36,7 @@
                         'icon' => 'share',
                         'url' => '#',
                         'items' => [
+                            ['label' => 'Категории', 'icon' => 'home', 'url' => ['/category/index']],
                             ['label' => 'Новости', 'icon' => 'home', 'url' => ['/post/index']],
                         ],
                     ],

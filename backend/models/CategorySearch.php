@@ -4,12 +4,12 @@ namespace backend\models;
 
 use yii\base\Model;
 use yii\data\ActiveDataProvider;
-use backend\models\Post;
+use backend\models\Category;
 
 /**
- * PostSearch represents the model behind the search form of `backend\models\Post`.
+ * CategorySearch represents the model behind the search form of `backend\models\Category`.
  */
-class PostSearch extends Post
+class CategorySearch extends Category
 {
     /**
      * {@inheritdoc}
@@ -17,8 +17,8 @@ class PostSearch extends Post
     public function rules()
     {
         return [
-            [['id', 'category_id', 'active', 'author_id', 'created_at', 'updated_at', 'deleted_at'], 'integer'],
-            [['name', 'slug', 'description', 'img', 'keywords'], 'safe'],
+            [['id', 'parent_id', 'active', 'deleted_at'], 'integer'],
+            [['name', 'slug', 'keywords', 'description'], 'safe'],
         ];
     }
 
@@ -40,7 +40,7 @@ class PostSearch extends Post
      */
     public function search($params)
     {
-        $query = Post::find();
+        $query = Category::find();
 
         // add conditions that should always apply here
 
@@ -59,19 +59,15 @@ class PostSearch extends Post
         // grid filtering conditions
         $query->andFilterWhere([
             'id' => $this->id,
-            'category_id' => $this->category_id,
+            'parent_id' => $this->parent_id,
             'active' => $this->active,
-            'author_id' => $this->author_id,
-            'created_at' => $this->created_at,
-            'updated_at' => $this->updated_at,
             'deleted_at' => $this->deleted_at,
         ]);
 
         $query->andFilterWhere(['like', 'name', $this->name])
             ->andFilterWhere(['like', 'slug', $this->slug])
-            ->andFilterWhere(['like', 'description', $this->description])
-            ->andFilterWhere(['like', 'img', $this->img])
-            ->andFilterWhere(['like', 'keywords', $this->keywords]);
+            ->andFilterWhere(['like', 'keywords', $this->keywords])
+            ->andFilterWhere(['like', 'description', $this->description]);
 
         return $dataProvider;
     }
