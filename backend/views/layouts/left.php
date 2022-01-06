@@ -1,3 +1,10 @@
+<?php
+// var_dump('<pre>');
+// var_dump(Yii::$app->user->identity);
+// var_dump('</pre>');
+// die;
+
+?>
 <aside class="main-sidebar">
 
     <section class="sidebar">
@@ -5,12 +12,13 @@
         <!-- Sidebar user panel -->
         <div class="user-panel">
             <div class="pull-left image">
-                <img src="<?= $directoryAsset ?>/img/user2-160x160.jpg" class="img-circle" alt="User Image"/>
+                <?php if (true): ?>
+                    <img src="<?= $directoryAsset ?>/img/user2-160x160.jpg" class="img-circle" alt="User Image"/>
+                <?php endif; ?>
             </div>
             <div class="pull-left info">
-                <p>Alexander Pierce</p>
-
-                <a href="#"><i class="fa fa-circle text-success"></i> Online</a>
+                <p><?= Yii::$app->user->identity->username; ?></p>
+                <p><?= Yii::$app->user->getId(); ?></p>
             </div>
         </div>
 

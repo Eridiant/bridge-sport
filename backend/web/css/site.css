@@ -74,6 +74,16 @@ a.desc:after {
     flex-direction: row;
 }
 
+.navbar .sidebar-toggle {
+    margin-right: auto;
+}
+.wrapper .main-header .logo {
+    height: 60px;
+    line-height: 60px;
+}
+.wrapper .main-sidebar {
+    padding-top: 60px;
+}
 @media(max-width:767px) {
     .nav li > form > button.logout {
         display:block;

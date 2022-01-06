@@ -6,7 +6,7 @@ window.addEventListener('load', () => {
         let slug = translit.value;
         let mem = transliteration(name.value);
         let current = '';
-        
+
         name.addEventListener('input', (e) => {
             current = transliteration(name.value);
             slug = translit.value;

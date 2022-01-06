@@ -14,10 +14,8 @@ $this->params['breadcrumbs'][] = $this->title;
 ?>
 <div class="post-index">
 
-    <h1><?= Html::encode($this->title) ?></h1>
-
     <p>
-        <?= Html::a('Create Post', ['create'], ['class' => 'btn btn-success']) ?>
+        <?= Html::a('Создать новость', ['create'], ['class' => 'btn btn-success']) ?>
     </p>
 
     <?php // echo $this->render('_search', ['model' => $searchModel]); ?>
@@ -28,21 +26,35 @@ $this->params['breadcrumbs'][] = $this->title;
         'columns' => [
             ['class' => 'yii\grid\SerialColumn'],
 
-            'id',
-            'category_id',
+            // 'id',
+            // 'category_id',
+            [
+                'label' => 'Доступно',
+                'format' => 'text',
+                'value' => function($model) {
+                    return $model->category->name;
+                }
+            ],
             'name',
             'slug',
-            'description:ntext',
+            // 'description:ntext',
             //'img',
             //'keywords',
-            //'active',
+            // 'active',
+            [
+                'label' => 'Доступно',
+                'format' => 'text',
+                'value' => function($model) {
+                    return $model->active ? 'Доступно' : 'Не доступно';
+                }
+            ],
             //'author_id',
             //'created_at',
             //'updated_at',
             //'deleted_at',
             [
                 'class' => ActionColumn::className(),
-                'urlCreator' => function ($action, Post $model, $key, $index, $column) {
+                'urlCreator' => function ($action, \backend\models\Post $model, $key, $index, $column) {
                     return Url::toRoute([$action, 'id' => $model->id]);
                 }
             ],

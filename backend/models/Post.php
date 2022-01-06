@@ -3,6 +3,7 @@
 namespace backend\models;
 
 use Yii;
+use yii\behaviors\TimestampBehavior;
 
 /**
  * This is the model class for table "bsip_post".
@@ -24,6 +25,10 @@ use Yii;
  */
 class Post extends \yii\db\ActiveRecord
 {
+
+    public $createdAtAttribute = 'created_at';
+    public $updatedAtAttribute = 'updated_at';
+
     /**
      * {@inheritdoc}
      */
@@ -38,12 +43,27 @@ class Post extends \yii\db\ActiveRecord
     public function rules()
     {
         return [
-            [['category_id', 'name', 'slug', 'created_at'], 'required'],
+            [['category_id', 'name', 'slug'], 'required'],
             [['category_id', 'active', 'author_id', 'created_at', 'updated_at', 'deleted_at'], 'integer'],
             [['description'], 'string'],
             [['name', 'slug', 'img', 'keywords'], 'string', 'max' => 255],
             [['slug'], 'unique'],
+            [['created_at', 'updated_at'], 'safe'],
             [['category_id'], 'exist', 'skipOnError' => true, 'targetClass' => Category::className(), 'targetAttribute' => ['category_id' => 'id']],
+        ];
+    }
+
+    public function behaviors()
+    {
+        return [
+            'timestamp' => [
+                'class' => TimestampBehavior::class,
+                'attributes' => [
+                    \yii\db\BaseActiveRecord::EVENT_BEFORE_INSERT => ['created_at', 'updated_at'],
+                    \yii\db\BaseActiveRecord::EVENT_BEFORE_UPDATE => ['updated_at'],
+                ],
+                // 'value' => new \yii\db\Expression('NOW()'),
+            ],
         ];
     }
 

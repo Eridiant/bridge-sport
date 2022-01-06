@@ -78,7 +78,7 @@ class SiteController extends Controller
      */
     public function actionIndex()
     {
-        $model = Post::find()-all();
+        $model = Post::find()->all();
 
         return $this->render('index', compact('model'));
     }

@@ -34,11 +34,11 @@ use mihaildev\ckeditor\CKEditor;
 
     <?= $form->field($model, 'author_id')->hiddenInput()->label(false) ?>
 
-    <?= $form->field($model, 'created_at')->textInput() ?>
+    <?//= $form->field($model, 'created_at')->textInput() ?>
 
-    <?= $form->field($model, 'updated_at')->textInput() ?>
+    <?//= $form->field($model, 'updated_at')->textInput() ?>
 
-    <?= $form->field($model, 'deleted_at')->textInput() ?>
+    <?//= $form->field($model, 'deleted_at')->textInput() ?>
 
     <div class="form-group">
         <?= Html::submitButton('Save', ['class' => 'btn btn-success']) ?>
