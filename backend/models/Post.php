@@ -11,9 +11,12 @@ use yii\behaviors\TimestampBehavior;
  * @property int $id
  * @property int $category_id
  * @property string $name
+ * @property string|null $url
  * @property string $slug
+ * @property string|null $preview
  * @property string|null $description
  * @property string|null $img
+ * @property string|null $dial
  * @property string|null $keywords
  * @property int $active
  * @property int|null $author_id
@@ -45,11 +48,10 @@ class Post extends \yii\db\ActiveRecord
         return [
             [['category_id', 'name', 'slug'], 'required'],
             [['category_id', 'active', 'author_id', 'created_at', 'updated_at', 'deleted_at'], 'integer'],
-            [['description'], 'string'],
-            [['name', 'slug', 'img', 'keywords'], 'string', 'max' => 255],
-            [['slug'], 'unique'],
-            [['created_at', 'updated_at'], 'safe'],
-            [['category_id'], 'exist', 'skipOnError' => true, 'targetClass' => Category::className(), 'targetAttribute' => ['category_id' => 'id']],
+            [['url', 'preview', 'description'], 'string'],
+            [['created_at', 'updated_at', 'deleted_at'], 'safe'],
+            [['name', 'slug', 'img', 'dial', 'keywords'], 'string', 'max' => 255],
+            [['category_id'], 'exist', 'skipOnError' => true, 'targetClass' => Category::class, 'targetAttribute' => ['category_id' => 'id']],
         ];
     }
 
@@ -76,9 +78,12 @@ class Post extends \yii\db\ActiveRecord
             'id' => 'ID',
             'category_id' => 'Category ID',
             'name' => 'Name',
+            'url' => 'Url',
             'slug' => 'Slug',
+            'preview' => 'Preview',
             'description' => 'Description',
             'img' => 'Img',
+            'dial' => 'Dial',
             'keywords' => 'Keywords',
             'active' => 'Active',
             'author_id' => 'Author ID',
@@ -95,6 +100,6 @@ class Post extends \yii\db\ActiveRecord
      */
     public function getCategory()
     {
-        return $this->hasOne(Category::className(), ['id' => 'category_id']);
+        return $this->hasOne(Category::class, ['id' => 'category_id']);
     }
 }

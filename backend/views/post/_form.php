@@ -19,6 +19,8 @@ use mihaildev\ckeditor\CKEditor;
 
     <?= $form->field($model, 'slug', ['inputOptions' => ['class' => 'form-control slug']])->textInput(['maxlength' => true]) ?>
 
+    <?= $form->field($model, 'preview')->textarea(['rows' => 6]) ?>
+
     <?= $form->field($model, 'description')->widget(CKEditor::className(),[
         'editorOptions' => [
             'preset' => 'full', //разработанны стандартные настройки basic, standard, full данную возможность не обязательно использовать
@@ -27,6 +29,8 @@ use mihaildev\ckeditor\CKEditor;
     ]);?>
 
     <?= $form->field($model, 'img')->textInput(['maxlength' => true]) ?>
+
+    <?= $form->field($model, 'dial')->textInput(['maxlength' => true]) ?>
 
     <?= $form->field($model, 'keywords')->textInput(['maxlength' => true]) ?>
 
@@ -47,3 +51,4 @@ use mihaildev\ckeditor\CKEditor;
     <?php ActiveForm::end(); ?>
 
 </div>
+

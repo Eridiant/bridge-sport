@@ -2,6 +2,7 @@
 
 namespace backend\controllers;
 
+use Yii;
 use backend\models\Post;
 use backend\models\PostSearch;
 use backend\models\Category;
@@ -73,11 +74,17 @@ class PostController extends Controller
         $model = new Post();
 
         $model->category_id = $id;
-        $model->author_id = $id;
+        $model->author_id = Yii::$app->user->getId();
 
         if ($this->request->isPost) {
-            if ($model->load($this->request->post()) && $model->save()) {
-                return $this->redirect(['view', 'id' => $model->id]);
+            if ($model->load($this->request->post())) {
+
+                $model->url = $this->createUrl($model->category_id, $model->slug);
+
+                if ($model->save()) {
+                    return $this->redirect(['view', 'id' => $model->id]);
+                }
+
             } else {
                 var_dump('<pre>');
                 var_dump($model->getErrors());
@@ -92,6 +99,22 @@ class PostController extends Controller
         return $this->render('create', [
             'model' => $model,
         ]);
+    }
+
+    protected function createUrl($category_id, $slug)
+    {
+        do {
+            $category = Category::find()
+                        ->select(['parent_id', 'slug'])
+                        ->where(['id' => $category_id])
+                        ->one();
+
+            $slug = $category->slug . '/'. $slug;
+            $category_id = $category->parent_id;
+
+        } while ($category_id != 0);
+
+        return $slug;
     }
 
     /**

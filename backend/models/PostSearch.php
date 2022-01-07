@@ -5,6 +5,7 @@ namespace backend\models;
 use yii\base\Model;
 use yii\data\ActiveDataProvider;
 use backend\models\Post;
+use backend\models\Category;
 
 /**
  * PostSearch represents the model behind the search form of `backend\models\Post`.
@@ -18,7 +19,7 @@ class PostSearch extends Post
     {
         return [
             [['id', 'category_id', 'active', 'author_id', 'created_at', 'updated_at', 'deleted_at'], 'integer'],
-            [['name', 'slug', 'description', 'img', 'keywords'], 'safe'],
+            [['name', 'url', 'slug', 'preview', 'description', 'img', 'dial', 'keywords'], 'safe'],
         ];
     }
 
@@ -68,11 +69,17 @@ class PostSearch extends Post
         ]);
 
         $query->andFilterWhere(['like', 'name', $this->name])
+            ->andFilterWhere(['like', 'url', $this->url])
             ->andFilterWhere(['like', 'slug', $this->slug])
+            ->andFilterWhere(['like', 'preview', $this->preview])
             ->andFilterWhere(['like', 'description', $this->description])
             ->andFilterWhere(['like', 'img', $this->img])
+            ->andFilterWhere(['like', 'dial', $this->dial])
             ->andFilterWhere(['like', 'keywords', $this->keywords]);
 
         return $dataProvider;
     }
 }
+
+
+

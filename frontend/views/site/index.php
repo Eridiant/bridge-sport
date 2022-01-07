@@ -8,11 +8,14 @@ use yii\helpers\Url;
 $this->title = 'My Yii Application';
 ?>
 <div class="site-index">
+    <p>
+        <a href="<?= Url::to(['/site/contact']) ?>"><?= Url::to(['/site/contact']) ?></a>
+    </p>
     <?php foreach ($model as $m): ?>
         <div>
             <h1><?= $m->name; ?></h1>
-            <p><?= $m->description; ?></p>
-            <a href="<?= Url::toRoute(['/news', 'slug' => $m->slug]) ?>">читать больше</a>
+            <p><?= $m->preview; ?></p>
+            <a href="<?= Url::to(['/news', 'id' => $m->id]) ?>">читать больше</a>
         </div>
     <?php endforeach; ?>
 </div>

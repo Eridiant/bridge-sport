@@ -17,8 +17,8 @@ class PostSearch extends Post
     public function rules()
     {
         return [
-            [['id', 'category_id', 'active', 'created_at', 'updated_at', 'deleted_at'], 'integer'],
-            [['name', 'slug', 'description', 'img', 'keywords'], 'safe'],
+            [['id', 'category_id', 'active', 'author_id', 'created_at', 'updated_at', 'deleted_at'], 'integer'],
+            [['name', 'url', 'slug', 'preview', 'description', 'img', 'dial', 'keywords'], 'safe'],
         ];
     }
 
@@ -61,15 +61,19 @@ class PostSearch extends Post
             'id' => $this->id,
             'category_id' => $this->category_id,
             'active' => $this->active,
+            'author_id' => $this->author_id,
             'created_at' => $this->created_at,
             'updated_at' => $this->updated_at,
             'deleted_at' => $this->deleted_at,
         ]);
 
         $query->andFilterWhere(['like', 'name', $this->name])
+            ->andFilterWhere(['like', 'url', $this->url])
             ->andFilterWhere(['like', 'slug', $this->slug])
+            ->andFilterWhere(['like', 'preview', $this->preview])
             ->andFilterWhere(['like', 'description', $this->description])
             ->andFilterWhere(['like', 'img', $this->img])
+            ->andFilterWhere(['like', 'dial', $this->dial])
             ->andFilterWhere(['like', 'keywords', $this->keywords]);
 
         return $dataProvider;

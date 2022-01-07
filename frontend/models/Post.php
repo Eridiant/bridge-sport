@@ -8,13 +8,17 @@ use Yii;
  * This is the model class for table "bsip_post".
  *
  * @property int $id
- * @property int|null $category_id
- * @property string|null $name
- * @property string|null $slug
+ * @property int $category_id
+ * @property string $name
+ * @property string|null $url
+ * @property string $slug
+ * @property string|null $preview
  * @property string|null $description
  * @property string|null $img
+ * @property string|null $dial
  * @property string|null $keywords
  * @property int $active
+ * @property int|null $author_id
  * @property int $created_at
  * @property int|null $updated_at
  * @property int|null $deleted_at
@@ -37,10 +41,10 @@ class Post extends \yii\db\ActiveRecord
     public function rules()
     {
         return [
-            [['category_id', 'active', 'created_at', 'updated_at', 'deleted_at'], 'integer'],
-            [['description'], 'string'],
-            [['created_at'], 'required'],
-            [['name', 'slug', 'img', 'keywords'], 'string', 'max' => 255],
+            [['category_id', 'name', 'slug', 'created_at'], 'required'],
+            [['category_id', 'active', 'author_id', 'created_at', 'updated_at', 'deleted_at'], 'integer'],
+            [['url', 'preview', 'description'], 'string'],
+            [['name', 'slug', 'img', 'dial', 'keywords'], 'string', 'max' => 255],
             [['category_id'], 'exist', 'skipOnError' => true, 'targetClass' => Category::className(), 'targetAttribute' => ['category_id' => 'id']],
         ];
     }
@@ -54,11 +58,15 @@ class Post extends \yii\db\ActiveRecord
             'id' => 'ID',
             'category_id' => 'Category ID',
             'name' => 'Name',
+            'url' => 'Url',
             'slug' => 'Slug',
+            'preview' => 'Preview',
             'description' => 'Description',
             'img' => 'Img',
+            'dial' => 'Dial',
             'keywords' => 'Keywords',
             'active' => 'Active',
+            'author_id' => 'Author ID',
             'created_at' => 'Created At',
             'updated_at' => 'Updated At',
             'deleted_at' => 'Deleted At',

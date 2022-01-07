@@ -40,14 +40,24 @@ return [
         'urlManager' => [
             'enablePrettyUrl' => true,
             'showScriptName' => false,
+            // 'enableStrictParsing' => false,
+            // 'suffix' => '/',
+            // 'normalizer' => [
+            //     'class' => 'yii\web\UrlNormalizer',
+            //     'action' => \yii\web\UrlNormalizer::ACTION_REDIRECT_TEMPORARY,
+            // ],
             'rules' => [
                 '' => 'site/index',
                 'index' => 'site/index',
+                'post' => 'post/index',
                 '<url:\w+>' => 'page/index',
                 '<controller:\w+>' => '<controller>/index',
                 '<controller:\w+>/<id:\d+>' => '<controller>/view',
                 '<controller:\w+>/<action:\w+>/<id:\d+>' => '<controller>/<action>',
                 '<controller:\w+>/<action:\w+>' => '<controller>/<action>',
+                [
+                    'class' => 'common\components\PageRule',
+                ],
             ],
         ],
     ],
