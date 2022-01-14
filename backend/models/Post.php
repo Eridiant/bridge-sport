@@ -194,8 +194,14 @@ class Post extends \yii\db\ActiveRecord
 
                 // $imagine = new Image();
 
+                // Image::resize($path, 300, 100)
+                //     ->save("{$_SERVER['DOCUMENT_ROOT']}/frontend/web/images/post/{$year}/{$month}/{$rand}-{$this->img->baseName}.jpeg", ['jpeg_quality' => 75]);
+
                 Image::resize($path, 300, 100)
-                    ->save("{$_SERVER['DOCUMENT_ROOT']}/frontend/web/images/post/{$year}/{$month}/{$rand}-{$this->img->baseName}.jpeg", ['jpeg_quality' => 75]);
+                    ->save("{$_SERVER['DOCUMENT_ROOT']}/frontend/web/images/post/{$year}/{$month}/{$rand}-{$this->img->baseName}.webp", ['webp_quality' => 75]);
+
+                // Image::resize($path, 300, 100)
+                //     ->save("{$_SERVER['DOCUMENT_ROOT']}/frontend/web/images/post/{$year}/{$month}/{$rand}-{$this->img->baseName}.jpeg", ['jpeg_quality' => 75]);
 
                 return $file_name_g;
             }
