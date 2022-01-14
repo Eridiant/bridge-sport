@@ -35,7 +35,7 @@ use backend\models\Taxonomy;
         ],
     ]);?>
 
-    <?= $form->field($model, 'img')->textInput(['maxlength' => true]) ?>
+    <?= $form->field($model, 'img')->fileInput() ?>
 
     <?= $form->field($model, 'dial')->textInput(['maxlength' => true]) ?>
 

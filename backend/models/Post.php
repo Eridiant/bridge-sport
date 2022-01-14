@@ -4,6 +4,8 @@ namespace backend\models;
 
 use Yii;
 use yii\behaviors\TimestampBehavior;
+use yii\helpers\FileHelper;
+use yii\imagine\Image;
 
 /**
  * This is the model class for table "{{%post}}".
@@ -49,7 +51,7 @@ class Post extends \yii\db\ActiveRecord
             [['category_id', 'indexing', 'active', 'author_id', 'created_at', 'updated_at', 'deleted_at'], 'integer'],
             [['url', 'preview', 'description'], 'string'],
             [['taxonomiesArray'], 'safe'],
-            [['name', 'slug', 'img', 'dial', 'keywords'], 'string', 'max' => 255],
+            [['name', 'slug', 'dial', 'keywords'], 'string', 'max' => 255],
             [['category_id'], 'exist', 'skipOnError' => true, 'targetClass' => Category::class, 'targetAttribute' => ['category_id' => 'id']],
         ];
     }
@@ -170,6 +172,36 @@ class Post extends \yii\db\ActiveRecord
             if ($taxonomy = Taxonomy::findOne($taxonomyId)) {
                 $this->unlink('taxonomies', $taxonomy, true);
             }
+        }
+    }
+
+    public function upload(){
+        if($this->validate()){
+            if (!empty($this->img)) {
+                $year = date('Y');
+                $month = date('m');
+
+                if (!FileHelper::findDirectories(Yii::getAlias("@frontend/web/images/post/", $year))) {
+                    FileHelper::createDirectory("{$_SERVER['DOCUMENT_ROOT']}/frontend/web/images/post/{$year}", $mode = 0775);
+                }
+                if (!FileHelper::findDirectories(Yii::getAlias("@frontend/web/images/post/{$year}/", $month))) {
+                    FileHelper::createDirectory("{$_SERVER['DOCUMENT_ROOT']}/frontend/web/images/post/{$year}/{$month}", $mode = 0775);
+                }
+                $rand = substr(md5(microtime() . rand(0, 9999)), 0, 5);
+                $file_name_g = "{$year}/{$month}/{$rand}-" . $this->img->baseName . '.' . $this->img->extension;
+                $path = $_SERVER['DOCUMENT_ROOT'] . "/frontend/web/images/post/" . $file_name_g;
+                $this->img->saveAs($path);
+
+                // $imagine = new Image();
+
+                Image::resize($path, 300, 100)
+                    ->save("{$_SERVER['DOCUMENT_ROOT']}/frontend/web/images/post/{$year}/{$month}/{$rand}-{$this->img->baseName}.jpeg", ['jpeg_quality' => 75]);
+
+                return $file_name_g;
+            }
+            
+        }else{
+            return false;
         }
     }
 }

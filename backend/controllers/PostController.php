@@ -9,6 +9,7 @@ use backend\models\Category;
 use backend\models\CategorySearch;
 use backend\models\Attribute;
 use backend\models\AttributeSearch;
+use yii\web\UploadedFile;
 use yii\web\Controller;
 use yii\web\NotFoundHttpException;
 use yii\filters\VerbFilter;
@@ -83,6 +84,12 @@ class PostController extends Controller
 
                 $model->url = $this->createUrl($model->category_id, $model->slug);
 
+                $model->img = UploadedFile::getInstance($model, 'img');
+
+                if ($filename = $model->upload()) {
+                    $model->img = $filename;
+                }
+
                 $check = Post::find()->with('category')
                             // ->select(['slug', 'category_id'])
                             ->where([
@@ -146,7 +153,16 @@ class PostController extends Controller
         $model = $this->findModel($id);
 
         if ($this->request->isPost && $model->load($this->request->post()) && $model->save()) {
-            return $this->redirect(['view', 'id' => $model->id]);
+
+            if (!is_null(UploadedFile::getInstance($model, 'img'))) {
+                $model->img = UploadedFile::getInstance($model, 'img');
+                $model->img = $model->upload();
+            }
+
+            if ($model->save()) {
+                return $this->redirect(['view', 'id' => $model->id]);
+            }
+
         }
 
         return $this->render('update', [
