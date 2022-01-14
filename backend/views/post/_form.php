@@ -3,17 +3,24 @@
 use yii\helpers\Html;
 use yii\widgets\ActiveForm;
 use mihaildev\ckeditor\CKEditor;
+use backend\models\Taxonomy;
+
 
 /* @var $this yii\web\View */
 /* @var $model backend\models\Post */
 /* @var $form yii\widgets\ActiveForm */
+// var_dump('<pre>');
+// var_dump($model);
+// var_dump('</pre>');
+// die;
+
 ?>
 
 <div class="post-form">
 
     <?php $form = ActiveForm::begin(); ?>
 
-    <?= $form->field($model, 'category_id')->textInput() ?>
+    <?= $form->field($model, 'category_id')->dropDownList(\backend\models\Category::find()->select(['name', 'id'])->indexBy('id')->column()) ?>
 
     <?= $form->field($model, 'name', ['inputOptions' => ['class' => 'form-control name']])->textInput(['maxlength' => true]) ?>
 
@@ -34,7 +41,22 @@ use mihaildev\ckeditor\CKEditor;
 
     <?= $form->field($model, 'keywords')->textInput(['maxlength' => true]) ?>
 
-    <?= $form->field($model, 'active')->textInput() ?>
+    <div class="wrapper-form">
+
+        <?= $form->field($model, 'indexing')->dropDownList([
+                '0'=>'Не индексировать',
+                '1'=>'Индексировать'
+        ]) ?>
+
+        <?= $form->field($model, 'active')->dropDownList([
+                '0'=>'Скрыта',
+                '1'=>'Доступна',
+                // '2'=>'Доступ ограничен',
+        ]) ?>
+
+    </div>
+
+    <?= $form->field($model, 'taxonomiesArray')->checkboxList(Taxonomy::find()->select(['label', 'id'])->indexBy('id')->column()) ?>
 
     <?= $form->field($model, 'author_id')->hiddenInput()->label(false) ?>
 
@@ -43,6 +65,10 @@ use mihaildev\ckeditor\CKEditor;
     <?//= $form->field($model, 'updated_at')->textInput() ?>
 
     <?//= $form->field($model, 'deleted_at')->textInput() ?>
+
+    <?php
+
+    ?>
 
     <div class="form-group">
         <?= Html::submitButton('Save', ['class' => 'btn btn-success']) ?>

@@ -4,6 +4,8 @@ use yii\helpers\Html;
 use yii\helpers\Url;
 use yii\grid\ActionColumn;
 use yii\grid\GridView;
+use backend\models\Post;
+use backend\models\Category;
 
 /* @var $this yii\web\View */
 /* @var $searchModel backend\models\PostSearch */
@@ -24,17 +26,25 @@ $this->params['breadcrumbs'][] = $this->title;
         'dataProvider' => $dataProvider,
         'filterModel' => $searchModel,
         'columns' => [
-            ['class' => 'yii\grid\SerialColumn'],
+            // ['class' => 'yii\grid\SerialColumn'],
 
             // 'id',
             // 'category_id',
             [
                 'label' => 'Доступно',
+                'attribute' => 'category_id',
                 'format' => 'text',
-                'value' => function($model) {
-                    return $model->category->name;
-                }
+                'filter' => Category::find()->select(['name', 'id'])->indexBy('id')->column(),
+                // 'value' => function($model) {
+                //     return $model->category->name;
+                // }
+                'value' => 'category.name',
             ],
+            // [
+            //     'attribute' => 'category_id',
+            //     'filter' => Category::find()->select(['name', 'id'])->indexBy('id')->column(),
+            //     'value' => 'category.name',
+            // ],
             'name',
             'slug',
             // 'url:ntext',
@@ -46,7 +56,10 @@ $this->params['breadcrumbs'][] = $this->title;
             // 'active',
             [
                 'label' => 'Доступно',
+                'attribute' => 'active',
                 'format' => 'text',
+                'filter' => [0 => 'Не доступно', 1 => 'Доступно'],
+                // 'filter' => Post::find()->select(['active', 'id'])->indexBy('id')->column(),
                 'value' => function($model) {
                     return $model->active ? 'Доступно' : 'Не доступно';
                 }

@@ -11,6 +11,7 @@ use Yii;
  * @property int $parent_id
  * @property string $name
  * @property string $slug
+ * @property string|null $img
  * @property string|null $keywords
  * @property string|null $description
  * @property int $active
@@ -37,8 +38,7 @@ class Category extends \yii\db\ActiveRecord
             [['parent_id', 'active', 'deleted_at'], 'integer'],
             [['name', 'slug'], 'required'],
             [['description'], 'string'],
-            [['name', 'slug', 'keywords'], 'string', 'max' => 255],
-            [['slug'], 'unique'],
+            [['name', 'slug', 'img', 'keywords'], 'string', 'max' => 255],
         ];
     }
 
@@ -52,6 +52,7 @@ class Category extends \yii\db\ActiveRecord
             'parent_id' => 'Parent ID',
             'name' => 'Name',
             'slug' => 'Slug',
+            'img' => 'Img',
             'keywords' => 'Keywords',
             'description' => 'Description',
             'active' => 'Active',
@@ -69,3 +70,4 @@ class Category extends \yii\db\ActiveRecord
         return $this->hasMany(Post::class, ['category_id' => 'id']);
     }
 }
+

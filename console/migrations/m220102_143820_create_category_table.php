@@ -13,14 +13,14 @@ class m220102_143820_create_category_table extends Migration
     public function safeUp()
     {
         $this->createTable('{{%category}}', [
-            'id' => $this->primaryKey(),
+            'id' => $this->primaryKey(4),
             'parent_id' => $this->smallInteger()->notNull()->defaultValue(0),
             'name' => $this->string(255)->notNull(),
             'slug' => $this->string(255)->notNull(),
             'img' => $this->string(255),
             'keywords' => $this->string(255),
             'description' => $this->text(),
-            'active' => $this->smallInteger(1)->notNull()->defaultValue(1),
+            'active' => $this->tinyInteger()->notNull()->defaultValue(1),
             'deleted_at' => $this->integer(11),
         ]);
     }

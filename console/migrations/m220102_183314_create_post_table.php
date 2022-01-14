@@ -14,7 +14,7 @@ class m220102_183314_create_post_table extends Migration
     {
         $this->createTable('{{%post}}', [
             'id' => $this->primaryKey(),
-            'category_id' => $this->integer()->notNull(),
+            'category_id' => $this->integer(4)->notNull(),
             'name' => $this->string(255)->notNull(),
             'url' => $this->text(),
             'slug' => $this->string(255)->notNull(),
@@ -22,13 +22,24 @@ class m220102_183314_create_post_table extends Migration
             'description' => $this->text(),
             'img' => $this->string(255),
             'dial' => $this->string(255),
+            'indexing' => $this->tinyInteger()->notNull()->defaultValue(0),
             'keywords' => $this->string(255),
-            'active' => $this->smallInteger(1)->notNull()->defaultValue(1),
-            'author_id' => $this->smallInteger(),
+            'active' => $this->tinyInteger()->notNull()->defaultValue(1),
+            'author_id' => $this->integer(11),
             'created_at' => $this->integer(11)->notNull(),
             'updated_at' => $this->integer(11),
             'deleted_at' => $this->integer(11),
         ]);
+        $this->createIndex(
+            'idx-post-url',
+            '{{%post}}',
+            'url'
+        );
+        $this->createIndex(
+            'idx-post-slug',
+            '{{%post}}',
+            'slug'
+        );
         $this->addForeignKey(
             'fk-category-post',
             '{{%post}}',

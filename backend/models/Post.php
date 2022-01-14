@@ -6,7 +6,7 @@ use Yii;
 use yii\behaviors\TimestampBehavior;
 
 /**
- * This is the model class for table "bsip_post".
+ * This is the model class for table "{{%post}}".
  *
  * @property int $id
  * @property int $category_id
@@ -17,6 +17,7 @@ use yii\behaviors\TimestampBehavior;
  * @property string|null $description
  * @property string|null $img
  * @property string|null $dial
+ * @property int $indexing
  * @property string|null $keywords
  * @property int $active
  * @property int|null $author_id
@@ -25,13 +26,11 @@ use yii\behaviors\TimestampBehavior;
  * @property int|null $deleted_at
  *
  * @property Category $category
+ * @property PostTaxonomy[] $postTaxonomies
+ * @property Taxonomy[] $taxonomies
  */
 class Post extends \yii\db\ActiveRecord
 {
-
-    public $createdAtAttribute = 'created_at';
-    public $updatedAtAttribute = 'updated_at';
-
     /**
      * {@inheritdoc}
      */
@@ -47,9 +46,9 @@ class Post extends \yii\db\ActiveRecord
     {
         return [
             [['category_id', 'name', 'slug'], 'required'],
-            [['category_id', 'active', 'author_id', 'created_at', 'updated_at', 'deleted_at'], 'integer'],
+            [['category_id', 'indexing', 'active', 'author_id', 'created_at', 'updated_at', 'deleted_at'], 'integer'],
             [['url', 'preview', 'description'], 'string'],
-            [['created_at', 'updated_at', 'deleted_at'], 'safe'],
+            [['taxonomiesArray'], 'safe'],
             [['name', 'slug', 'img', 'dial', 'keywords'], 'string', 'max' => 255],
             [['category_id'], 'exist', 'skipOnError' => true, 'targetClass' => Category::class, 'targetAttribute' => ['category_id' => 'id']],
         ];
@@ -84,6 +83,7 @@ class Post extends \yii\db\ActiveRecord
             'description' => 'Description',
             'img' => 'Img',
             'dial' => 'Dial',
+            'indexing' => 'Indexing',
             'keywords' => 'Keywords',
             'active' => 'Active',
             'author_id' => 'Author ID',
@@ -96,10 +96,80 @@ class Post extends \yii\db\ActiveRecord
     /**
      * Gets query for [[Category]].
      *
-     * @return \yii\db\ActiveQuery
+     * @return \yii\db\ActiveQuery|\backend\models\query\CategoryQuery
      */
     public function getCategory()
     {
         return $this->hasOne(Category::class, ['id' => 'category_id']);
+    }
+
+    /**
+     * Gets query for [[PostTaxonomies]].
+     *
+     * @return \yii\db\ActiveQuery|\backend\models\query\PostTaxonomyQuery
+     */
+    public function getPostTaxonomies()
+    {
+        return $this->hasMany(PostTaxonomy::class, ['post_id' => 'id']);
+    }
+
+    /**
+     * Gets query for [[Taxonomies]].
+     *
+     * @return \yii\db\ActiveQuery|\backend\models\query\TaxonomyQuery
+     */
+    public function getTaxonomies()
+    {
+        return $this->hasMany(Taxonomy::class, ['id' => 'taxonomy_id'])->viaTable('{{%post_taxonomy}}', ['post_id' => 'id']);
+    }
+
+    /**
+     * {@inheritdoc}
+     * @return \backend\models\query\PostQuery the active query used by this AR class.
+     */
+    public static function find()
+    {
+        return new \backend\models\query\PostQuery(get_called_class());
+    }
+
+    private $_taxonomiesArray;
+
+    public function getTaxonomiesArray()
+    {
+        if ($this->_taxonomiesArray === null) {
+            $this->_taxonomiesArray = $this->getTaxonomies()->select('id')->column();
+        }
+        return $this->_taxonomiesArray;
+    }
+
+    public function setTaxonomiesArray($value)
+    {
+        $this->_taxonomiesArray = (array)$value;
+    }
+
+    public function afterSave($insert, $changedAttributes)
+    {
+        $this->updateTaxonomies();
+        parent::afterSave($insert, $changedAttributes);
+    }
+
+    private function updateTaxonomies()
+    {
+        $currentTaxonomyIds = $this->getTaxonomies()->select('id')->column();
+        $newTaxonomyIds = $this->getTaxonomiesArray();
+
+        foreach (array_filter(array_diff($newTaxonomyIds, $currentTaxonomyIds)) as $taxonomyId) {
+            /** @var Taxonomy $Taxonomy */
+            if ($taxonomy = Taxonomy::findOne($taxonomyId)) {
+                $this->link('taxonomies', $taxonomy);
+            }
+        }
+
+        foreach (array_filter(array_diff($currentTaxonomyIds, $newTaxonomyIds)) as $taxonomyId) {
+            /** @var Taxonomy $taxonomy */
+            if ($taxonomy = Taxonomy::findOne($taxonomyId)) {
+                $this->unlink('taxonomies', $taxonomy, true);
+            }
+        }
     }
 }

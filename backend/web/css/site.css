@@ -84,6 +84,10 @@ a.desc:after {
 .wrapper .main-sidebar {
     padding-top: 60px;
 }
+.wrapper-form {
+    display: flex;
+    gap: 30px;
+}
 @media(max-width:767px) {
     .nav li > form > button.logout {
         display:block;

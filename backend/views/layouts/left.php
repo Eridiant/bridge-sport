@@ -45,6 +45,7 @@
                         'url' => '#',
                         'items' => [
                             ['label' => 'Категории', 'icon' => 'home', 'url' => ['/category/index']],
+                            ['label' => 'Атрибуты', 'icon' => 'home', 'url' => ['/taxonomy/index']],
                             ['label' => 'Новости', 'icon' => 'home', 'url' => ['/post/index']],
                         ],
                     ],

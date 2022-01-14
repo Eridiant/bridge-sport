@@ -7,6 +7,8 @@ use backend\models\Post;
 use backend\models\PostSearch;
 use backend\models\Category;
 use backend\models\CategorySearch;
+use backend\models\Attribute;
+use backend\models\AttributeSearch;
 use yii\web\Controller;
 use yii\web\NotFoundHttpException;
 use yii\filters\VerbFilter;
@@ -81,6 +83,21 @@ class PostController extends Controller
 
                 $model->url = $this->createUrl($model->category_id, $model->slug);
 
+                $check = Post::find()->with('category')
+                            // ->select(['slug', 'category_id'])
+                            ->where([
+                                'slug' => $model->slug,
+                                'category_id' => $model->category_id
+                                ])
+                            ->exists();
+
+                if ($check) {
+                    // $model->loadDefaultValues();
+                    Yii::$app->session->setFlash("категория и слаг совпадают");
+                    return $this->render('create', [
+                        'model' => $model,
+                    ]);
+                }
                 if ($model->save()) {
                     return $this->redirect(['view', 'id' => $model->id]);
                 }
@@ -96,9 +113,9 @@ class PostController extends Controller
             $model->loadDefaultValues();
         }
 
-        return $this->render('create', [
-            'model' => $model,
-        ]);
+        // $attributes = Attribute::find()->all();
+
+        return $this->render('create', compact('model'));
     }
 
     protected function createUrl($category_id, $slug)

@@ -15,6 +15,11 @@ $this->title = 'My Yii Application';
         <div>
             <h1><?= $m->name; ?></h1>
             <p><?= $m->preview; ?></p>
+            <p><?php 
+            var_dump('<pre>');
+            var_dump($m->attributes); 
+            var_dump('</pre>');
+            ?></p>
             <a href="<?= Url::to(['/news', 'id' => $m->id]) ?>">читать больше</a>
         </div>
     <?php endforeach; ?>
