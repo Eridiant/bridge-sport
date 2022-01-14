@@ -2,6 +2,27 @@ main > .container {
     padding: 70px 15px 20px;
 }
 
+.news-wrapper {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 30px;
+    margin-bottom: 30px;
+}
+
+.news-img {
+    width: 25%;
+    min-width: 150px;
+    height: auto;
+    flex-basis: 25%;
+    flex-grow: 1;
+}
+
+.news-inner {
+    flex-basis: 70%;
+    min-width: 300px;
+    flex-grow: 3;
+}
+
 .footer {
     background-color: #f5f5f5;
     font-size: .9em;
