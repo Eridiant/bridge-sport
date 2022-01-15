@@ -37,6 +37,7 @@ class Category extends \yii\db\ActiveRecord
         return [
             [['parent_id', 'active', 'deleted_at'], 'integer'],
             [['name', 'slug'], 'required'],
+            [ 'parent_id', 'default', 'value' => 0 ],
             [['description'], 'string'],
             [['name', 'slug', 'img', 'keywords'], 'string', 'max' => 255],
         ];
