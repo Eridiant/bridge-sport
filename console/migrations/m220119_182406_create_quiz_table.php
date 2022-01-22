@@ -20,6 +20,9 @@ class m220119_182406_create_quiz_table extends Migration
             'img' => $this->string(255),
             'description' => $this->text(),
             'type' => $this->tinyInteger(),
+            'created_at' => $this->integer(11)->notNull(),
+            'updated_at' => $this->integer(11),
+            'deleted_at' => $this->integer(11),
         ]);
 
         // creates index for column `survey_id`

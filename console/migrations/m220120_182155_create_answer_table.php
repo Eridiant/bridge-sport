@@ -3,19 +3,19 @@
 use yii\db\Migration;
 
 /**
- * Handles the creation of table `{{%question}}`.
+ * Handles the creation of table `{{%answer}}`.
  * Has foreign keys to the tables:
  *
  * - `{{%quiz}}`
  */
-class m220120_182155_create_question_table extends Migration
+class m220120_182155_create_answer_table extends Migration
 {
     /**
      * {@inheritdoc}
      */
     public function safeUp()
     {
-        $this->createTable('{{%question}}', [
+        $this->createTable('{{%answer}}', [
             'id' => $this->primaryKey(),
             'quiz_id' => $this->integer()->notNull(),
             'description' => $this->text(),
@@ -23,15 +23,15 @@ class m220120_182155_create_question_table extends Migration
 
         // creates index for column `quiz_id`
         $this->createIndex(
-            '{{%idx-question-quiz_id}}',
-            '{{%question}}',
+            '{{%idx-answer-quiz_id}}',
+            '{{%answer}}',
             'quiz_id'
         );
 
         // add foreign key for table `{{%quiz}}`
         $this->addForeignKey(
-            '{{%fk-question-quiz_id}}',
-            '{{%question}}',
+            '{{%fk-answer-quiz_id}}',
+            '{{%answer}}',
             'quiz_id',
             '{{%quiz}}',
             'id',
@@ -46,16 +46,16 @@ class m220120_182155_create_question_table extends Migration
     {
         // drops foreign key for table `{{%quiz}}`
         $this->dropForeignKey(
-            '{{%fk-question-quiz_id}}',
-            '{{%question}}'
+            '{{%fk-answer-quiz_id}}',
+            '{{%answer}}'
         );
 
         // drops index for column `quiz_id`
         $this->dropIndex(
-            '{{%idx-question-quiz_id}}',
-            '{{%question}}'
+            '{{%idx-answer-quiz_id}}',
+            '{{%answer}}'
         );
 
-        $this->dropTable('{{%question}}');
+        $this->dropTable('{{%answer}}');
     }
 }
