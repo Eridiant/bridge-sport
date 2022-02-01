@@ -49,6 +49,16 @@
                             ['label' => 'Новости', 'icon' => 'home', 'url' => ['/post/index']],
                         ],
                     ],
+                    [
+                        'label' => 'Опросы',
+                        'icon' => 'share',
+                        'url' => '#',
+                        'items' => [
+                            ['label' => 'Категории', 'icon' => 'home', 'url' => ['/category/index']],
+                            ['label' => 'Атрибуты', 'icon' => 'home', 'url' => ['/taxonomy/index']],
+                            ['label' => 'Новости', 'icon' => 'home', 'url' => ['/post/index']],
+                        ],
+                    ],
                     ['label' => 'Gii', 'icon' => 'file-code-o', 'url' => ['/gii']],
                     ['label' => 'Debug', 'icon' => 'dashboard', 'url' => ['/debug']],
                     ['label' => 'Login', 'url' => ['site/login'], 'visible' => Yii::$app->user->isGuest],
