@@ -2,17 +2,16 @@
 
 namespace backend\controllers;
 
-use Yii;
-use backend\models\Survey;
-use backend\models\SurveySearch;
+use backend\models\Answer;
+use backend\models\AnswerSearch;
 use yii\web\Controller;
 use yii\web\NotFoundHttpException;
 use yii\filters\VerbFilter;
 
 /**
- * SurveyController implements the CRUD actions for Survey model.
+ * AnswerController implements the CRUD actions for Answer model.
  */
-class SurveyController extends Controller
+class AnswerController extends Controller
 {
     /**
      * @inheritDoc
@@ -33,18 +32,13 @@ class SurveyController extends Controller
     }
 
     /**
-     * Lists all Survey models.
+     * Lists all Answer models.
      *
      * @return string
      */
     public function actionIndex()
     {
-        // $this->request->queryParams += ["type"=>"1"];
-        // var_dump('<pre>');
-        // var_dump($this->request->queryParams);
-        // var_dump('</pre>');
-        // die;
-        $searchModel = new SurveySearch();
+        $searchModel = new AnswerSearch();
         $dataProvider = $searchModel->search($this->request->queryParams);
 
         return $this->render('index', [
@@ -53,28 +47,8 @@ class SurveyController extends Controller
         ]);
     }
 
-    public function actionQuiz()
-    {
-        $this->request->queryParams += ["SurveySearch"=>["type"=>"2"]];
-        // $this->request->queryParams["SurveySearch"] += ["type"=>"2"];
-        // var_dump('<pre>');
-        // var_dump($this->request->queryParams["SurveySearch"]);
-        // var_dump($this->request->queryParams);
-        // var_dump('</pre>');
-        // die;
-        // ?SurveySearch[type]=1
-        
-        $searchModel = new SurveySearch();
-        $dataProvider = $searchModel->search($this->request->queryParams);
-
-        return $this->render('quiz', [
-            'searchModel' => $searchModel,
-            'dataProvider' => $dataProvider,
-        ]);
-    }
-
     /**
-     * Displays a single Survey model.
+     * Displays a single Answer model.
      * @param int $id ID
      * @return string
      * @throws NotFoundHttpException if the model cannot be found
@@ -87,26 +61,17 @@ class SurveyController extends Controller
     }
 
     /**
-     * Creates a new Survey model.
+     * Creates a new Answer model.
      * If creation is successful, the browser will be redirected to the 'view' page.
      * @return string|\yii\web\Response
      */
     public function actionCreate()
     {
-        $model = new Survey();
+        $model = new Answer();
 
         if ($this->request->isPost) {
-
-            if ($model->load($this->request->post())) {
-                $model->user_id = Yii::$app->user->getId();
-                if ($model->save()) {
-                    return $this->redirect(['view', 'id' => $model->id]);
-                } else {
-                    var_dump('<pre>');
-                    var_dump($model->getErrors());
-                    var_dump('</pre>');
-                    die;
-                }
+            if ($model->load($this->request->post()) && $model->save()) {
+                return $this->redirect(['view', 'id' => $model->id]);
             }
         } else {
             $model->loadDefaultValues();
@@ -118,7 +83,7 @@ class SurveyController extends Controller
     }
 
     /**
-     * Updates an existing Survey model.
+     * Updates an existing Answer model.
      * If update is successful, the browser will be redirected to the 'view' page.
      * @param int $id ID
      * @return string|\yii\web\Response
@@ -138,7 +103,7 @@ class SurveyController extends Controller
     }
 
     /**
-     * Deletes an existing Survey model.
+     * Deletes an existing Answer model.
      * If deletion is successful, the browser will be redirected to the 'index' page.
      * @param int $id ID
      * @return \yii\web\Response
@@ -152,15 +117,15 @@ class SurveyController extends Controller
     }
 
     /**
-     * Finds the Survey model based on its primary key value.
+     * Finds the Answer model based on its primary key value.
      * If the model is not found, a 404 HTTP exception will be thrown.
      * @param int $id ID
-     * @return Survey the loaded model
+     * @return Answer the loaded model
      * @throws NotFoundHttpException if the model cannot be found
      */
     protected function findModel($id)
     {
-        if (($model = Survey::findOne(['id' => $id])) !== null) {
+        if (($model = Answer::findOne(['id' => $id])) !== null) {
             return $model;
         }
 

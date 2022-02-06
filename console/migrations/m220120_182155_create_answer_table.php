@@ -18,6 +18,7 @@ class m220120_182155_create_answer_table extends Migration
         $this->createTable('{{%answer}}', [
             'id' => $this->primaryKey(),
             'quiz_id' => $this->integer()->notNull(),
+            'answer_id' => $this->integer(),
             'description' => $this->text(),
         ]);
 

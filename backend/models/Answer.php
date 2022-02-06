@@ -9,6 +9,7 @@ use Yii;
  *
  * @property int $id
  * @property int $quiz_id
+ * @property int|null $answer_id
  * @property string|null $description
  *
  * @property AnswerUser[] $answerUsers
@@ -31,9 +32,9 @@ class Answer extends \yii\db\ActiveRecord
     {
         return [
             [['quiz_id'], 'required'],
-            [['quiz_id'], 'integer'],
+            [['quiz_id', 'answer_id'], 'integer'],
             [['description'], 'string'],
-            [['quiz_id'], 'exist', 'skipOnError' => true, 'targetClass' => Quiz::class, 'targetAttribute' => ['quiz_id' => 'id']],
+            [['quiz_id'], 'exist', 'skipOnError' => true, 'targetClass' => Quiz::className(), 'targetAttribute' => ['quiz_id' => 'id']],
         ];
     }
 
@@ -45,6 +46,7 @@ class Answer extends \yii\db\ActiveRecord
         return [
             'id' => 'ID',
             'quiz_id' => 'Quiz ID',
+            'answer_id' => 'Answer ID',
             'description' => 'Description',
         ];
     }
@@ -56,7 +58,7 @@ class Answer extends \yii\db\ActiveRecord
      */
     public function getAnswerUsers()
     {
-        return $this->hasMany(AnswerUser::class, ['answer_id' => 'id']);
+        return $this->hasMany(AnswerUser::className(), ['answer_id' => 'id']);
     }
 
     /**
@@ -66,6 +68,6 @@ class Answer extends \yii\db\ActiveRecord
      */
     public function getQuiz()
     {
-        return $this->hasOne(Quiz::class, ['id' => 'quiz_id']);
+        return $this->hasOne(Quiz::className(), ['id' => 'quiz_id']);
     }
 }

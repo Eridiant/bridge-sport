@@ -3,13 +3,13 @@
 use yii\helpers\Html;
 
 /* @var $this yii\web\View */
-/* @var $model backend\models\Survey */
+/* @var $model backend\models\Quiz */
 
-$this->title = 'Create Survey';
-$this->params['breadcrumbs'][] = ['label' => 'Surveys', 'url' => ['index']];
+$this->title = 'Create Quiz';
+$this->params['breadcrumbs'][] = ['label' => 'Quizzes', 'url' => ['index']];
 $this->params['breadcrumbs'][] = $this->title;
 ?>
-<div class="survey-create">
+<div class="quiz-create">
 
     <?= $this->render('_form', [
         'model' => $model,

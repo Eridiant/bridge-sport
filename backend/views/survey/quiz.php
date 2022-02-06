@@ -9,7 +9,7 @@ use yii\grid\GridView;
 /* @var $searchModel backend\models\SurveySearch */
 /* @var $dataProvider yii\data\ActiveDataProvider */
 
-$this->title = 'Surveys';
+$this->title = 'Quiz';
 $this->params['breadcrumbs'][] = $this->title;
 ?>
 <div class="survey-index">
@@ -34,12 +34,12 @@ $this->params['breadcrumbs'][] = $this->title;
             //'keywords',
             //'preview:ntext',
             //'description:ntext',
-            'type',
+            // 'type',
             [
-                'label' => 'Добавить вопрос',
+                'label' => 'Добавить ответ',
                 'format' => 'raw',
                 'value' => function($model){
-                    return Html::a('Добавить', ['/quiz/create', 'id' => $model->id], ['class' => 'profile-link']);
+                    return Html::a('Добавить', ['/answer/create', 'id' => $model->id], ['class' => 'profile-link']);
                 },
             ],
             //'access',

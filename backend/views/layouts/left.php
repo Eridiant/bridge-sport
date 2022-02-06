@@ -54,9 +54,9 @@
                         'icon' => 'share',
                         'url' => '#',
                         'items' => [
-                            ['label' => 'Категории', 'icon' => 'home', 'url' => ['/category/index']],
-                            ['label' => 'Атрибуты', 'icon' => 'home', 'url' => ['/taxonomy/index']],
-                            ['label' => 'Новости', 'icon' => 'home', 'url' => ['/post/index']],
+                            ['label' => 'Опросы', 'icon' => 'home', 'url' => ['/survey/index']],
+                            ['label' => 'Опросы', 'icon' => 'home', 'url' => ['/post/index']],
+                            ['label' => 'Quiz', 'icon' => 'home', 'url' => ['/survey/quiz']],
                         ],
                     ],
                     ['label' => 'Gii', 'icon' => 'file-code-o', 'url' => ['/gii']],

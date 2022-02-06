@@ -3,6 +3,7 @@
 namespace backend\models;
 
 use Yii;
+use yii\behaviors\TimestampBehavior;
 
 /**
  * This is the model class for table "{{%survey}}".
@@ -42,11 +43,25 @@ class Survey extends \yii\db\ActiveRecord
     public function rules()
     {
         return [
-            [['user_id', 'name', 'slug', 'created_at'], 'required'],
+            [['user_id', 'name', 'slug'], 'required'],
             [['user_id', 'type', 'access', 'active', 'created_at', 'updated_at', 'deleted_at'], 'integer'],
             [['preview', 'description'], 'string'],
             [['name', 'slug', 'img', 'keywords'], 'string', 'max' => 255],
             [['user_id'], 'exist', 'skipOnError' => true, 'targetClass' => User::class, 'targetAttribute' => ['user_id' => 'id']],
+        ];
+    }
+
+    public function behaviors()
+    {
+        return [
+            'timestamp' => [
+                'class' => TimestampBehavior::class,
+                'attributes' => [
+                    \yii\db\BaseActiveRecord::EVENT_BEFORE_INSERT => ['created_at', 'updated_at'],
+                    \yii\db\BaseActiveRecord::EVENT_BEFORE_UPDATE => ['updated_at'],
+                ],
+                // 'value' => new \yii\db\Expression('NOW()'),
+            ],
         ];
     }
 
