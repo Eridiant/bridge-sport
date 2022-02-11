@@ -55,8 +55,9 @@
                         'url' => '#',
                         'items' => [
                             ['label' => 'Опросы', 'icon' => 'home', 'url' => ['/survey/index']],
-                            ['label' => 'Опросы', 'icon' => 'home', 'url' => ['/post/index']],
+                            ['label' => 'Edit', 'icon' => 'home', 'url' => ['/quiz/edit']],
                             ['label' => 'Quiz', 'icon' => 'home', 'url' => ['/survey/quiz']],
+                            ['label' => 'Ответ', 'icon' => 'home', 'url' => ['/answer/index']],
                         ],
                     ],
                     ['label' => 'Gii', 'icon' => 'file-code-o', 'url' => ['/gii']],

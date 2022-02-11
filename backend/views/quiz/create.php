@@ -8,6 +8,7 @@ use yii\helpers\Html;
 $this->title = 'Create Quiz';
 $this->params['breadcrumbs'][] = ['label' => 'Quizzes', 'url' => ['index']];
 $this->params['breadcrumbs'][] = $this->title;
+
 ?>
 <div class="quiz-create">
 

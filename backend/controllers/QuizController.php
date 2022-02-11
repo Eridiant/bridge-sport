@@ -2,6 +2,7 @@
 
 namespace backend\controllers;
 
+use Yii;
 use backend\models\Quiz;
 use backend\models\QuizSearch;
 use yii\web\Controller;
@@ -24,7 +25,7 @@ class QuizController extends Controller
                 'verbs' => [
                     'class' => VerbFilter::className(),
                     'actions' => [
-                        'delete' => ['POST'],
+                        'delete' => ['POST', 'GET'],
                     ],
                 ],
             ]
@@ -45,6 +46,54 @@ class QuizController extends Controller
             'searchModel' => $searchModel,
             'dataProvider' => $dataProvider,
         ]);
+    }
+
+    public function actionEdit()
+    {
+        $id = Yii::$app->request->get('id');
+
+        return $this->render('edit', compact('id'));
+    }
+
+    public function actionCheck($id = null)
+    {
+        $request = Yii::$app->request;
+
+        if ($this->request->isPost) {
+            if ($id == null) {
+                $model = new Quiz();
+            } else {
+                $model = $this->findModel($id);
+            }
+            if ($model->load($this->request->post()) && $model->save()) {
+                $id = $this->request->get('survey_id');
+                return $this->render('edit', compact('id'));
+            }
+        }
+
+        
+
+        $model = Quiz::find()
+                ->where(['parent_id' => $request->get('parent_id'), 'survey_id' => $request->get('survey_id')]);
+        
+        if (!empty($request->get('answer_id'))) {
+            $model = $model->andWhere(['answer_id' => $request->get('answer_id')]);
+        }
+        
+        $model = $model->one();
+        // $searchModel = new QuizSearch();
+        // $dataProvider = $searchModel->search($this->request->queryParams);
+        if (!empty($model)) {
+            return $this->render('update', compact('model'));
+        }
+
+        $model = new Quiz();
+
+        $model->parent_id = $request->get('parent_id');
+        $model->survey_id = $request->get('survey_id');
+        $model->answer_id = $request->get('answer_id');
+        
+        return $this->render('create', compact('model'));
     }
 
     /**
@@ -76,6 +125,8 @@ class QuizController extends Controller
         } else {
             $model->loadDefaultValues();
         }
+
+        $model->survey_id = Yii::$app->request->get('id');
 
         return $this->render('create', [
             'model' => $model,
@@ -113,7 +164,7 @@ class QuizController extends Controller
     {
         $this->findModel($id)->delete();
 
-        return $this->redirect(['index']);
+        return $this->redirect(Yii::$app->request->referrer);
     }
 
     /**

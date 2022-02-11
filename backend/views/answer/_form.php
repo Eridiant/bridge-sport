@@ -12,9 +12,9 @@ use yii\widgets\ActiveForm;
 
     <?php $form = ActiveForm::begin(); ?>
 
-    <?= $form->field($model, 'quiz_id')->textInput() ?>
+    <?= $form->field($model, 'quiz_id')->hiddenInput()->label(false) ?>
 
-    <?= $form->field($model, 'answer_id')->textInput() ?>
+    <?= $form->field($model, 'answer_id')->hiddenInput()->label(false) ?>
 
     <?= $form->field($model, 'description')->textarea(['rows' => 6]) ?>
 

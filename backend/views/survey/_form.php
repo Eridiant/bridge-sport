@@ -2,6 +2,7 @@
 
 use yii\helpers\Html;
 use yii\widgets\ActiveForm;
+use mihaildev\ckeditor\CKEditor;
 
 /* @var $this yii\web\View */
 /* @var $model backend\models\Survey */
@@ -22,7 +23,12 @@ use yii\widgets\ActiveForm;
 
     <?= $form->field($model, 'preview')->textarea(['rows' => 6]) ?>
 
-    <?= $form->field($model, 'description')->textarea(['rows' => 6]) ?>
+    <?= $form->field($model, 'description')->widget(CKEditor::className(),[
+        'editorOptions' => [
+            'preset' => 'standard', //разработанны стандартные настройки basic, standard, full данную возможность не обязательно использовать
+            'inline' => false, //по умолчанию false
+        ],
+    ]);?>
 
     <?= $form->field($model, 'type')->textInput() ?>
 

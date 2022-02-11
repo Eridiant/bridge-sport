@@ -2,6 +2,7 @@
 
 namespace backend\controllers;
 
+use Yii;
 use backend\models\Answer;
 use backend\models\AnswerSearch;
 use yii\web\Controller;
@@ -24,7 +25,7 @@ class AnswerController extends Controller
                 'verbs' => [
                     'class' => VerbFilter::className(),
                     'actions' => [
-                        'delete' => ['POST'],
+                        'delete' => ['POST', 'GET'],
                     ],
                 ],
             ]
@@ -71,11 +72,17 @@ class AnswerController extends Controller
 
         if ($this->request->isPost) {
             if ($model->load($this->request->post()) && $model->save()) {
-                return $this->redirect(['view', 'id' => $model->id]);
+                $id = $this->request->get('survey_id');
+                return $this->render('/quiz/edit', compact('id'));
             }
         } else {
             $model->loadDefaultValues();
         }
+
+        $request = Yii::$app->request;
+
+        $model->quiz_id = $request->get('quiz_id');
+        // $model->survey_id = $request->get('survey_id');
 
         return $this->render('create', [
             'model' => $model,
@@ -113,7 +120,7 @@ class AnswerController extends Controller
     {
         $this->findModel($id)->delete();
 
-        return $this->redirect(['index']);
+        return $this->redirect(Yii::$app->request->referrer);
     }
 
     /**

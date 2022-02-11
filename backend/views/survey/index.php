@@ -35,13 +35,6 @@ $this->params['breadcrumbs'][] = $this->title;
             //'preview:ntext',
             //'description:ntext',
             'type',
-            [
-                'label' => 'Добавить вопрос',
-                'format' => 'raw',
-                'value' => function($model){
-                    return Html::a('Добавить', ['/quiz/create', 'id' => $model->id], ['class' => 'profile-link']);
-                },
-            ],
             //'access',
             //'active',
             //'created_at',

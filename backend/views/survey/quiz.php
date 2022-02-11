@@ -4,6 +4,7 @@ use yii\helpers\Html;
 use yii\helpers\Url;
 use yii\grid\ActionColumn;
 use yii\grid\GridView;
+use backend\models\Quiz;
 
 /* @var $this yii\web\View */
 /* @var $searchModel backend\models\SurveySearch */
@@ -36,10 +37,13 @@ $this->params['breadcrumbs'][] = $this->title;
             //'description:ntext',
             // 'type',
             [
-                'label' => 'Добавить ответ',
+                'label' => 'Добавить вопрос',
                 'format' => 'raw',
                 'value' => function($model){
-                    return Html::a('Добавить', ['/answer/create', 'id' => $model->id], ['class' => 'profile-link']);
+                    if (Quiz::find()->where(['survey_id' => $model->id])->count() == 0) {
+                        return Html::a('Создать', ['/quiz/create', 'id' => $model->id], ['class' => 'profile-link']);
+                    }
+                    return Html::a('Редактировать', ['/quiz/edit', 'id' => $model->id], ['class' => 'profile-link']);
                 },
             ],
             //'access',

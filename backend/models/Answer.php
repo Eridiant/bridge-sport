@@ -34,7 +34,7 @@ class Answer extends \yii\db\ActiveRecord
             [['quiz_id'], 'required'],
             [['quiz_id', 'answer_id'], 'integer'],
             [['description'], 'string'],
-            [['quiz_id'], 'exist', 'skipOnError' => true, 'targetClass' => Quiz::className(), 'targetAttribute' => ['quiz_id' => 'id']],
+            [['quiz_id'], 'exist', 'skipOnError' => true, 'targetClass' => Quiz::class, 'targetAttribute' => ['quiz_id' => 'id']],
         ];
     }
 
@@ -58,7 +58,7 @@ class Answer extends \yii\db\ActiveRecord
      */
     public function getAnswerUsers()
     {
-        return $this->hasMany(AnswerUser::className(), ['answer_id' => 'id']);
+        return $this->hasMany(AnswerUser::class, ['answer_id' => 'id']);
     }
 
     /**
@@ -68,6 +68,6 @@ class Answer extends \yii\db\ActiveRecord
      */
     public function getQuiz()
     {
-        return $this->hasOne(Quiz::className(), ['id' => 'quiz_id']);
+        return $this->hasOne(Quiz::class, ['id' => 'quiz_id']);
     }
 }
