@@ -7,29 +7,14 @@ use yii\helpers\Url;
 
 $this->title = 'My Yii Application';
 ?>
-<div class="site-index">
+<div class="container">
     <p>
         <a href="<?= Url::to(['/site/contact']) ?>"><?= Url::to(['/site/contact']) ?></a>
     </p>
     <?php foreach ($model as $m): ?>
         <div class="news-wrapper">
-            <?php if (empty($m->img)):
-                switch ($m->category_id) {
-                    case 0:
-                        $img = 'play';
-                        break;
-                    case 1:
-                        $img = 'whist';
-                        break;
-                    case 2:
-                        $img = 'competition';
-                        break;
-                    default:
-                        $img = 'competition';
-                        break;
-                }
-                ?>
-                <img src="/images/dummy/<?= $img; ?>.jpg" alt="" class="news-img">
+            <?php if (empty($m->img)): ?>
+                <img src="/images/dummy/<?= $m->category_id; ?>.jpg" alt="" class="news-img">
             <?php else: ?>
                 <img src="/images/dummy/<?= $m->img; ?>" alt="">
             <?php endif; ?>
