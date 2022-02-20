@@ -41,7 +41,7 @@ class Quiz extends \yii\db\ActiveRecord
             [['survey_id', 'parent_id', 'answer_id', 'type', 'created_at', 'updated_at', 'deleted_at'], 'integer'],
             [['description'], 'string'],
             [['img'], 'string', 'max' => 255],
-            [['survey_id'], 'exist', 'skipOnError' => true, 'targetClass' => Survey::className(), 'targetAttribute' => ['survey_id' => 'id']],
+            [['survey_id'], 'exist', 'skipOnError' => true, 'targetClass' => Survey::class, 'targetAttribute' => ['survey_id' => 'id']],
         ];
     }
 
@@ -71,7 +71,7 @@ class Quiz extends \yii\db\ActiveRecord
      */
     public function getAnswers()
     {
-        return $this->hasMany(Answer::className(), ['quiz_id' => 'id']);
+        return $this->hasMany(Answer::class, ['quiz_id' => 'id']);
     }
 
     /**
@@ -81,6 +81,6 @@ class Quiz extends \yii\db\ActiveRecord
      */
     public function getSurvey()
     {
-        return $this->hasOne(Survey::className(), ['id' => 'survey_id']);
+        return $this->hasOne(Survey::class, ['id' => 'survey_id']);
     }
 }

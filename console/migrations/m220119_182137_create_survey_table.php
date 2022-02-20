@@ -21,6 +21,7 @@ class m220119_182137_create_survey_table extends Migration
             'keywords' => $this->string(255),
             'preview' => $this->text(),
             'description' => $this->text(),
+            'conclusion' => $this->text(),
             'type' => $this->tinyInteger(),
             'access' => $this->tinyInteger(),
             'active' => $this->tinyInteger(),

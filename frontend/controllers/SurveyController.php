@@ -26,9 +26,10 @@ class SurveyController extends Controller
             parent::behaviors(),
             [
                 'verbs' => [
-                    'class' => VerbFilter::className(),
+                    'class' => VerbFilter::class,
                     'actions' => [
                         'delete' => ['POST'],
+                        'quiz' => ['POST'],
                     ],
                 ],
             ]
@@ -66,23 +67,61 @@ class SurveyController extends Controller
         return $this->render('view', compact('model'));
     }
 
-    public function actionQuiz($survey_id, $parent_id = 0)
-    // public function actionQuiz()
+    public function actionQuiz()
     {
+
         $request = Yii::$app->request;
-        var_dump('<pre>');
-        var_dump($survey_id);
-        var_dump('</pre>');
-        die;
+        // Yii::$app->response->format = \yii\web\Response::FORMAT_JSON;
+        // var_dump('<pre>');
+        // print_r($request->post(), true);
+        // var_dump(Yii::$app->request->getRawBody());
+        // var_dump($request->post('parent_id'));
+        // var_dump($request->isAjax);
+        // var_dump($request);
+        // var_dump($quiz);
+        // var_dump($survey_id);
+        // var_dump(json_decode($request->post()));
+        // var_dump(json_decode($request->getRawBody())->survey_id);
+        // var_dump('</pre>');
+        // die;
         
         if ($request->isPost) {
+
+            $survey_id = $request->post('survey_id');
+            $parent_id = is_null($request->post('parent_id')) ? 0 : $request->post('parent_id');
+            $answer_id = is_null($request->post('answer_id')) ? null : $request->post('answer_id');
             $model = Quiz::find()
-                    ->where(['survey_id=:survey_id', 'parent_id=:parent_id'])
-                    ->addParams([':survey_id' => $survey_id, ':parent_id' => $parent_id])
-                    ->one();
-            Yii::$app->response->format = \yii\web\Response::FORMAT_JSON;
+                    ->with('answers')
+                    // ->where(['survey_id' => $survey_id, 'parent_id' => $parent_id])
+                    // ->where(['survey_id=:survey_id', 'parent_id=:parent_id'])
+                    ->where('survey_id=:survey_id')
+                    // ->addParams([':survey_id' => $survey_id, ':parent_id' => $parent_id])
+                    ->addParams([':survey_id' => $survey_id])
+                    ->andWhere('parent_id=:parent_id')
+                    ->addParams([':parent_id' => $parent_id]);
+
+            if (!is_null($answer_id)) {
+                $model = $model->andWhere('answer_id=:answer_id')
+                    ->addParams([':answer_id' => $answer_id]);
+            }
+
+            $model = $model->one();
             
-            return json_encode(['model' => $model]);
+            if (is_null($model)) {
+                $model = Survey::find()->where(['id' => $survey_id])->one();
+                
+                return $this->renderPartial('_result', compact('model'));
+                // Yii::$app->response->format = \yii\web\Response::FORMAT_JSON;
+                // return Yii::$app->response->redirect(['site/index']);
+                // return Yii::$app->response->redirect('site/index');
+                // return $this->redirect('site/index', 302);
+                // return ['data' => ['success' => false]];
+                // Yii::$app->getResponse()->redirect(Yii::$app->request->referrer, 302, FALSE);
+                // return Yii::$app->getResponse()->redirect('/site/index', 302, FALSE);
+            }
+            // Yii::$app->response->format = \yii\sweb\Response::FORMAT_JSON;
+            return $this->renderPartial('_radio', compact('model'));
+            // return json_encode($this->renderPartial('_checkbox', compact('model')));
         }
         return ['data' => ['success' => false]];
         $model = Survey::find()->where(['slug' => $slug])->one();

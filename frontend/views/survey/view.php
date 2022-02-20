@@ -18,7 +18,8 @@ $this->params['breadcrumbs'][] = $this->title;
     <?php endif; ?>
     <p><?= $model->description; ?></p>
     <p><?= $model->id; ?></p>
-    <p id="quiz" class="link" data-id="<?= $model->id; ?>" data-csrf="">пройти квиз</p>
     <p><?= Yii::$app->formatter->asDate($model->created_at,'php:d.m.y');; ?></p>
-
+    <div class="quiz-wrap" data-id="<?= $model->id; ?>" >
+        <p class="link" >пройти квиз</p>
+    </div>
 </div>

@@ -5,6 +5,7 @@ namespace backend\controllers;
 use Yii;
 use backend\models\Answer;
 use backend\models\AnswerSearch;
+use backend\models\Quiz;
 use yii\web\Controller;
 use yii\web\NotFoundHttpException;
 use yii\filters\VerbFilter;
@@ -100,8 +101,11 @@ class AnswerController extends Controller
     {
         $model = $this->findModel($id);
 
-        if ($this->request->isPost && $model->load($this->request->post()) && $model->save()) {
-            return $this->redirect(['view', 'id' => $model->id]);
+        if ($this->request->isPost && $model->load($this->request->post())) {
+            if ($model->save()) {
+                $model = Quiz::find()->where(['id' => $model->quiz_id])->one();
+                return $this->redirect(['quiz/edit', 'id' => $model->survey_id]);
+            }
         }
 
         return $this->render('update', [
