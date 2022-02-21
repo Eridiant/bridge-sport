@@ -17,6 +17,7 @@ class m220120_183621_create_answer_user_table extends Migration
     public function safeUp()
     {
         $this->createTable('{{%answer_user}}', [
+            'id' => $this->primaryKey(),
             'answer_id' => $this->integer()->notNull(),
             'user_id' => $this->integer()->notNull(),
             'value' => $this->text(),
