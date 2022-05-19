@@ -2,7 +2,7 @@ document.addEventListener('DOMContentLoaded', () => {
     let link = document.querySelector('.link');
     let wrap = document.querySelector('.quiz-wrap');
 
-    wrap.addEventListener('click', (e) => {
+    wrap?.addEventListener('click', (e) => {
         let tg = e.target;
         if (tg.classList.contains('submit')) {
             let tgs = tg.closest('.submit').dataset;
@@ -25,7 +25,7 @@ function quizAjax(survey_id, parent_id = null, answer_id = null) {
     quizRequest.open("POST", '/survey/quiz', true);
     quizRequest.setRequestHeader('Content-Type', 'application/json');
     // quizRequest.setRequestHeader('Content-Type', 'application/x-www-form-urlencoded; charset=UTF-8');
-    quizRequest.setRequestHeader('X-CSRF-Token', yii.getCsrfToken());
+    quizRequest.setRequestHeader('X-CSRF-Token', document.querySelector('meta[name="csrf-token"]').content);
     quizRequest.setRequestHeader('X-Requested-With', 'XMLHttpRequest');
     quizRequest.onload = function() {
         if(quizRequest.readyState == XMLHttpRequest.DONE && quizRequest.status == 200) {

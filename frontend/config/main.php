@@ -22,6 +22,20 @@ return [
                 ],
             ],
         ],
+        'assetManager' => [
+            'linkAssets' => true,
+            'bundles' => [
+                'yii\web\JqueryAsset' => [
+                    'js'=>[]
+                ],
+                'yii\bootstrap\BootstrapPluginAsset' => [
+                    'js'=>[]
+                ],
+                'yii\bootstrap\BootstrapAsset' => [
+                    'css' => []
+                ]
+            ]
+        ],
         'user' => [
             'identityClass' => 'common\models\User',
             'enableAutoLogin' => true,
@@ -57,7 +71,7 @@ return [
                 'index' => 'site/index',
                 'post' => 'post/index',
                 'survey' => 'survey/index',
-                'survey/quiz' => 'survey/quiz',
+                // 'survey/quiz' => 'survey/quiz',
                 'survey/<slug:[\w-]+>' => 'survey/view',
                 // 'survey/<slug:[\w-]+>' => 'survey/view',
                 '<url:\w+>' => 'page/index',

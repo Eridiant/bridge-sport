@@ -18,16 +18,16 @@ class AppAsset extends AssetBundle
         'js/app.js',
     ];
     public $depends = [
-        'yii\web\YiiAsset',
-        'yii\bootstrap4\BootstrapAsset',
+        // 'yii\web\YiiAsset',
+        // 'yii\bootstrap4\BootstrapAsset',
     ];
-    public function init()
-    {
-        parent::init();
-        // resetting BootstrapAsset to not load own css files
-        \Yii::$app->assetManager->bundles['yii\\bootstrap4\\BootstrapAsset'] = [
-            'css' => [],
-            'js' => []
-        ];
-    }
+    // public function init()
+    // {
+    //     parent::init();
+    //     // resetting BootstrapAsset to not load own css files
+    //     \Yii::$app->assetManager->bundles['yii\\bootstrap4\\BootstrapAsset'] = [
+    //         'css' => [],
+    //         'js' => []
+    //     ];
+    // }
 }

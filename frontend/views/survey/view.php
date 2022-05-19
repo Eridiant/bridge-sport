@@ -8,7 +8,7 @@ use yii\helpers\Url;
 
 $this->title = $model->name;
 $this->params['breadcrumbs'][] = $this->title;
-\yii\web\YiiAsset::register($this);
+
 ?>
 <div class="post-view">
 
