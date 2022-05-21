@@ -88,6 +88,17 @@ a.desc:after {
     display: flex;
     gap: 30px;
 }
+.migrate-area {
+    overflow: auto;
+    background-color: #000;
+    color: #fff;
+    height: 500px;
+    max-height: 70vh;
+    padding: 10px;
+}
+.migrate-area p {
+    margin: 0;
+}
 @media(max-width:767px) {
     .nav li > form > button.logout {
         display:block;
