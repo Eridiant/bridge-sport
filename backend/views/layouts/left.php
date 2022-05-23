@@ -60,34 +60,26 @@
                             ['label' => 'Ответ', 'icon' => 'home', 'url' => ['/answer/index']],
                         ],
                     ],
-                    ['label' => 'Gii', 'icon' => 'file-code-o', 'url' => ['/gii']],
-                    ['label' => 'Debug', 'icon' => 'dashboard', 'url' => ['/debug']],
                     ['label' => 'Обновления', 'icon' => 'dashboard', 'url' => ['/migrate/index']],
                     ['label' => 'Login', 'url' => ['site/login'], 'visible' => Yii::$app->user->isGuest],
                     [
-                        'label' => 'Some tools',
+                        'label' => 'Логи',
                         'icon' => 'share',
                         'url' => '#',
                         'items' => [
-                            ['label' => 'Gii', 'icon' => 'file-code-o', 'url' => ['/gii'],],
-                            ['label' => 'Debug', 'icon' => 'dashboard', 'url' => ['/debug'],],
-                            [
-                                'label' => 'Level One',
-                                'icon' => 'circle-o',
-                                'url' => '#',
-                                'items' => [
-                                    ['label' => 'Level Two', 'icon' => 'circle-o', 'url' => '#',],
-                                    [
-                                        'label' => 'Level Two',
-                                        'icon' => 'circle-o',
-                                        'url' => '#',
-                                        'items' => [
-                                            ['label' => 'Level Three', 'icon' => 'circle-o', 'url' => '#',],
-                                            ['label' => 'Level Three', 'icon' => 'circle-o', 'url' => '#',],
-                                        ],
-                                    ],
-                                ],
-                            ],
+                            ['label' => 'Логи доступа', 'icon' => 'file-code-o', 'url' => ['/log/index'],],
+                            ['label' => 'Логи ошибок', 'icon' => 'dashboard', 'url' => ['/debug'],],
+                        ],
+                    ],
+                    [
+                        'label' => 'Разработка',
+                        'icon' => 'share',
+                        'url' => '#',
+                        'items' => [
+                            ['label' => 'Gii', 'icon' => 'file-code-o', 'url' => ['../gii'],],
+                            ['label' => 'Debug', 'icon' => 'dashboard', 'url' => ['../debug'],],
+                            ['label' => 'Gii admin', 'icon' => 'file-code-o', 'url' => ['/gii'],],
+                            ['label' => 'Debug admin', 'icon' => 'dashboard', 'url' => ['/debug'],],
                         ],
                     ],
                 ],
