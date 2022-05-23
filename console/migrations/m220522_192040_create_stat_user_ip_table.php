@@ -17,7 +17,7 @@ class m220522_192040_create_stat_user_ip_table extends Migration
             'ip' => $this->integer(10)->unsigned()->notNull(),
             'url' => $this->string(255),
             'ref' => $this->string(255),
-            'lang' => $this->string(12),
+            'lang_choose' => $this->string(12),
             'lang_all' => $this->string(255),
             'device' => $this->string(255),
             'created_at' => $this->integer()->notNull(),
