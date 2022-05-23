@@ -16,6 +16,7 @@ class m220523_115443_create_error_log_table extends Migration
             'id' => $this->primaryKey(),
             'name' => $this->string(64),
             'error' => $this->text(),
+            'created_at' => $this->integer()->notNull(),
         ]);
     }
 

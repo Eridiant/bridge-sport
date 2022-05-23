@@ -9,6 +9,7 @@ use yii\filters\VerbFilter;
 use yii\filters\AccessControl;
 use yii\web\NotFoundHttpException;
 use frontend\models\StatUserIp;
+use frontend\models\ErrorLog;
 
 /**
  * Site controller
@@ -84,13 +85,19 @@ class AppController extends Controller
 
     private function errLog($err, $data)
     {
-        return true;
-        // $fileName = Yii::getAlias('@webroot') . "/log/save_error.log";
-        // if ( file_exists($fileName) && ($fp = fopen($fileName, "a"))!==false ) {
-        //     $fLog = fopen($fileName,'a');
-        //     fwrite($fLog, date("d.m.Y H:i:s") . $err . "\r\n");
-        //     fclose($fLog);
-        // }
+        $error = new ErrorLog();
+        try {
+            $error->name = $err;
+            $error->error = $data;
+
+            if (!$error->save()) {
+                echo 'error';
+            }
+
+        }
+        catch (\yii\db\Exception $exception) {
+            echo 'error';
+        }
     }
 }
 
