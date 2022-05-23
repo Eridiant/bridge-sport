@@ -26,7 +26,7 @@ class m220522_192040_create_stat_user_ip_table extends Migration
         // creates index for column `ip`
         $this->createIndex(
             '{{%idx-stat-user-ip-ip}}',
-            '{{%user_ip}}',
+            '{{%stat_user_ip}}',
             'ip'
         );
     }
@@ -39,7 +39,7 @@ class m220522_192040_create_stat_user_ip_table extends Migration
         // drops index for column `ip`
         $this->dropIndex(
             '{{%idx-stat-user-ip-ip}}',
-            '{{%user_ip}}',
+            '{{%stat_user_ip}}',
             'ip'
         );
 
