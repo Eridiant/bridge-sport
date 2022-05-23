@@ -2,8 +2,8 @@
 
 namespace backend\controllers;
 
-use backend\models\ErrorLog;
 use backend\models\StatUserIp;
+use backend\models\ErrorLog;
 use yii\data\ActiveDataProvider;
 use yii\web\Controller;
 use yii\web\NotFoundHttpException;
@@ -46,7 +46,7 @@ class LogController extends Controller
             ],
             'sort' => [
                 'defaultOrder' => [
-                    'id' => SORT_ASC,
+                    'id' => SORT_DESC,
                 ]
             ],
         ]);

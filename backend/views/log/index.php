@@ -16,13 +16,23 @@ $this->params['breadcrumbs'][] = $this->title;
     <?= GridView::widget([
         'dataProvider' => $dataProvider,
         'columns' => [
-            'ip',
+            [
+                'attribute' => 'ip',
+                'value' => function (StatUserIp $model) {
+                    return long2ip($model->ip);
+                },
+            ],
             'url:url',
             'ref',
             'lang_choose',
             'lang_all',
             'device',
-            'created_at',
+            [
+                'attribute' => 'created_at',
+                'value' => function (StatUserIp $model) {
+                    return date("Y-m-d H:i:s", $model->created_at);
+                },
+            ],
         ],
     ]); ?>
 
