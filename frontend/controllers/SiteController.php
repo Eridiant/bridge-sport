@@ -79,6 +79,14 @@ class SiteController extends AppController
         return $this->render('index', compact('model'));
     }
 
+    public function actionTest()
+    {
+        var_dump('<pre>');
+        var_dump($_SERVER);
+        var_dump('</pre>');
+        die;
+    }
+
     /**
      * Logs in a user.
      *
