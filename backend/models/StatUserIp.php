@@ -47,12 +47,12 @@ class StatUserIp extends \yii\db\ActiveRecord
         return [
             'id' => 'ID',
             'ip' => 'Ip',
-            'url' => 'Url',
-            'ref' => 'Ref',
-            'lang_choose' => 'Lang Choose',
-            'lang_all' => 'Lang All',
-            'device' => 'Device',
-            'created_at' => 'Created At',
+            'url' => 'Страница',
+            'ref' => 'Рефералка',
+            'lang_choose' => 'Язык',
+            'lang_all' => 'Настройки',
+            'device' => 'Устройство',
+            'created_at' => 'Время',
         ];
     }
 }

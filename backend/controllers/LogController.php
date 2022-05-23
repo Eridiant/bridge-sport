@@ -2,6 +2,7 @@
 
 namespace backend\controllers;
 
+use backend\models\ErrorLog;
 use backend\models\StatUserIp;
 use yii\data\ActiveDataProvider;
 use yii\web\Controller;
@@ -40,6 +41,30 @@ class LogController extends Controller
     {
         $dataProvider = new ActiveDataProvider([
             'query' => StatUserIp::find(),
+            'pagination' => [
+                'pageSize' => 50
+            ],
+            'sort' => [
+                'defaultOrder' => [
+                    'id' => SORT_ASC,
+                ]
+            ],
+        ]);
+
+        return $this->render('index', [
+            'dataProvider' => $dataProvider,
+        ]);
+    }
+
+    /**
+     * Lists all ErrorLog models.
+     *
+     * @return string
+     */
+    public function actionError()
+    {
+        $dataProvider = new ActiveDataProvider([
+            'query' => ErrorLog::find(),
             /*
             'pagination' => [
                 'pageSize' => 50
@@ -73,3 +98,4 @@ class LogController extends Controller
         throw new NotFoundHttpException('The requested page does not exist.');
     }
 }
+

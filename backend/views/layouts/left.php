@@ -1,8 +1,5 @@
 <?php
-// var_dump('<pre>');
-// var_dump(Yii::$app->user->identity);
-// var_dump('</pre>');
-// die;
+
 
 ?>
 <aside class="main-sidebar">
@@ -39,6 +36,7 @@
                 'options' => ['class' => 'sidebar-menu tree', 'data-widget'=> 'tree'],
                 'items' => [
                     ['label' => 'Menu Yii2', 'options' => ['class' => 'header']],
+                    ['label' => 'Главная', 'icon' => 'home', 'url' => ['/site/index']],
                     [
                         'label' => 'Посты',
                         'icon' => 'share',
@@ -68,7 +66,7 @@
                         'url' => '#',
                         'items' => [
                             ['label' => 'Логи доступа', 'icon' => 'file-code-o', 'url' => ['/log/index'],],
-                            ['label' => 'Логи ошибок', 'icon' => 'dashboard', 'url' => ['/debug'],],
+                            ['label' => 'Логи ошибок', 'icon' => 'dashboard', 'url' => ['/log/error'],],
                         ],
                     ],
                     [

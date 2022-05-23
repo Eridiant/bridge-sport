@@ -108,6 +108,9 @@ a.desc:after {
     font-size: 15px;
     opacity: .8;
 }
+.index-wrapper a {
+    display: flex;
+}
 @media(max-width:767px) {
     .nav li > form > button.logout {
         display:block;

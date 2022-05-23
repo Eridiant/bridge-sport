@@ -26,6 +26,17 @@ AppAsset::register($this);
 <body>
 <?php $this->beginBody() ?>
 
+<?php if (!Yii::$app->user->isGuest): ?>
+
+<!-- ------Admin-panel----------- -->
+<div class="admin">
+    <a href="<?= Url::toRoute('/site/logout') ?>" class="admin-item">logout</a>
+    <a href="<?= Url::toRoute('/admin') ?>" class="admin-item">admin-panel</a>
+</div>
+
+<!-- ------Admin-panel-end----------- -->
+<?php endif; ?>
+
 <header>
 <a href="<?= Url::to('/') ?>">Главная</a>
 </header>
