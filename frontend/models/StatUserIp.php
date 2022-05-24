@@ -33,7 +33,7 @@ class StatUserIp extends \yii\db\ActiveRecord
     {
         return [
             [['ip'], 'required'],
-            [['ip', 'created_at'], 'integer'],
+            [['created_at'], 'integer'],
             [['url', 'ref', 'lang_all', 'device'], 'string', 'max' => 255],
             [['lang_choose'], 'string', 'max' => 12],
         ];

@@ -19,7 +19,7 @@ $this->params['breadcrumbs'][] = $this->title;
             [
                 'attribute' => 'ip',
                 'value' => function ($model) {
-                    return long2ip($model->ip);
+                    return inet_ntop($model->ip);
                 },
             ],
             'url:url',

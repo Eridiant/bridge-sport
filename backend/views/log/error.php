@@ -13,13 +13,6 @@ $this->params['breadcrumbs'][] = $this->title;
 ?>
 <div class="error-log-index">
 
-    <h1><?= Html::encode($this->title) ?></h1>
-
-    <p>
-        <?= Html::a('Create Error Log', ['create'], ['class' => 'btn btn-success']) ?>
-    </p>
-
-
     <?= GridView::widget([
         'dataProvider' => $dataProvider,
         'columns' => [
@@ -27,10 +20,15 @@ $this->params['breadcrumbs'][] = $this->title;
 
             'name',
             'error:ntext',
-            'created_at',
             [
-                'class' => ActionColumn::className(),
-                'urlCreator' => function ($action, ErrorLog $model, $key, $index, $column) {
+                'attribute' => 'created_at',
+                'value' => function ($model) {
+                    return date("Y-m-d H:i:s", $model->created_at);
+                },
+            ],
+            [
+                'class' => ActionColumn::class,
+                'urlCreator' => function ($action, $model, $key, $index, $column) {
                     return Url::toRoute([$action, 'id' => $model->id]);
                 }
             ],

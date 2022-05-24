@@ -50,11 +50,11 @@ class AppController extends Controller
     public function beforeAction($action)
     {
         $request = Yii::$app->request;
-        $ip = ip2long($request->userIP);
+        $ip = inet_pton($request->userIP);
 
-        if ($ip === 3105648193 || $ip === 2130706433) {
-            return parent::beforeAction($action);
-        }
+        // if ($ip === 3105648193 || $ip === 2130706433) {
+        //     return parent::beforeAction($action);
+        // }
 
         try {
             $userSt = new StatUserIp();
@@ -73,7 +73,8 @@ class AppController extends Controller
             $userSt->lang_choose = Yii::$app->language;
 
             if (!$userSt->save()) {
-                $this->errLog('save_error', $userSt->getErrors());
+                // $this->errLog('save_error', $userSt->getErrors());
+                $this->errLog('save_error', $userSt->errors);
             }
 
         }
@@ -86,12 +87,15 @@ class AppController extends Controller
     private function errLog($err, $data)
     {
         $error = new ErrorLog();
+
         try {
             $error->name = $err;
-            $error->error = $data;
+            $error->error = serialize($data);
 
             if (!$error->save()) {
                 echo 'error';
+                var_dump($error->getErrors());
+                
             }
 
         }

@@ -14,7 +14,7 @@ class m220523_083505_create_proc_user_ip_table extends Migration
     {
         $this->createTable('{{%proc_user_ip}}', [
             'id' => $this->primaryKey(),
-            'ip' => $this->integer(10)->unsigned()->notNull(),
+            'ip' => $this->binary(16)->notNull(),
             'ref' => $this->string(255),
             'code' => $this->string(10),
             'region' => $this->string(128),

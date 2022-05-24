@@ -77,7 +77,7 @@ class LogController extends Controller
             */
         ]);
 
-        return $this->render('index', [
+        return $this->render('error', [
             'dataProvider' => $dataProvider,
         ]);
     }
