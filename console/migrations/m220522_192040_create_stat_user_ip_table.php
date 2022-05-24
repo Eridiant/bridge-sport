@@ -14,7 +14,7 @@ class m220522_192040_create_stat_user_ip_table extends Migration
     {
         $this->createTable('{{%stat_user_ip}}', [
             'id' => $this->primaryKey(),
-            'ip' => $this->binary()->notNull(),
+            'ip' => $this->string(39)->notNull(),
             'url' => $this->string(255),
             'ref' => $this->string(255),
             'lang_choose' => $this->string(12),
@@ -22,13 +22,6 @@ class m220522_192040_create_stat_user_ip_table extends Migration
             'device' => $this->string(255),
             'created_at' => $this->integer()->notNull(),
         ]);
-
-        // creates index for column `ip`
-        // $this->createIndex(
-        //     '{{%idx-stat-user-ip-ip}}',
-        //     '{{%stat_user_ip}}',
-        //     'ip'
-        // );
     }
 
     /**
@@ -36,13 +29,6 @@ class m220522_192040_create_stat_user_ip_table extends Migration
      */
     public function safeDown()
     {
-        // drops index for column `ip`
-        // $this->dropIndex(
-        //     '{{%idx-stat-user-ip-ip}}',
-        //     '{{%stat_user_ip}}',
-        //     'ip'
-        // );
-
         $this->dropTable('{{%stat_user_ip}}');
     }
 }

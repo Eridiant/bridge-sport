@@ -50,11 +50,14 @@ class AppController extends Controller
     public function beforeAction($action)
     {
         $request = Yii::$app->request;
-        $ip = inet_pton($request->userIP);
 
-        // if ($ip === 3105648193 || $ip === 2130706433) {
-        //     return parent::beforeAction($action);
-        // }
+        $ip = $request->userIP;
+
+        if ($ip === '185.28.110.65' || $ip === '127.0.0.1') {
+            return parent::beforeAction($action);
+        }
+
+        $ip = inet_pton($request->userIP);
 
         try {
             $userSt = new StatUserIp();
@@ -94,13 +97,14 @@ class AppController extends Controller
 
             if (!$error->save()) {
                 echo 'error';
-                var_dump($error->getErrors());
-                
+                // var_dump($error->getErrors());
             }
 
         }
         catch (\yii\db\Exception $exception) {
             echo 'error';
+            // var_dump($exception->getMessage());
+            
         }
     }
 }
