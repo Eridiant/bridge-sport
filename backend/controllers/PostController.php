@@ -113,7 +113,7 @@ class PostController extends Controller
                 var_dump('<pre>');
                 var_dump($model->getErrors());
                 var_dump('</pre>');
-                die;
+                // die;
                 
             }
         } else {
@@ -156,6 +156,7 @@ class PostController extends Controller
 
             if (!is_null(UploadedFile::getInstance($model, 'img'))) {
                 $model->img = UploadedFile::getInstance($model, 'img');
+
                 $model->img = $model->upload();
             }
 

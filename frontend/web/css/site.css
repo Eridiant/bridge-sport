@@ -23,6 +23,13 @@ main > .container {
     flex-grow: 3;
 }
 
+.post-view iframe {
+    width: 100%;
+    max-width: 1100px;
+    height: auto;
+    aspect-ratio: 13/10;
+}
+
 .link {
     cursor: pointer;
 }

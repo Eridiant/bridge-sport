@@ -30,7 +30,7 @@ use backend\models\Taxonomy;
 
     <?= $form->field($model, 'description')->widget(CKEditor::className(),[
         'editorOptions' => [
-            'preset' => 'full', //разработанны стандартные настройки basic, standard, full данную возможность не обязательно использовать
+            'preset' => 'standard', //разработанны стандартные настройки basic, standard, full данную возможность не обязательно использовать
             'inline' => false, //по умолчанию false
         ],
     ]);?>
