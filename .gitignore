@@ -44,6 +44,9 @@ phpunit.phar
 /frontend/web/error_log
 /backend/web/error_log
 
+# ignore post img
+/frontend/web/images/post
+
 # ignore my add
 composer.lock
 
