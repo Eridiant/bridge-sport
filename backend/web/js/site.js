@@ -75,7 +75,7 @@ function transliteration(word){
 		'о': 'o',    'п': 'p',    'р': 'r',    'с': 's',    'т': 't',
 		'у': 'u',    'ф': 'f',    'х': 'h',    'ц': 'c',    'ч': 'ch',
 		'ш': 'sh',   'щ': 'sch',  'ь': '',     'ы': 'y',    'ъ': '',
-		'э': 'e',    'ю': 'yu',   'я': 'ya'
+		'э': 'eh',   'ю': 'yu',   'я': 'ya'
 	};
 
 	word = word.toLowerCase();

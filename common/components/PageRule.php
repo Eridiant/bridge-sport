@@ -69,7 +69,7 @@ class PageRule implements UrlRuleInterface {
 
         $url = trim($request->pathInfo, '/'); // удаляем слеши из начала и конца 
         $post = Post::find()
-                ->where(['url' => $url, 'active' => 1])
+                ->where(['url' => $url, 'status' => 1])
                 ->one();
 
         if ($post !== null) {

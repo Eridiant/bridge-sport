@@ -15,17 +15,22 @@ class m220102_183314_create_post_table extends Migration
         $this->createTable('{{%post}}', [
             'id' => $this->primaryKey(),
             'category_id' => $this->integer(4)->notNull(),
+            'parent_id' => $this->integer(4),
             'name' => $this->string(255)->notNull(),
             'url' => $this->text(),
             'slug' => $this->string(255)->notNull(),
             'preview' => $this->text(),
-            'description' => $this->text(),
+            'text' => $this->text(),
             'img' => $this->string(255),
             'dial' => $this->string(255),
+            'iframe' => $this->text(),
             'indexing' => $this->tinyInteger()->notNull()->defaultValue(0),
+            'title' => $this->string(255),
+            'description' => $this->text(),
             'keywords' => $this->string(255),
-            'active' => $this->tinyInteger()->notNull()->defaultValue(1),
+            'status' => $this->tinyInteger()->notNull()->defaultValue(0),
             'author_id' => $this->integer(11),
+            'published_at' => $this->integer(11),
             'created_at' => $this->integer(11)->notNull(),
             'updated_at' => $this->integer(11),
             'deleted_at' => $this->integer(11),
@@ -40,8 +45,25 @@ class m220102_183314_create_post_table extends Migration
             '{{%post}}',
             'slug'
         );
+        // $this->addForeignKey(
+        //     'fk-category-post',
+        //     '{{%post}}',
+        //     'category_id',
+        //     '{{%category}}',
+        //     'id',
+        //     'CASCADE'
+        // );
+
+        // creates index for column `category_id`
+        $this->createIndex(
+            '{{%idx-post-category_id}}',
+            '{{%post}}',
+            'category_id'
+        );
+
+        // add foreign key for table `{{%category}}`
         $this->addForeignKey(
-            'fk-category-post',
+            '{{%fk-post-category_id}}',
             '{{%post}}',
             'category_id',
             '{{%category}}',
@@ -55,10 +77,22 @@ class m220102_183314_create_post_table extends Migration
      */
     public function safeDown()
     {
+
+        // drops foreign key for table `{{%category}}`
         $this->dropForeignKey(
-            'fk-category-post',
-            '{{%post}}',
+            '{{%fk-post-category_id}}',
+            '{{%post}}'
         );
+
+        // drops index for column `category_id`
+        $this->dropIndex(
+            '{{%idx-post-category_id}}',
+            '{{%post}}'
+        );
+        // $this->dropForeignKey(
+        //     'fk-category-post',
+        //     '{{%post}}',
+        // );
         $this->dropTable('{{%post}}');
     }
 }

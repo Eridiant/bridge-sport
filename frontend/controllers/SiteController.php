@@ -74,7 +74,9 @@ class SiteController extends AppController
      */
     public function actionIndex()
     {
-        $model = Post::find()->all();
+        $model = Post::find()
+        ->where(['status' => 1])
+        ->all();
 
         return $this->render('index', compact('model'));
     }

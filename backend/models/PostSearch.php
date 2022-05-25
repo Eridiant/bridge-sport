@@ -5,7 +5,6 @@ namespace backend\models;
 use yii\base\Model;
 use yii\data\ActiveDataProvider;
 use backend\models\Post;
-use backend\models\Category;
 
 /**
  * PostSearch represents the model behind the search form of `backend\models\Post`.
@@ -18,8 +17,8 @@ class PostSearch extends Post
     public function rules()
     {
         return [
-            [['id', 'category_id', 'active', 'author_id', 'created_at', 'updated_at', 'deleted_at'], 'integer'],
-            [['name', 'url', 'slug', 'preview', 'description', 'img', 'dial', 'keywords'], 'safe'],
+            [['id', 'category_id', 'parent_id', 'indexing', 'status', 'author_id', 'published_at', 'created_at', 'updated_at', 'deleted_at'], 'integer'],
+            [['name', 'url', 'slug', 'preview', 'text', 'img', 'dial', 'iframe', 'title', 'description', 'keywords'], 'safe'],
         ];
     }
 
@@ -41,7 +40,7 @@ class PostSearch extends Post
      */
     public function search($params)
     {
-        $query = Post::find()->with('category');
+        $query = Post::find();
 
         // add conditions that should always apply here
 
@@ -61,8 +60,11 @@ class PostSearch extends Post
         $query->andFilterWhere([
             'id' => $this->id,
             'category_id' => $this->category_id,
-            'active' => $this->active,
+            'parent_id' => $this->parent_id,
+            'indexing' => $this->indexing,
+            'status' => $this->status,
             'author_id' => $this->author_id,
+            'published_at' => $this->published_at,
             'created_at' => $this->created_at,
             'updated_at' => $this->updated_at,
             'deleted_at' => $this->deleted_at,
@@ -72,14 +74,14 @@ class PostSearch extends Post
             ->andFilterWhere(['like', 'url', $this->url])
             ->andFilterWhere(['like', 'slug', $this->slug])
             ->andFilterWhere(['like', 'preview', $this->preview])
-            ->andFilterWhere(['like', 'description', $this->description])
+            ->andFilterWhere(['like', 'text', $this->text])
             ->andFilterWhere(['like', 'img', $this->img])
             ->andFilterWhere(['like', 'dial', $this->dial])
+            ->andFilterWhere(['like', 'iframe', $this->iframe])
+            ->andFilterWhere(['like', 'title', $this->title])
+            ->andFilterWhere(['like', 'description', $this->description])
             ->andFilterWhere(['like', 'keywords', $this->keywords]);
 
         return $dataProvider;
     }
 }
-
-
-

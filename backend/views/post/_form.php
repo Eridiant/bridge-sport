@@ -22,13 +22,15 @@ use backend\models\Taxonomy;
 
     <?= $form->field($model, 'category_id')->dropDownList(\backend\models\Category::find()->select(['name', 'id'])->indexBy('id')->column()) ?>
 
+    <?= $form->field($model, 'parent_id')->textInput() ?>
+
     <?= $form->field($model, 'name', ['inputOptions' => ['class' => 'form-control name']])->textInput(['maxlength' => true]) ?>
 
     <?= $form->field($model, 'slug', ['inputOptions' => ['class' => 'form-control slug']])->textInput(['maxlength' => true]) ?>
 
     <?= $form->field($model, 'preview')->textarea(['rows' => 6]) ?>
 
-    <?= $form->field($model, 'description')->widget(CKEditor::className(),[
+    <?= $form->field($model, 'text')->widget(CKEditor::className(),[
         'editorOptions' => [
             'preset' => 'standard', //разработанны стандартные настройки basic, standard, full данную возможность не обязательно использовать
             'inline' => false, //по умолчанию false
@@ -39,6 +41,16 @@ use backend\models\Taxonomy;
 
     <?= $form->field($model, 'dial')->textInput(['maxlength' => true]) ?>
 
+    <?= $form->field($model, 'iframe')->textarea(['rows' => 3]) ?>
+
+    <?= $form->field($model, 'taxonomiesArray')->checkboxList(Taxonomy::find()->select(['label', 'id'])->indexBy('id')->column()) ?>
+    <hr>
+    <h2>Блок СЕО</h2>
+
+    <?= $form->field($model, 'title')->textInput(['maxlength' => true]) ?>
+
+    <?= $form->field($model, 'description')->textarea(['rows' => 6]) ?>
+
     <?= $form->field($model, 'keywords')->textInput(['maxlength' => true]) ?>
 
     <div class="wrapper-form">
@@ -48,7 +60,7 @@ use backend\models\Taxonomy;
                 '1'=>'Индексировать'
         ]) ?>
 
-        <?= $form->field($model, 'active')->dropDownList([
+        <?= $form->field($model, 'status')->dropDownList([
                 '0'=>'Скрыта',
                 '1'=>'Доступна',
                 // '2'=>'Доступ ограничен',
@@ -56,19 +68,9 @@ use backend\models\Taxonomy;
 
     </div>
 
-    <?= $form->field($model, 'taxonomiesArray')->checkboxList(Taxonomy::find()->select(['label', 'id'])->indexBy('id')->column()) ?>
-
     <?= $form->field($model, 'author_id')->hiddenInput()->label(false) ?>
 
-    <?//= $form->field($model, 'created_at')->textInput() ?>
-
-    <?//= $form->field($model, 'updated_at')->textInput() ?>
-
-    <?//= $form->field($model, 'deleted_at')->textInput() ?>
-
-    <?php
-
-    ?>
+    <hr>
 
     <div class="form-group">
         <?= Html::submitButton('Save', ['class' => 'btn btn-success']) ?>

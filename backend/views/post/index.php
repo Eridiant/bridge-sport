@@ -56,12 +56,12 @@ $this->params['breadcrumbs'][] = $this->title;
             // 'active',
             [
                 'label' => 'Доступно',
-                'attribute' => 'active',
+                'attribute' => 'status',
                 'format' => 'text',
                 'filter' => [0 => 'Не доступно', 1 => 'Доступно'],
                 // 'filter' => Post::find()->select(['active', 'id'])->indexBy('id')->column(),
                 'value' => function($model) {
-                    return $model->active ? 'Доступно' : 'Не доступно';
+                    return $model->status ? 'Доступно' : 'Не доступно';
                 }
             ],
             //'author_id',
@@ -69,7 +69,7 @@ $this->params['breadcrumbs'][] = $this->title;
             //'updated_at',
             //'deleted_at',
             [
-                'class' => ActionColumn::className(),
+                'class' => ActionColumn::class,
                 'urlCreator' => function ($action, \backend\models\Post $model, $key, $index, $column) {
                     return Url::toRoute([$action, 'id' => $model->id]);
                 }

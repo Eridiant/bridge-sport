@@ -14,7 +14,7 @@ $this->title = 'My Yii Application';
     <?php foreach ($model as $m): ?>
         <div class="news-wrapper">
             <?php if (empty($m->img)): ?>
-                <img src="/images/post/<?= $m->category_id; ?>.jpg" alt="" class="news-img">
+                <img src="/images/dummy/<?= $m->category_id; ?>.jpg" alt="" class="news-img">
             <?php else: ?>
                 <img src="/images/post/<?= $m->img; ?>" alt="">
             <?php endif; ?>

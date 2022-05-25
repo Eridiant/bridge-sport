@@ -12,17 +12,22 @@ use yii\imagine\Image;
  *
  * @property int $id
  * @property int $category_id
+ * @property int|null $parent_id
  * @property string $name
  * @property string|null $url
  * @property string $slug
  * @property string|null $preview
- * @property string|null $description
+ * @property string|null $text
  * @property string|null $img
  * @property string|null $dial
+ * @property string|null $iframe
  * @property int $indexing
+ * @property string|null $title
+ * @property string|null $description
  * @property string|null $keywords
- * @property int $active
+ * @property int $status
  * @property int|null $author_id
+ * @property int|null $published_at
  * @property int $created_at
  * @property int|null $updated_at
  * @property int|null $deleted_at
@@ -40,7 +45,7 @@ class Post extends \yii\db\ActiveRecord
     {
         return '{{%post}}';
     }
-
+    
     /**
      * {@inheritdoc}
      */
@@ -48,10 +53,10 @@ class Post extends \yii\db\ActiveRecord
     {
         return [
             [['category_id', 'name', 'slug'], 'required'],
-            [['category_id', 'indexing', 'active', 'author_id', 'created_at', 'updated_at', 'deleted_at'], 'integer'],
-            [['url', 'preview', 'description'], 'string'],
+            [['category_id', 'parent_id', 'indexing', 'status', 'author_id', 'published_at', 'created_at', 'updated_at', 'deleted_at'], 'integer'],
+            [['url', 'preview', 'text', 'iframe', 'description'], 'string'],
             [['taxonomiesArray'], 'safe'],
-            [['name', 'slug', 'dial', 'keywords'], 'string', 'max' => 255],
+            [['name', 'slug', 'img', 'dial', 'title', 'keywords'], 'string', 'max' => 255],
             [['category_id'], 'exist', 'skipOnError' => true, 'targetClass' => Category::class, 'targetAttribute' => ['category_id' => 'id']],
         ];
     }
@@ -78,17 +83,22 @@ class Post extends \yii\db\ActiveRecord
         return [
             'id' => 'ID',
             'category_id' => 'Category ID',
+            'parent_id' => 'Parent ID',
             'name' => 'Name',
             'url' => 'Url',
             'slug' => 'Slug',
             'preview' => 'Preview',
-            'description' => 'Description',
+            'text' => 'Text',
             'img' => 'Img',
             'dial' => 'Dial',
+            'iframe' => 'Iframe',
             'indexing' => 'Indexing',
+            'title' => 'Title',
+            'description' => 'Description',
             'keywords' => 'Keywords',
-            'active' => 'Active',
+            'status' => 'Status',
             'author_id' => 'Author ID',
+            'published_at' => 'Published At',
             'created_at' => 'Created At',
             'updated_at' => 'Updated At',
             'deleted_at' => 'Deleted At',

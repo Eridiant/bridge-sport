@@ -4,26 +4,35 @@ namespace frontend\models;
 
 use Yii;
 
+
 /**
- * This is the model class for table "bsip_post".
+ * This is the model class for table "{{%post}}".
  *
  * @property int $id
  * @property int $category_id
+ * @property int|null $parent_id
  * @property string $name
  * @property string|null $url
  * @property string $slug
  * @property string|null $preview
- * @property string|null $description
+ * @property string|null $text
  * @property string|null $img
  * @property string|null $dial
+ * @property string|null $iframe
+ * @property int $indexing
+ * @property string|null $title
+ * @property string|null $description
  * @property string|null $keywords
- * @property int $active
+ * @property int $status
  * @property int|null $author_id
+ * @property int|null $published_at
  * @property int $created_at
  * @property int|null $updated_at
  * @property int|null $deleted_at
  *
  * @property Category $category
+ * @property PostTaxonomy[] $postTaxonomies
+ * @property Taxonomy[] $taxonomies
  */
 class Post extends \yii\db\ActiveRecord
 {
@@ -41,11 +50,11 @@ class Post extends \yii\db\ActiveRecord
     public function rules()
     {
         return [
-            [['category_id', 'name', 'slug', 'created_at'], 'required'],
-            [['category_id', 'active', 'author_id', 'created_at', 'updated_at', 'deleted_at'], 'integer'],
-            [['url', 'preview', 'description'], 'string'],
-            [['name', 'slug', 'img', 'dial', 'keywords'], 'string', 'max' => 255],
-            [['category_id'], 'exist', 'skipOnError' => true, 'targetClass' => Category::className(), 'targetAttribute' => ['category_id' => 'id']],
+            [['category_id', 'name', 'slug'], 'required'],
+            [['category_id', 'parent_id', 'indexing', 'status', 'author_id', 'published_at', 'created_at', 'updated_at', 'deleted_at'], 'integer'],
+            [['url', 'preview', 'text', 'description'], 'string'],
+            [['name', 'slug', 'img', 'dial', 'iframe', 'title', 'keywords'], 'string', 'max' => 255],
+            [['category_id'], 'exist', 'skipOnError' => true, 'targetClass' => Category::class, 'targetAttribute' => ['category_id' => 'id']],
         ];
     }
 
@@ -57,16 +66,22 @@ class Post extends \yii\db\ActiveRecord
         return [
             'id' => 'ID',
             'category_id' => 'Category ID',
+            'parent_id' => 'Parent ID',
             'name' => 'Name',
             'url' => 'Url',
             'slug' => 'Slug',
             'preview' => 'Preview',
-            'description' => 'Description',
+            'text' => 'Text',
             'img' => 'Img',
             'dial' => 'Dial',
+            'iframe' => 'Iframe',
+            'indexing' => 'Indexing',
+            'title' => 'Title',
+            'description' => 'Description',
             'keywords' => 'Keywords',
-            'active' => 'Active',
+            'status' => 'Status',
             'author_id' => 'Author ID',
+            'published_at' => 'Published At',
             'created_at' => 'Created At',
             'updated_at' => 'Updated At',
             'deleted_at' => 'Deleted At',
@@ -80,6 +95,26 @@ class Post extends \yii\db\ActiveRecord
      */
     public function getCategory()
     {
-        return $this->hasOne(Category::class, ['id' => 'category_id']);
+        return $this->hasOne(Category::className(), ['id' => 'category_id']);
+    }
+
+    /**
+     * Gets query for [[PostTaxonomies]].
+     *
+     * @return \yii\db\ActiveQuery
+     */
+    public function getPostTaxonomies()
+    {
+        return $this->hasMany(PostTaxonomy::className(), ['post_id' => 'id']);
+    }
+
+    /**
+     * Gets query for [[Taxonomies]].
+     *
+     * @return \yii\db\ActiveQuery
+     */
+    public function getTaxonomies()
+    {
+        return $this->hasMany(Taxonomy::className(), ['id' => 'taxonomy_id'])->viaTable('{{%post_taxonomy}}', ['post_id' => 'id']);
     }
 }
