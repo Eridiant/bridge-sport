@@ -95,7 +95,7 @@ class Post extends \yii\db\ActiveRecord
      */
     public function getCategory()
     {
-        return $this->hasOne(Category::className(), ['id' => 'category_id']);
+        return $this->hasOne(Category::class, ['id' => 'category_id']);
     }
 
     /**
@@ -105,7 +105,7 @@ class Post extends \yii\db\ActiveRecord
      */
     public function getPostTaxonomies()
     {
-        return $this->hasMany(PostTaxonomy::className(), ['post_id' => 'id']);
+        return $this->hasMany(PostTaxonomy::class, ['post_id' => 'id']);
     }
 
     /**
@@ -115,6 +115,6 @@ class Post extends \yii\db\ActiveRecord
      */
     public function getTaxonomies()
     {
-        return $this->hasMany(Taxonomy::className(), ['id' => 'taxonomy_id'])->viaTable('{{%post_taxonomy}}', ['post_id' => 'id']);
+        return $this->hasMany(Taxonomy::class, ['id' => 'taxonomy_id'])->viaTable('{{%post_taxonomy}}', ['post_id' => 'id']);
     }
 }
