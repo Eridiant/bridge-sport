@@ -10,6 +10,7 @@ use yii\bootstrap4\Html;
 use yii\helpers\Url;
 use yii\bootstrap4\Nav;
 use yii\bootstrap4\NavBar;
+use common\components\MenuWidget;
 
 AppAsset::register($this);
 ?>
@@ -37,16 +38,20 @@ AppAsset::register($this);
 <!-- ------Admin-panel-end----------- -->
 <?php endif; ?>
 
-<header>
-<a href="<?= Url::to('/') ?>">Главная</a>
-</header>
+<?php require_once('template-header.php'); ?>
 
-<main role="main">
-    <div class="container">
-
-        <?= $content ?>
+<div class="main">
+    <div class="container main-container" style="max-width: 1600px; margin-left: auto; margin-right: auto">
+        <aside>
+            <?= MenuWidget::widget(['tpl' => 'menu']); ?>
+        </aside>
+        <main role="main">
+            <?= $content ?>
+        </main>
     </div>
-</main>
+</div>
+
+<?php require_once('template-footer.php'); ?>
 
 <footer>
 
