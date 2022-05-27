@@ -10,7 +10,7 @@ use yii\helpers\Url;
             <div class="row">
                 <div class="col-lg-3 col-md-6 col-sm-12">
                     <div class="footer-item">
-                        <p>All</p>
+                        <p>Site under destruction</p>
                     </div>
                 </div>
             </div>

@@ -20,21 +20,29 @@ $this->title = 'Bridge sport';
                     </picture>
                 </div>
             <?php else: ?>
-                <img src="/images/post/<?= $m->img; ?>" alt="">
+                <div class="news-img">
+                    <picture>
+                        <img src="/images/post/<?= $m->img; ?>" alt="" class="news-img">
+                    </picture>
+                </div>
             <?php endif; ?>
             <div class="news-inner">
+                <div class="news-header">
+                <p><?= $m->category->name; ?></p>
+                    <p>
+                        <?php if ($m->taxonomies): ?>
+                            <?php foreach ($m->taxonomies as $taxonomy): ?>
+                                <span><?= $taxonomy->label; ?></span>
+                            <?php endforeach; ?>
+                        <?php endif; ?>
+                    </p>
+                </div>
                 <h2 class="title"><?= $m->name; ?></h2>
-                <p><?= $m->preview; ?></p>
-                <p><?php 
-                // var_dump('<pre>');
-                // var_dump($m->category_id); 
-                // var_dump('</pre>');
-                ?></p>
+                <p class="news-desc"><?= $m->preview; ?></p>
                 <div class="news-footer">
                     <a href="<?= Url::to(['/news', 'id' => $m->id]) ?>">
                         читать больше
                     </a>
-                    <p><?= $m->created_at; ?></p>
                 </div>
             </div>
         </div>
