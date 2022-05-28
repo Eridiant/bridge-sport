@@ -1,0 +1,60 @@
+<?php
+
+use yii\db\Migration;
+
+/**
+ * Handles the creation of table `{{%category}}`.
+ * Has foreign keys to the tables:
+ *
+ * - `{{%url}}`
+ */
+class m220528_182928_create_category_table extends Migration
+{
+    /**
+     * {@inheritdoc}
+     */
+    public function safeUp()
+    {
+        $this->createTable('{{%category}}', [
+            'id' => $this->primaryKey(),
+            'url' => $this->integer()->notNull(),
+        ]);
+
+        // creates index for column `url`
+        $this->createIndex(
+            '{{%idx-category-url}}',
+            '{{%category}}',
+            'url'
+        );
+
+        // add foreign key for table `{{%url}}`
+        $this->addForeignKey(
+            '{{%fk-category-url}}',
+            '{{%category}}',
+            'url',
+            '{{%url}}',
+            'id',
+            'CASCADE'
+        );
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function safeDown()
+    {
+        // drops foreign key for table `{{%url}}`
+        $this->dropForeignKey(
+            '{{%fk-category-url}}',
+            '{{%category}}'
+        );
+
+        // drops index for column `url`
+        $this->dropIndex(
+            '{{%idx-category-url}}',
+            '{{%category}}'
+        );
+
+        $this->dropTable('{{%category}}');
+    }
+}

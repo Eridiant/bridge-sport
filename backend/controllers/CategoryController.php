@@ -71,8 +71,10 @@ class CategoryController extends Controller
 
         $model->parent_id = $id;
 
-        if ($this->request->isPost) {
-            if ($model->load($this->request->post()) && $model->save()) {
+        if ($this->request->isPost && $model->load($this->request->post())) {
+
+            $model->url = $this->createUrl($model->parent_id, $model->slug);
+            if ($model->save()) {
                 return $this->redirect(['view', 'id' => $model->id]);
             }
         } else {
@@ -82,6 +84,26 @@ class CategoryController extends Controller
         return $this->render('create', [
             'model' => $model,
         ]);
+    }
+
+    protected function createUrl($category_id, $slug)
+    {
+        if (!empty($category_id)) {
+            do {
+                $category = Category::find()
+                            ->select(['parent_id', 'slug'])
+                            ->where(['id' => $category_id])
+                            ->one();
+    
+                $slug = $category->slug . '/'. $slug;
+                $category_id = $category->parent_id;
+                // $slug = isset($category->slug) ? $category->slug . '/'. $slug : $slug;
+                // $category_id = isset($category->parent_id) ? $category->parent_id : 0;
+    
+            } while ($category_id != 0);
+        }
+
+        return $slug;
     }
 
     /**

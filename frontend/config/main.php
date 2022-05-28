@@ -77,7 +77,7 @@ return [
                 // 'survey/quiz' => 'survey/quiz',
                 'survey/<slug:[\w-]+>' => 'survey/view',
                 // 'survey/<slug:[\w-]+>' => 'survey/view',
-                '<url:\w+>' => 'page/index',
+                // '<url:\w+>' => 'page/index',
                 [
                     'class' => 'common\components\PageRule',
                 ],

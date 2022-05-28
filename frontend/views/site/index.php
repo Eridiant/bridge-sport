@@ -7,11 +7,10 @@ use yii\helpers\Url;
 
 $this->title = 'Bridge sport';
 
-$this->params['breadcrumbs'][] = $this->title;
 ?>
 <div class="main-wrapper">
     <p>
-        <a href="<?= Url::to(['/site/contact']) ?>"><?= Url::to(['/site/contact']) ?></a>
+
     </p>
     <?php foreach ($model as $m): ?>
         <div class="news-wrapper">
@@ -38,7 +37,7 @@ $this->params['breadcrumbs'][] = $this->title;
                 <h2 class="title"><?= $m->name; ?></h2>
                 <p class="news-desc"><?= $m->preview; ?></p>
                 <div class="news-footer">
-                    <a href="<?= Url::to(['/news', 'id' => $m->id]) ?>">
+                    <a href="<?= Url::to(['/post', 'id' => $m->id]) ?>">
                         читать больше
                     </a>
                 </div>

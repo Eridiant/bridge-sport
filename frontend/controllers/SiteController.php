@@ -79,8 +79,6 @@ class SiteController extends AppController
         ->where(['status' => 1])
         ->all();
 
-        // $this->view-> = 'hello';
-        // $this->params['breadcrumbs'][] = 'adfs';
         return $this->render('index', compact('model'));
     }
 

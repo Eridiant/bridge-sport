@@ -7,38 +7,47 @@ use yii\widgets\DetailView;
 /* @var $model frontend\models\Category */
 
 $this->title = $model->name;
-$this->params['breadcrumbs'][] = ['label' => 'Categories', 'url' => ['index']];
-$this->params['breadcrumbs'][] = $this->title;
-\yii\web\YiiAsset::register($this);
+// var_dump('<pre>');
+// var_dump($model->posts);
+// var_dump('</pre>');
+// die;
+
 ?>
 <div class="category-view">
 
     <h1><?= Html::encode($this->title) ?></h1>
 
-    <p>
-        <?= Html::a('Update', ['update', 'id' => $model->id], ['class' => 'btn btn-primary']) ?>
-        <?= Html::a('Delete', ['delete', 'id' => $model->id], [
-            'class' => 'btn btn-danger',
-            'data' => [
-                'confirm' => 'Are you sure you want to delete this item?',
-                'method' => 'post',
-            ],
-        ]) ?>
-    </p>
-
-    <?= DetailView::widget([
-        'model' => $model,
-        'attributes' => [
-            'id',
-            'parent_id',
-            'name',
-            'slug',
-            'img',
-            'keywords',
-            'description:ntext',
-            'active',
-            'deleted_at',
-        ],
-    ]) ?>
+    <?php foreach ($model->posts as $m): ?>
+        <div class="news-wrapper">
+            <div class="news-img">
+                <picture>
+                    <?php if (empty($m->img)): ?>
+                        <img src="/images/dummy/<?= $m->id; ?>.jpg" alt="" class="news-img">
+                    <?php else: ?>
+                        <img src="/images/post/<?= $m->img; ?>" alt="" class="news-img">
+                    <?php endif; ?>
+                </picture>
+            </div>
+            <div class="news-inner">
+                <div class="news-header">
+                <p><?= $m->category->name; ?></p>
+                    <p>
+                        <?php if ($m->taxonomies): ?>
+                            <?php foreach ($m->taxonomies as $taxonomy): ?>
+                                <span><?= $taxonomy->label; ?></span>
+                            <?php endforeach; ?>
+                        <?php endif; ?>
+                    </p>
+                </div>
+                <h2 class="title"><?= $m->name; ?></h2>
+                <p class="news-desc"><?= $m->preview; ?></p>
+                <div class="news-footer">
+                    <a href="#">
+                        читать больше
+                    </a>
+                </div>
+            </div>
+        </div>
+    <?php endforeach; ?>
 
 </div>
