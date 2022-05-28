@@ -15,7 +15,7 @@ use yii\filters\VerbFilter;
 /**
  * SurveyController implements the CRUD actions for Post model.
  */
-class SurveyController extends Controller
+class SurveyController extends AppController
 {
     /**
      * @inheritDoc

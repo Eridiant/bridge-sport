@@ -6,6 +6,8 @@ use yii\helpers\Url;
 /* @var $this yii\web\View */
 
 $this->title = 'Bridge sport';
+
+$this->params['breadcrumbs'][] = $this->title;
 ?>
 <div class="main-wrapper">
     <p>
@@ -13,19 +15,15 @@ $this->title = 'Bridge sport';
     </p>
     <?php foreach ($model as $m): ?>
         <div class="news-wrapper">
-            <?php if (empty($m->img)): ?>
-                <div class="news-img <?= $m->taxonomies[0]->label; ?>">
-                    <picture>
+            <div class="news-img <?= $m->taxonomies[0]->label; ?>">
+                <picture>
+                    <?php if (empty($m->img)): ?>
                         <img src="/images/dummy/<?= $m->category_id; ?>.jpg" alt="" class="news-img">
-                    </picture>
-                </div>
-            <?php else: ?>
-                <div class="news-img <?= $m->taxonomies[0]->label; ?>">
-                    <picture>
+                    <?php else: ?>
                         <img src="/images/post/<?= $m->img; ?>" alt="" class="news-img">
-                    </picture>
-                </div>
-            <?php endif; ?>
+                    <?php endif; ?>
+                </picture>
+            </div>
             <div class="news-inner">
                 <div class="news-header">
                 <p><?= $m->category->name; ?></p>

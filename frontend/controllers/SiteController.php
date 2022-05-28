@@ -79,6 +79,8 @@ class SiteController extends AppController
         ->where(['status' => 1])
         ->all();
 
+        // $this->view-> = 'hello';
+        // $this->params['breadcrumbs'][] = 'adfs';
         return $this->render('index', compact('model'));
     }
 
@@ -99,6 +101,8 @@ class SiteController extends AppController
         }
 
         $model->password = '';
+
+        Yii::$app->view->params['aside'] = false;
 
         return $this->render('login', [
             'model' => $model,

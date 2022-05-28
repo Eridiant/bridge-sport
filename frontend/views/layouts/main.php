@@ -10,7 +10,6 @@ use yii\bootstrap4\Html;
 use yii\helpers\Url;
 use yii\bootstrap4\Nav;
 use yii\bootstrap4\NavBar;
-use common\components\MenuWidget;
 
 AppAsset::register($this);
 ?>
@@ -42,9 +41,7 @@ AppAsset::register($this);
 
 <div class="main">
     <div class="container main-container" style="max-width: 1600px; margin-left: auto; margin-right: auto">
-        <aside>
-            <?= MenuWidget::widget(['tpl' => 'menu']); ?>
-        </aside>
+        <?php require_once('template-aside.php'); ?>
         <main role="main">
             <?= $content ?>
         </main>

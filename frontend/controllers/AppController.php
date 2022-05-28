@@ -56,6 +56,8 @@ class AppController extends Controller
 
     public function beforeAction($action)
     {
+        Yii::$app->view->params['aside'] = true;
+
         $request = Yii::$app->request;
 
         $ip = $request->userIP;
