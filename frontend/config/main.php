@@ -63,8 +63,9 @@ return [
         'urlManager' => [
             'enablePrettyUrl' => true,
             'showScriptName' => false,
+            // 'caseSensitive' => false,
             // 'enableStrictParsing' => false,
-            // 'suffix' => '/',
+            'suffix' => '/',
             // 'normalizer' => [
             //     'class' => 'yii\web\UrlNormalizer',
             //     'action' => \yii\web\UrlNormalizer::ACTION_REDIRECT_TEMPORARY,

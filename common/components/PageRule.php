@@ -82,21 +82,17 @@ class PageRule implements UrlRuleInterface {
 
         $category = Category::find()
             ->select(['id', 'url'])
-            ->where('url=:url')
+            ->where('binary url=:url')
             ->addParams([':url' => $url])
             ->one();
-            // var_dump('<pre>');
-            // var_dump($category->id);
-            // var_dump('</pre>');
-            // // die;
-            
+
         if (!empty($category)) {
             return ['/category/view', ['id' => $category->id]];
         }
         $post = Post::find()
             ->select(['id', 'url'])
             ->where(['status' => 1])
-            ->andWhere('url=:url')
+            ->andWhere('binary url=:url')
             ->addParams([':url' => $url])
             ->one();
 

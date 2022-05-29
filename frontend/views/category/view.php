@@ -1,6 +1,7 @@
 <?php
 
 use yii\helpers\Html;
+use yii\helpers\Url;
 use yii\widgets\DetailView;
 
 /* @var $this yii\web\View */
@@ -42,7 +43,7 @@ $this->title = $model->name;
                 <h2 class="title"><?= $m->name; ?></h2>
                 <p class="news-desc"><?= $m->preview; ?></p>
                 <div class="news-footer">
-                    <a href="#">
+                    <a href="<?= Url::to(['/post', 'id' => $m->id]) ?>">
                         читать больше
                     </a>
                 </div>

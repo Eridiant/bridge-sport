@@ -50,10 +50,6 @@ AppAsset::register($this);
 
 <?php require_once('template-footer.php'); ?>
 
-<footer>
-
-</footer>
-
 <?php $this->endBody() ?>
 </body>
 </html>

@@ -35,6 +35,7 @@ class m220102_183314_create_post_table extends Migration
             'updated_at' => $this->integer(11),
             'deleted_at' => $this->integer(11),
         ]);
+
         $this->createIndex(
             'idx-post-url',
             '{{%post}}',
@@ -45,14 +46,6 @@ class m220102_183314_create_post_table extends Migration
             '{{%post}}',
             'slug'
         );
-        // $this->addForeignKey(
-        //     'fk-category-post',
-        //     '{{%post}}',
-        //     'category_id',
-        //     '{{%category}}',
-        //     'id',
-        //     'CASCADE'
-        // );
 
         // creates index for column `category_id`
         $this->createIndex(
@@ -89,10 +82,17 @@ class m220102_183314_create_post_table extends Migration
             '{{%idx-post-category_id}}',
             '{{%post}}'
         );
-        // $this->dropForeignKey(
-        //     'fk-category-post',
-        //     '{{%post}}',
-        // );
+
+        $this->dropIndex(
+            '{{%idx-post-url}}',
+            '{{%post}}'
+        );
+
+        $this->dropIndex(
+            '{{%idx-post-slug}}',
+            '{{%post}}'
+        );
+
         $this->dropTable('{{%post}}');
     }
 }
