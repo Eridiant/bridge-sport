@@ -1,0 +1,60 @@
+<?php
+
+use yii\db\Migration;
+
+/**
+ * Handles the creation of table `{{%post}}`.
+ * Has foreign keys to the tables:
+ *
+ * - `{{%youtube}}`
+ */
+class m220531_183126_create_post_table extends Migration
+{
+    /**
+     * {@inheritdoc}
+     */
+    public function safeUp()
+    {
+        $this->createTable('{{%post}}', [
+            'id' => $this->primaryKey(),
+            'youtube_id' => $this->integer()->notNull(),
+        ]);
+
+        // creates index for column `youtube_id`
+        $this->createIndex(
+            '{{%idx-post-youtube_id}}',
+            '{{%post}}',
+            'youtube_id'
+        );
+
+        // add foreign key for table `{{%youtube}}`
+        $this->addForeignKey(
+            '{{%fk-post-youtube_id}}',
+            '{{%post}}',
+            'youtube_id',
+            '{{%youtube}}',
+            'id',
+            'CASCADE'
+        );
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function safeDown()
+    {
+        // drops foreign key for table `{{%youtube}}`
+        $this->dropForeignKey(
+            '{{%fk-post-youtube_id}}',
+            '{{%post}}'
+        );
+
+        // drops index for column `youtube_id`
+        $this->dropIndex(
+            '{{%idx-post-youtube_id}}',
+            '{{%post}}'
+        );
+
+        $this->dropTable('{{%post}}');
+    }
+}

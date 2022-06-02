@@ -65,6 +65,12 @@ class CategoryController extends AppController
      */
     public function actionView($id)
     {
+        // $model = $this->findModel($id);
+        // var_dump('<pre>');
+        // var_dump($model->posts);
+        // var_dump('</pre>');
+        // die;
+        
         return $this->render('view', [
             'model' => $this->findModel($id),
         ]);
@@ -72,7 +78,11 @@ class CategoryController extends AppController
 
     protected function findModel($id)
     {
-        if (($model = Category::findOne(['id' => $id])) !== null) {
+        $model = Category::find()
+        ->With('posts')
+        ->where(['id' => $id])
+        ->one();
+        if ($model !== null) {
             return $model;
         }
 

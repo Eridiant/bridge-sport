@@ -1,0 +1,61 @@
+<?php
+
+use yii\db\Migration;
+
+/**
+ * Handles the creation of table `{{%post_img_format}}`.
+ * Has foreign keys to the tables:
+ *
+ * - `{{%img}}`
+ */
+class m220529_192440_create_post_img_format_table extends Migration
+{
+    /**
+     * {@inheritdoc}
+     */
+    public function safeUp()
+    {
+        $this->createTable('{{%post_img_format}}', [
+            'id' => $this->primaryKey(),
+            'img_id' => $this->integer()->notNull(),
+            'format' => $this->string(24),
+        ]);
+
+        // creates index for column `img_id`
+        $this->createIndex(
+            '{{%idx-post_img_format-img_id}}',
+            '{{%post_img_format}}',
+            'img_id'
+        );
+
+        // add foreign key for table `{{%img}}`
+        $this->addForeignKey(
+            '{{%fk-post_img_format-img_id}}',
+            '{{%post_img_format}}',
+            'img_id',
+            '{{%img}}',
+            'id',
+            'CASCADE'
+        );
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function safeDown()
+    {
+        // drops foreign key for table `{{%img}}`
+        $this->dropForeignKey(
+            '{{%fk-post_img_format-img_id}}',
+            '{{%post_img_format}}'
+        );
+
+        // drops index for column `img_id`
+        $this->dropIndex(
+            '{{%idx-post_img_format-img_id}}',
+            '{{%post_img_format}}'
+        );
+
+        $this->dropTable('{{%post_img_format}}');
+    }
+}

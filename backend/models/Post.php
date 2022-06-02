@@ -5,7 +5,9 @@ namespace backend\models;
 use Yii;
 use yii\behaviors\TimestampBehavior;
 use yii\helpers\FileHelper;
-use yii\imagine\Image;
+use yii\web\UploadedFile;
+// use yii\imagine\Image;
+
 
 /**
  * This is the model class for table "{{%post}}".
@@ -18,9 +20,10 @@ use yii\imagine\Image;
  * @property string $slug
  * @property string|null $preview
  * @property string|null $text
- * @property string|null $img
+ * @property int|null $image_id
  * @property string|null $dial
- * @property string|null $iframe
+ * @property int|null $iframe_id
+ * @property int|null $youtube_id
  * @property int $indexing
  * @property string|null $title
  * @property string|null $description
@@ -33,8 +36,11 @@ use yii\imagine\Image;
  * @property int|null $deleted_at
  *
  * @property Category $category
+ * @property Iframe $iframe
+ * @property Image $image
  * @property PostTaxonomy[] $postTaxonomies
  * @property Taxonomy[] $taxonomies
+ * @property Youtube $youtube
  */
 class Post extends \yii\db\ActiveRecord
 {
@@ -53,11 +59,14 @@ class Post extends \yii\db\ActiveRecord
     {
         return [
             [['category_id', 'name', 'slug'], 'required'],
-            [['category_id', 'parent_id', 'indexing', 'status', 'author_id', 'published_at', 'created_at', 'updated_at', 'deleted_at'], 'integer'],
+            [['category_id', 'parent_id', 'image_id', 'iframe_id', 'youtube_id', 'indexing', 'status', 'author_id', 'published_at', 'created_at', 'updated_at', 'deleted_at'], 'integer'],
             [['url', 'preview', 'text', 'iframe', 'description'], 'string'],
-            [['taxonomiesArray'], 'safe'],
-            [['name', 'slug', 'img', 'dial', 'title', 'keywords'], 'string', 'max' => 255],
+            [['taxonomiesArray', 'alt', 'img', 'youtube', 'youtubeFields', 'hide', 'onlyImg', 'frame', 'previews'], 'safe'],
+            [['name', 'slug', 'dial', 'title', 'keywords'], 'string', 'max' => 255],
             [['category_id'], 'exist', 'skipOnError' => true, 'targetClass' => Category::class, 'targetAttribute' => ['category_id' => 'id']],
+            [['iframe_id'], 'exist', 'skipOnError' => true, 'targetClass' => Iframe::class, 'targetAttribute' => ['iframe_id' => 'id']],
+            [['image_id'], 'exist', 'skipOnError' => true, 'targetClass' => Image::class, 'targetAttribute' => ['image_id' => 'id']],
+            [['youtube_id'], 'exist', 'skipOnError' => true, 'targetClass' => Youtube::class, 'targetAttribute' => ['youtube_id' => 'id']],
         ];
     }
 
@@ -89,9 +98,10 @@ class Post extends \yii\db\ActiveRecord
             'slug' => 'Slug',
             'preview' => 'Preview',
             'text' => 'Text',
-            'img' => 'Img',
+            'image_id' => 'Image ID',
             'dial' => 'Dial',
-            'iframe' => 'Iframe',
+            'iframe_id' => 'Iframe ID',
+            'youtube_id' => 'Youtube ID',
             'indexing' => 'Indexing',
             'title' => 'Title',
             'description' => 'Description',
@@ -102,6 +112,7 @@ class Post extends \yii\db\ActiveRecord
             'created_at' => 'Created At',
             'updated_at' => 'Updated At',
             'deleted_at' => 'Deleted At',
+            'youtubeFields' => 'Ссылка на ютуб',
         ];
     }
 
@@ -113,6 +124,177 @@ class Post extends \yii\db\ActiveRecord
     public function getCategory()
     {
         return $this->hasOne(Category::class, ['id' => 'category_id']);
+    }
+
+    /**
+     * Gets query for [[Iframe]].
+     *
+     * @return \yii\db\ActiveQuery
+     */
+    public function getIframe()
+    {
+        return $this->hasOne(Iframe::class, ['id' => 'iframe_id']);
+    }
+
+
+    private $_iframe;
+    private $_onlyImg;
+    private $_preview;
+    public function getFrame()
+    {
+        return $this->_iframe;
+    }
+    public function setFrame($value)
+    {
+        $this->_iframe = $value;
+    }
+    public function getOnlyImg()
+    {
+        return $this->_onlyImg;
+    }
+    public function setOnlyImg($value)
+    {
+        $this->_onlyImg = $value;
+    }
+    public function getPreviews()
+    {
+        return $this->_preview;
+    }
+    public function setPreviews($value)
+    {
+        $this->_preview = $value;
+    }
+
+    public function updateFrame()
+    {
+        $iframe = new Iframe();
+        $iframe->frame = $this->getFrame();
+        $iframe->only_img = $this->getOnlyImg();
+        $iframe->preview = $this->getPreviews();
+        if ($iframe->save()) {
+            $this->iframe_id = $iframe->getPrimaryKey();
+        } else {
+            var_dump('<pre>');
+            var_dump($iframe->getErrors());
+            var_dump('</pre>');
+            die;
+        }
+    }
+
+    private $_img;
+    private $_alt;
+    public function getImg()
+    {
+        return $this->_img;
+    }
+    public function setImg($value)
+    {
+        $this->_img = $value;
+    }
+    public function getAlt()
+    {
+        return $this->_alt;
+    }
+    public function setAlt($value)
+    {
+        $this->_alt = $value;
+    }
+    public function updateImage()
+    {
+        $image = new Image();
+        $image->url = UploadedFile::getInstance($this, 'img');
+
+        if ($filename = $image->upload('post')) {
+
+            // $image = new Image();
+            $image->url = $filename;
+            $image->alt = $this->getAlt();
+            
+            if ($image->save()) {
+                $this->image_id = $image->getPrimaryKey();
+            } else {
+                var_dump('<pre>');
+                var_dump($image->getErrors());
+                var_dump('</pre>');
+                die;
+            }
+        }
+    }
+
+    /**
+     * Gets query for [[Image]].
+     *
+     * @return \yii\db\ActiveQuery
+     */
+    public function getImage()
+    {
+        return $this->hasOne(Image::class, ['id' => 'image_id']);
+    }
+
+    /**
+     * Gets query for [[Youtube]].
+     *
+     * @return \yii\db\ActiveQuery
+     */
+    public function getYoutube()
+    {
+        return $this->hasOne(Youtube::class, ['id' => 'youtube_id']);
+    }
+
+
+    // private $_youtube;
+    private $_youtubeFields;
+    public function getYoutubeFields()
+    {
+        if ($this->_youtubeFields === null) {
+            $this->_youtubeFields = $this->getYoutube()->select('id')->one();
+        }
+        return $this->_youtubeFields;
+    }
+
+    private $_hide;
+    public function getHide()
+    {
+        return $this->_hide;
+    }
+
+    public function setYoutubeFields($value)
+    {
+        $this->_youtubeFields = $value;
+    }
+    public function setHide($value)
+    {
+        $this->_hide = $value;
+    }
+
+    public function beforeSave($insert)
+    {
+        $this->updateImage();
+        $this->updateYoutube();
+        $this->updateFrame();
+        // var_dump('<pre>');
+        // var_dump($this);
+        // var_dump('</pre>');
+        // die;
+        
+        return parent::beforeSave($insert);
+    }
+
+    public function updateYoutube()
+    {
+        $youtube = new Youtube();
+        $youtube->youtube = $this->getYoutubeFields();
+        $youtube->hide = $this->getHide();
+        $youtube->key = 'key';
+        $youtube->image_id = 2;
+        if ($youtube->save()) {
+            $this->youtube_id = $youtube->getPrimaryKey();
+        } else {
+            var_dump('<pre>');
+            var_dump($youtube->getErrors());
+            var_dump('</pre>');
+            die;
+        }
     }
 
     /**
@@ -185,49 +367,50 @@ class Post extends \yii\db\ActiveRecord
         }
     }
 
-    public function upload(){
-        if($this->validate()){
-            if (!empty($this->img)) {
-                $year = date('Y');
-                $month = date('m');
+    // public function upload(){
 
-                if (!FileHelper::findDirectories(Yii::getAlias("@frontend/web/images/post/", $year))) {
-                    FileHelper::createDirectory("{$_SERVER['DOCUMENT_ROOT']}/frontend/web/images/post/{$year}", $mode = 0775);
-                }
-                if (!FileHelper::findDirectories(Yii::getAlias("@frontend/web/images/post/{$year}/", $month))) {
-                    FileHelper::createDirectory("{$_SERVER['DOCUMENT_ROOT']}/frontend/web/images/post/{$year}/{$month}", $mode = 0775);
-                }
-                $rand = substr(md5(microtime() . rand(0, 9999)), 0, 5);
-                $file_name_g = "{$year}/{$month}/{$rand}-" . $this->img->baseName . '.' . $this->img->extension;
-                $path = $_SERVER['DOCUMENT_ROOT'] . "/frontend/web/images/post/" . $file_name_g;
-                $this->img->saveAs($path);
+    //     if($this->validate()){
+    //         if (!empty($this->img)) {
+    //             $year = date('Y');
+    //             $month = date('m');
 
-                // $imagine = new Image();
+    //             if (!FileHelper::findDirectories(Yii::getAlias("@frontend/web/images/post/", $year))) {
+    //                 FileHelper::createDirectory("{$_SERVER['DOCUMENT_ROOT']}/frontend/web/images/post/{$year}", $mode = 0775);
+    //             }
+    //             if (!FileHelper::findDirectories(Yii::getAlias("@frontend/web/images/post/{$year}/", $month))) {
+    //                 FileHelper::createDirectory("{$_SERVER['DOCUMENT_ROOT']}/frontend/web/images/post/{$year}/{$month}", $mode = 0775);
+    //             }
+    //             $rand = substr(md5(microtime() . rand(0, 9999)), 0, 5);
+    //             $file_name_g = "{$year}/{$month}/{$rand}-" . $this->img->baseName . '.' . $this->img->extension;
+    //             $path = $_SERVER['DOCUMENT_ROOT'] . "/frontend/web/images/post/" . $file_name_g;
+    //             $this->img->saveAs($path);
 
-                // Image::resize($path, 300, 100)
-                //     ->save("{$_SERVER['DOCUMENT_ROOT']}/frontend/web/images/post/{$year}/{$month}/{$rand}-{$this->img->baseName}.jpeg", ['jpeg_quality' => 75]);
+    //             // $imagine = new Image();
 
-                if (function_exists('imagewebp')) {
-                    Image::resize($path, 300, 100)
-                    ->save("{$_SERVER['DOCUMENT_ROOT']}/frontend/web/images/post/{$year}/{$month}/{$rand}-{$this->img->baseName}.webp", ['webp_quality' => 75]);
-                } else {
-                    // var_dump('<pre>');
-                    // var_dump(phpinfo());
-                    // var_dump('</pre>');
-                    // die;
+    //             // Image::resize($path, 300, 100)
+    //             //     ->save("{$_SERVER['DOCUMENT_ROOT']}/frontend/web/images/post/{$year}/{$month}/{$rand}-{$this->img->baseName}.jpeg", ['jpeg_quality' => 75]);
+
+    //             if (function_exists('imagewebp')) {
+    //                 Image::resize($path, 300, 100)
+    //                 ->save("{$_SERVER['DOCUMENT_ROOT']}/frontend/web/images/post/{$year}/{$month}/{$rand}-{$this->img->baseName}.webp", ['webp_quality' => 75]);
+    //             } else {
+    //                 // var_dump('<pre>');
+    //                 // var_dump(phpinfo());
+    //                 // var_dump('</pre>');
+    //                 // die;
                     
-                }
-                Image::thumbnail($path, 100, 100)
-                    ->save("{$_SERVER['DOCUMENT_ROOT']}/frontend/web/images/post/{$year}/{$month}/{$rand}-{$this->img->baseName}.jpeg", ['jpeg_quality' => 75]);
+    //             }
+    //             Image::thumbnail($path, 100, 100)
+    //                 ->save("{$_SERVER['DOCUMENT_ROOT']}/frontend/web/images/post/{$year}/{$month}/{$rand}-{$this->img->baseName}.jpeg", ['jpeg_quality' => 75]);
 
-                // Image::resize($path, 300, 100)
-                //     ->save("{$_SERVER['DOCUMENT_ROOT']}/frontend/web/images/post/{$year}/{$month}/{$rand}-{$this->img->baseName}.jpeg", ['jpeg_quality' => 75]);
+    //             // Image::resize($path, 300, 100)
+    //             //     ->save("{$_SERVER['DOCUMENT_ROOT']}/frontend/web/images/post/{$year}/{$month}/{$rand}-{$this->img->baseName}.jpeg", ['jpeg_quality' => 75]);
 
-                return $file_name_g;
-            }
+    //             return $file_name_g;
+    //         }
             
-        }else{
-            return false;
-        }
-    }
+    //     }else{
+    //         return false;
+    //     }
+    // }
 }

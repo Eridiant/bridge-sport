@@ -4,6 +4,9 @@ namespace backend\controllers;
 
 use Yii;
 use backend\models\Post;
+use backend\models\Image;
+use backend\models\Iframe;
+use backend\models\Youtube;
 use backend\models\PostSearch;
 use backend\models\Category;
 use backend\models\CategorySearch;
@@ -71,25 +74,67 @@ class PostController extends Controller
      * If creation is successful, the browser will be redirected to the 'view' page.
      * @return string|\yii\web\Response
      */
-    public function actionCreate($id = 0)
+    public function actionCreate($id = 0, $parent = 0)
     {
 
         $model = new Post();
-
-        $model->category_id = $id;
-        $model->author_id = Yii::$app->user->getId();
-
+        
         if ($this->request->isPost) {
             if ($model->load($this->request->post())) {
+                $model->author_id = Yii::$app->user->getId();
 
                 $model->url = $this->createUrl($model->category_id, $model->slug);
 
-                $model->img = UploadedFile::getInstance($model, 'img');
+                // $image = new Image();
+                // $image->url = UploadedFile::getInstance($model, 'img');
 
-                if ($filename = $model->upload()) {
-                    $model->img = $filename;
-                }
+                // if ($filename = $image->upload()) {
 
+                //     // $image = new Image();
+                //     $image->url = $filename;
+                //     $image->alt = $model->alt;
+                    
+                //     if ($image->save()) {
+                //         $model->image_id = $image->getPrimaryKey();
+                //     } else {
+                //         var_dump('<pre>');
+                //         var_dump($image->getErrors());
+                //         var_dump('</pre>');
+                //         die;
+                //     }
+                // }
+
+                // if ($model->iframe) {
+                //     $iframe = new Iframe();
+                //     $iframe->frame = $model->iframe;
+                //     $iframe->only_img = $model->only_img;
+                //     $iframe->preview = $model->preview;
+                //     if ($iframe->save()) {
+                //         $model->iframe_id = $iframe->getPrimaryKey();
+                //     } else {
+                //         var_dump('<pre>');
+                //         var_dump($iframe->getErrors());
+                //         var_dump('</pre>');
+                //         die;
+                //     }
+                // }
+
+                // if ($model->youtube) {
+                //     $youtube = new Youtube();
+                //     $youtube->youtube = $model->youtube;
+                //     $youtube->hide = $model->hide;
+                //     $youtube->key = 'key';
+                //     // $youtube->image_id = 'image';
+                //     if ($youtube->save()) {
+                //         $model->youtube_id = $youtube->getPrimaryKey();
+                //     } else {
+                //         var_dump('<pre>');
+                //         var_dump($youtube->getErrors());
+                //         var_dump('</pre>');
+                //         die;
+                //     }
+                // }
+                
                 $check = Post::find()->with('category')
                             // ->select(['slug', 'category_id'])
                             ->where([
@@ -105,20 +150,31 @@ class PostController extends Controller
                         'model' => $model,
                     ]);
                 }
+
                 if ($model->save()) {
+                    
                     return $this->redirect(['view', 'id' => $model->id]);
+                } else {
+                    var_dump('<pre>');
+                    var_dump($model->getErrors());
+                    var_dump('</pre>');
+                    die;
+                    
                 }
 
+
             } else {
-                var_dump('<pre>');
-                var_dump($model->getErrors());
-                var_dump('</pre>');
-                // die;
-                
+                $model->loadDefaultValues();
             }
-        } else {
-            $model->loadDefaultValues();
         }
+
+        // if ($id) {
+        //     $model->category_id = $id;
+        // }
+
+        // if ($parent) {
+        //     $model->parent_id = $parent;
+        // }
 
         // $attributes = Attribute::find()->all();
 
@@ -194,7 +250,19 @@ class PostController extends Controller
      */
     protected function findModel($id)
     {
-        if (($model = Post::findOne(['id' => $id])) !== null) {
+        $model = Post::find()
+            ->where(['id' => $id])
+            // ->joinWith('image')
+            // ->with('image')
+            // ->all()
+            ->one()
+            ;
+        // var_dump('<pre>');
+        // var_dump($model->image);
+        // var_dump('</pre>');
+        // die;
+        
+        if ($model !== null) {
             return $model;
         }
 

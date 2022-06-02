@@ -14,12 +14,12 @@ $this->title = 'Bridge sport';
     </p>
     <?php foreach ($model as $m): ?>
         <div class="news-wrapper">
-            <div class="news-img <?= $m->taxonomies[0]->label; ?>">
+            <div class="news-img <?= is_null($m->taxonomies) ? $m->taxonomies[0]->label : ''; ?>">
                 <picture>
-                    <?php if (empty($m->img)): ?>
+                    <?php if (empty($m->image->url)): ?>
                         <img src="/images/dummy/<?= $m->category_id; ?>.jpg" alt="" class="news-img">
                     <?php else: ?>
-                        <img src="/images/post/<?= $m->img; ?>" alt="" class="news-img">
+                        <img src="/images/<?= $m->image->url; ?>" alt="" class="news-img">
                     <?php endif; ?>
                 </picture>
             </div>

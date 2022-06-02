@@ -19,7 +19,7 @@ $this->title = $model->name;
     <p><?= $model->text; ?></p>
 
     <?php if (!empty($model->iframe)): ?>
-        <iframe src="<?= $model->iframe; ?>" frameborder="0"></iframe>
+        <iframe src="<?= $model->iframe->frame; ?>" frameborder="0"></iframe>
     <?php endif; ?>
 
 </div>

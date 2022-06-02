@@ -5,6 +5,7 @@ namespace frontend\models;
 use Yii;
 
 
+
 /**
  * This is the model class for table "{{%post}}".
  *
@@ -16,9 +17,9 @@ use Yii;
  * @property string $slug
  * @property string|null $preview
  * @property string|null $text
- * @property string|null $img
+ * @property int|null $image_id
  * @property string|null $dial
- * @property string|null $iframe
+ * @property int|null $iframe_id
  * @property int $indexing
  * @property string|null $title
  * @property string|null $description
@@ -31,6 +32,8 @@ use Yii;
  * @property int|null $deleted_at
  *
  * @property Category $category
+ * @property Iframe $iframe
+ * @property Image $image
  * @property PostTaxonomy[] $postTaxonomies
  * @property Taxonomy[] $taxonomies
  */
@@ -50,11 +53,13 @@ class Post extends \yii\db\ActiveRecord
     public function rules()
     {
         return [
-            [['category_id', 'name', 'slug'], 'required'],
-            [['category_id', 'parent_id', 'indexing', 'status', 'author_id', 'published_at', 'created_at', 'updated_at', 'deleted_at'], 'integer'],
+            [['category_id', 'name', 'slug', 'created_at'], 'required'],
+            [['category_id', 'parent_id', 'image_id', 'iframe_id', 'indexing', 'status', 'author_id', 'published_at', 'created_at', 'updated_at', 'deleted_at'], 'integer'],
             [['url', 'preview', 'text', 'description'], 'string'],
-            [['name', 'slug', 'img', 'dial', 'iframe', 'title', 'keywords'], 'string', 'max' => 255],
+            [['name', 'slug', 'dial', 'title', 'keywords'], 'string', 'max' => 255],
             [['category_id'], 'exist', 'skipOnError' => true, 'targetClass' => Category::class, 'targetAttribute' => ['category_id' => 'id']],
+            [['iframe_id'], 'exist', 'skipOnError' => true, 'targetClass' => Iframe::class, 'targetAttribute' => ['iframe_id' => 'id']],
+            [['image_id'], 'exist', 'skipOnError' => true, 'targetClass' => Image::class, 'targetAttribute' => ['image_id' => 'id']],
         ];
     }
 
@@ -72,9 +77,9 @@ class Post extends \yii\db\ActiveRecord
             'slug' => 'Slug',
             'preview' => 'Preview',
             'text' => 'Text',
-            'img' => 'Img',
+            'image_id' => 'Image ID',
             'dial' => 'Dial',
-            'iframe' => 'Iframe',
+            'iframe_id' => 'Iframe ID',
             'indexing' => 'Indexing',
             'title' => 'Title',
             'description' => 'Description',
@@ -96,6 +101,26 @@ class Post extends \yii\db\ActiveRecord
     public function getCategory()
     {
         return $this->hasOne(Category::class, ['id' => 'category_id']);
+    }
+
+    /**
+     * Gets query for [[Iframe]].
+     *
+     * @return \yii\db\ActiveQuery
+     */
+    public function getIframe()
+    {
+        return $this->hasOne(Iframe::class, ['id' => 'iframe_id']);
+    }
+
+    /**
+     * Gets query for [[Image]].
+     *
+     * @return \yii\db\ActiveQuery
+     */
+    public function getImage()
+    {
+        return $this->hasOne(Image::class, ['id' => 'image_id']);
     }
 
     /**

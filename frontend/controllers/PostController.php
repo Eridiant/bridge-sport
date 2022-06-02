@@ -21,11 +21,16 @@ class PostController extends AppController
      */
     public function actionIndex()
     {
+
+        // var_dump($this->request->queryParams);
+        
         $searchModel = new PostSearch();
         $dataProvider = $searchModel->search($this->request->queryParams);
-
+        // $dataProvider = $dataProvider->;
+        $model = $dataProvider->getModels();
+        
         // $this->setMeta('', '');
-
+        return $this->render('index', compact('model'));
         return $this->render('index', [
             'searchModel' => $searchModel,
             'dataProvider' => $dataProvider,

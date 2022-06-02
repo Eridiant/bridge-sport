@@ -10,7 +10,7 @@ use backend\models\Taxonomy;
 /* @var $model backend\models\Post */
 /* @var $form yii\widgets\ActiveForm */
 // var_dump('<pre>');
-// var_dump($model);
+// var_dump($model->image, '<hr>', $model);
 // var_dump('</pre>');
 // die;
 
@@ -40,10 +40,10 @@ use backend\models\Taxonomy;
     <hr>
     <div class="row">
         <div class="col-xs-4">
-            <?= $form->field($model, 'img')->fileInput() ?>
+            <?= $form->field($model->image, 'url')->fileInput() ?>
         </div>
         <div class="col-xs-8">
-            <?= $form->field($model, 'alt')->textInput(['maxlength' => true]) ?>
+            <?= $form->field($model->image, 'alt')->textInput(['maxlength' => true]) ?>
         </div>
     </div>
     <hr>
@@ -51,17 +51,17 @@ use backend\models\Taxonomy;
 
     <hr>
     <p>добавить сдачу с BBO</p>
-    <?= $form->field($model, 'frame')->textarea(['rows' => 3]) ?>
+    <?= $form->field($model->iframe, 'iframe')->textarea(['rows' => 3]) ?>
     <div class="wrapper-form">
-        <?= $form->field($model, 'onlyImg')->checkbox() ?>
-        <?= $form->field($model, 'previews')->checkbox() ?>
+        <?= $form->field($model->iframe, 'only_img')->checkbox() ?>
+        <?= $form->field($model->iframe, 'preview')->checkbox() ?>
     </div>
 
     <hr>
 
     <p>добавить видео с Youtube(пока не работает)</p>
-    <?= $form->field($model, 'youtubeFields')->textarea(['rows' => 3]) ?>
-    <?= $form->field($model, 'hide')->checkbox() ?>
+    <?= $form->field($model->youtube, 'youtube')->textarea(['rows' => 3]) ?>
+    <?= $form->field($model->youtube, 'hide')->checkbox() ?>
     <hr>
 
     <?= $form->field($model, 'taxonomiesArray')->checkboxList(Taxonomy::find()->select(['label', 'id'])->indexBy('id')->column()) ?>

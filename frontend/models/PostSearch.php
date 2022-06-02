@@ -1,13 +1,13 @@
 <?php
 
-namespace backend\models;
+namespace frontend\models;
 
 use yii\base\Model;
 use yii\data\ActiveDataProvider;
-use backend\models\Post;
+use frontend\models\Post;
 
 /**
- * PostSearch represents the model behind the search form of `backend\models\Post`.
+ * PostSearch represents the model behind the search form of `frontend\models\Post`.
  */
 class PostSearch extends Post
 {
@@ -17,8 +17,8 @@ class PostSearch extends Post
     public function rules()
     {
         return [
-            [['id', 'category_id', 'parent_id', 'indexing', 'status', 'author_id', 'published_at', 'created_at', 'updated_at', 'deleted_at'], 'integer'],
-            [['name', 'url', 'slug', 'preview', 'text', 'img', 'dial', 'iframe', 'title', 'description', 'keywords'], 'safe'],
+            [['id', 'category_id', 'parent_id', 'image_id', 'iframe_id', 'indexing', 'status', 'author_id', 'published_at', 'created_at', 'updated_at', 'deleted_at'], 'integer'],
+            [['name', 'url', 'slug', 'preview', 'text', 'dial', 'title', 'description', 'keywords'], 'safe'],
         ];
     }
 
@@ -40,7 +40,10 @@ class PostSearch extends Post
      */
     public function search($params)
     {
-        $query = Post::find();
+        if ($params) {
+            $this->category_id =  $params["category_id"] ?: $params["category_id"];
+        }
+        $query = Post::find()->with(['image', 'taxonomies', 'category']);
 
         // add conditions that should always apply here
 
@@ -61,6 +64,8 @@ class PostSearch extends Post
             'id' => $this->id,
             'category_id' => $this->category_id,
             'parent_id' => $this->parent_id,
+            'image_id' => $this->image_id,
+            'iframe_id' => $this->iframe_id,
             'indexing' => $this->indexing,
             'status' => $this->status,
             'author_id' => $this->author_id,
@@ -71,13 +76,12 @@ class PostSearch extends Post
         ]);
 
         $query->andFilterWhere(['like', 'name', $this->name])
+            ->andFilterWhere(['in', 'category_id', $this->category_id])
             ->andFilterWhere(['like', 'url', $this->url])
             ->andFilterWhere(['like', 'slug', $this->slug])
             ->andFilterWhere(['like', 'preview', $this->preview])
             ->andFilterWhere(['like', 'text', $this->text])
-            ->andFilterWhere(['like', 'img', $this->img])
             ->andFilterWhere(['like', 'dial', $this->dial])
-            ->andFilterWhere(['like', 'iframe', $this->iframe])
             ->andFilterWhere(['like', 'title', $this->title])
             ->andFilterWhere(['like', 'description', $this->description])
             ->andFilterWhere(['like', 'keywords', $this->keywords]);

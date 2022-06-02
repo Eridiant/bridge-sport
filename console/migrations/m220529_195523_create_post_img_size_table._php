@@ -1,0 +1,62 @@
+<?php
+
+use yii\db\Migration;
+
+/**
+ * Handles the creation of table `{{%post_img_size}}`.
+ * Has foreign keys to the tables:
+ *
+ * - `{{%img}}`
+ */
+class m220529_195523_create_post_img_size_table extends Migration
+{
+    /**
+     * {@inheritdoc}
+     */
+    public function safeUp()
+    {
+        $this->createTable('{{%post_img_size}}', [
+            'id' => $this->primaryKey(),
+            'img_id' => $this->integer()->notNull(),
+            'height' => $this->smallInteger(),
+            'width' => $this->smallInteger(),
+        ]);
+
+        // creates index for column `img_id`
+        $this->createIndex(
+            '{{%idx-post_img_size-img_id}}',
+            '{{%post_img_size}}',
+            'img_id'
+        );
+
+        // add foreign key for table `{{%img}}`
+        $this->addForeignKey(
+            '{{%fk-post_img_size-img_id}}',
+            '{{%post_img_size}}',
+            'img_id',
+            '{{%img}}',
+            'id',
+            'CASCADE'
+        );
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function safeDown()
+    {
+        // drops foreign key for table `{{%img}}`
+        $this->dropForeignKey(
+            '{{%fk-post_img_size-img_id}}',
+            '{{%post_img_size}}'
+        );
+
+        // drops index for column `img_id`
+        $this->dropIndex(
+            '{{%idx-post_img_size-img_id}}',
+            '{{%post_img_size}}'
+        );
+
+        $this->dropTable('{{%post_img_size}}');
+    }
+}

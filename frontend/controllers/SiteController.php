@@ -75,9 +75,13 @@ class SiteController extends AppController
      */
     public function actionIndex()
     {
-        $model = Post::find()
-        ->where(['status' => 1])
-        ->all();
+        // $model = Post::find()
+        // ->where(['status' => 1])
+        // ->all();
+        $searchModel = new PostSearch();
+        $dataProvider = $searchModel->search($this->request->queryParams);
+        // $dataProvider = $dataProvider->;
+        $model = $dataProvider->getModels();
 
         return $this->render('index', compact('model'));
     }

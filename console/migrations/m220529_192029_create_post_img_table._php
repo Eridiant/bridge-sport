@@ -1,0 +1,61 @@
+<?php
+
+use yii\db\Migration;
+
+/**
+ * Handles the creation of table `{{%post_img}}`.
+ * Has foreign keys to the tables:
+ *
+ * - `{{%post}}`
+ */
+class m220529_192029_create_post_img_table extends Migration
+{
+    /**
+     * {@inheritdoc}
+     */
+    public function safeUp()
+    {
+        $this->createTable('{{%post_img}}', [
+            'id' => $this->primaryKey(),
+            'post_id' => $this->integer()->notNull(),
+            'alt' => $this->text(),
+        ]);
+
+        // creates index for column `post_id`
+        $this->createIndex(
+            '{{%idx-post_img-post_id}}',
+            '{{%post_img}}',
+            'post_id'
+        );
+
+        // add foreign key for table `{{%post}}`
+        $this->addForeignKey(
+            '{{%fk-post_img-post_id}}',
+            '{{%post_img}}',
+            'post_id',
+            '{{%post}}',
+            'id',
+            'CASCADE'
+        );
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function safeDown()
+    {
+        // drops foreign key for table `{{%post}}`
+        $this->dropForeignKey(
+            '{{%fk-post_img-post_id}}',
+            '{{%post_img}}'
+        );
+
+        // drops index for column `post_id`
+        $this->dropIndex(
+            '{{%idx-post_img-post_id}}',
+            '{{%post_img}}'
+        );
+
+        $this->dropTable('{{%post_img}}');
+    }
+}

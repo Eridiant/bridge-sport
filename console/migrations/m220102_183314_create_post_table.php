@@ -4,6 +4,11 @@ use yii\db\Migration;
 
 /**
  * Handles the creation of table `{{%post}}`.
+ * Has foreign keys to the tables:
+ *
+ * - `{{%image}}`
+ * - `{{%iframe}}`
+ * - `{{%category}}`
  */
 class m220102_183314_create_post_table extends Migration
 {
@@ -15,15 +20,16 @@ class m220102_183314_create_post_table extends Migration
         $this->createTable('{{%post}}', [
             'id' => $this->primaryKey(),
             'category_id' => $this->integer(4)->notNull(),
-            'parent_id' => $this->integer(4),
+            'parent_id' => $this->integer(11),
             'name' => $this->string(255)->notNull(),
             'url' => $this->text(),
             'slug' => $this->string(255)->notNull(),
             'preview' => $this->text(),
             'text' => $this->text(),
-            'img' => $this->string(255),
+            'image_id' => $this->integer(11),
             'dial' => $this->string(255),
-            'iframe' => $this->text(),
+            'iframe_id' => $this->integer(11),
+            'youtube_id' => $this->integer(11),
             'indexing' => $this->tinyInteger()->notNull()->defaultValue(0),
             'title' => $this->string(255),
             'description' => $this->text(),
@@ -37,12 +43,12 @@ class m220102_183314_create_post_table extends Migration
         ]);
 
         $this->createIndex(
-            'idx-post-url',
+            '{{%idx-post-url}}',
             '{{%post}}',
             'url'
         );
         $this->createIndex(
-            'idx-post-slug',
+            '{{%idx-post-slug}}',
             '{{%post}}',
             'slug'
         );
@@ -63,6 +69,57 @@ class m220102_183314_create_post_table extends Migration
             'id',
             'CASCADE'
         );
+
+        // creates index for column `image_id`
+        $this->createIndex(
+            '{{%idx-post-image_id}}',
+            '{{%post}}',
+            'image_id'
+        );
+
+        // add foreign key for table `{{%image}}`
+        $this->addForeignKey(
+            '{{%fk-post-image_id}}',
+            '{{%post}}',
+            'image_id',
+            '{{%image}}',
+            'id',
+            'CASCADE'
+        );
+
+        // creates index for column `iframe_id`
+        $this->createIndex(
+            '{{%idx-post-iframe_id}}',
+            '{{%post}}',
+            'iframe_id'
+        );
+
+        // add foreign key for table `{{%iframe}}`
+        $this->addForeignKey(
+            '{{%fk-post-iframe_id}}',
+            '{{%post}}',
+            'iframe_id',
+            '{{%iframe}}',
+            'id',
+            'CASCADE'
+        );
+
+        // creates index for column `youtube_id`
+        $this->createIndex(
+            '{{%idx-post-youtube_id}}',
+            '{{%post}}',
+            'youtube_id'
+        );
+
+        // add foreign key for table `{{%youtube}}`
+        $this->addForeignKey(
+            '{{%fk-post-youtube_id}}',
+            '{{%post}}',
+            'youtube_id',
+            '{{%youtube}}',
+            'id',
+            'CASCADE'
+        );
     }
 
     /**
@@ -70,6 +127,41 @@ class m220102_183314_create_post_table extends Migration
      */
     public function safeDown()
     {
+        // drops foreign key for table `{{%youtube}}`
+        $this->dropForeignKey(
+            '{{%fk-post-youtube_id}}',
+            '{{%post}}'
+        );
+
+        // drops index for column `youtube_id`
+        $this->dropIndex(
+            '{{%idx-post-youtube_id}}',
+            '{{%post}}'
+        );
+
+        // drops foreign key for table `{{%image}}`
+        $this->dropForeignKey(
+            '{{%fk-post-image_id}}',
+            '{{%post}}'
+        );
+
+        // drops index for column `image_id`
+        $this->dropIndex(
+            '{{%idx-post-image_id}}',
+            '{{%post}}'
+        );
+
+        // drops foreign key for table `{{%iframe}}`
+        $this->dropForeignKey(
+            '{{%fk-post-iframe_id}}',
+            '{{%post}}'
+        );
+
+        // drops index for column `iframe_id`
+        $this->dropIndex(
+            '{{%idx-post-iframe_id}}',
+            '{{%post}}'
+        );
 
         // drops foreign key for table `{{%category}}`
         $this->dropForeignKey(
@@ -84,12 +176,12 @@ class m220102_183314_create_post_table extends Migration
         );
 
         $this->dropIndex(
-            '{{%idx-post-url}}',
+            '{{%idx-post-slug}}',
             '{{%post}}'
         );
 
         $this->dropIndex(
-            '{{%idx-post-slug}}',
+            '{{%idx-post-url}}',
             '{{%post}}'
         );
 

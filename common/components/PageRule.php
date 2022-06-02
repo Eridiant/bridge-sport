@@ -87,7 +87,7 @@ class PageRule implements UrlRuleInterface {
             ->one();
 
         if (!empty($category)) {
-            return ['/category/view', ['id' => $category->id]];
+            return ['/post/index', ['category_id' => $category->id]];
         }
         $post = Post::find()
             ->select(['id', 'url'])

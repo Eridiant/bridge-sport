@@ -22,10 +22,10 @@ $this->title = $model->name;
         <div class="news-wrapper">
             <div class="news-img">
                 <picture>
-                    <?php if (empty($m->img)): ?>
-                        <img src="/images/dummy/<?= $m->id; ?>.jpg" alt="" class="news-img">
+                    <?php if (empty($m->image->url)): ?>
+                        <img src="/images/dummy/<?= $m->category_id; ?>.jpg" alt="" class="news-img">
                     <?php else: ?>
-                        <img src="/images/post/<?= $m->img; ?>" alt="" class="news-img">
+                        <img src="/images/post/<?= $m->image->url; ?>" alt="" class="news-img">
                     <?php endif; ?>
                 </picture>
             </div>

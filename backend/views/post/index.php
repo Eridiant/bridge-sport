@@ -46,7 +46,7 @@ $this->params['breadcrumbs'][] = $this->title;
             //     'value' => 'category.name',
             // ],
             'name',
-            'slug',
+            // 'slug',
             // 'url:ntext',
             //'preview:ntext',
             // 'description:ntext',
@@ -63,6 +63,13 @@ $this->params['breadcrumbs'][] = $this->title;
                 'value' => function($model) {
                     return $model->status ? 'Доступно' : 'Не доступно';
                 }
+            ],
+            [
+                'label' => 'Добавить статью',
+                'format' => 'raw',
+                'value' => function($model){
+                    return Html::a('Добавить', ['/post/create', 'id' => $model->category_id, 'parent' => $model->id], ['class' => 'profile-link']);
+                },
             ],
             //'author_id',
             //'created_at',
