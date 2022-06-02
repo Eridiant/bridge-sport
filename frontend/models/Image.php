@@ -9,11 +9,15 @@ use Yii;
  *
  * @property int $id
  * @property string|null $alt
- * @property string|null $url
+ * @property string|null $path
+ * @property int|null $thWidth
+ * @property int|null $thHeight
+ * @property string|null $format
+ * @property int|null $thumb
+ * @property int|null $width
+ * @property int|null $image
  *
  * @property Iframe[] $iframes
- * @property ImageFormat[] $imageFormats
- * @property ImageSize[] $imageSizes
  * @property Post[] $posts
  * @property Youtube[] $youtubes
  */
@@ -33,7 +37,9 @@ class Image extends \yii\db\ActiveRecord
     public function rules()
     {
         return [
-            [['alt', 'url'], 'string', 'max' => 255],
+            [['thWidth', 'thHeight', 'thumb', 'width', 'image'], 'integer'],
+            [['alt', 'path'], 'string', 'max' => 255],
+            [['format'], 'string', 'max' => 24],
         ];
     }
 
@@ -45,7 +51,13 @@ class Image extends \yii\db\ActiveRecord
         return [
             'id' => 'ID',
             'alt' => 'Alt',
-            'url' => 'Url',
+            'path' => 'Path',
+            'thWidth' => 'Th Width',
+            'thHeight' => 'Th Height',
+            'format' => 'Format',
+            'thumb' => 'Thumb',
+            'width' => 'Width',
+            'image' => 'Image',
         ];
     }
 
@@ -57,26 +69,6 @@ class Image extends \yii\db\ActiveRecord
     public function getIframes()
     {
         return $this->hasMany(Iframe::class, ['image_id' => 'id']);
-    }
-
-    /**
-     * Gets query for [[ImageFormats]].
-     *
-     * @return \yii\db\ActiveQuery
-     */
-    public function getImageFormats()
-    {
-        return $this->hasMany(ImageFormat::class, ['image_id' => 'id']);
-    }
-
-    /**
-     * Gets query for [[ImageSizes]].
-     *
-     * @return \yii\db\ActiveQuery
-     */
-    public function getImageSizes()
-    {
-        return $this->hasMany(ImageSize::class, ['image_id' => 'id']);
     }
 
     /**

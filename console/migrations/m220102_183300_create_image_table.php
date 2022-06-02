@@ -15,7 +15,13 @@ class m220102_183300_create_image_table extends Migration
         $this->createTable('{{%image}}', [
             'id' => $this->primaryKey(),
             'alt' => $this->string(255),
-            'url' => $this->string(255),
+            'path' => $this->string(255),
+            'thWidth' => $this->smallInteger(),
+            'thHeight' => $this->smallInteger(),
+            'format' => $this->string(24),
+            'thumb' => $this->tinyInteger(),
+            'width' => $this->smallInteger(),
+            'image' => $this->smallInteger(),
         ]);
     }
 

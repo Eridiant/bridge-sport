@@ -204,8 +204,13 @@ class Post extends \yii\db\ActiveRecord
         $image = new Image();
         $image->url = UploadedFile::getInstance($this, 'img');
 
-        if ($filename = $image->upload('post')) {
+        if ($arr = $image->upload('post')) {
 
+            var_dump('<pre>');
+            var_dump($arr);
+            var_dump('</pre>');
+            die;
+            
             // $image = new Image();
             $image->url = $filename;
             $image->alt = $this->getAlt();
