@@ -222,7 +222,7 @@ class PostController extends Controller
 
         }
 
-        return $this->render('update', [
+        return $this->render('create', [
             'model' => $model,
         ]);
     }

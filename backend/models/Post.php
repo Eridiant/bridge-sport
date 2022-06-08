@@ -167,17 +167,19 @@ class Post extends \yii\db\ActiveRecord
 
     public function updateFrame()
     {
-        $iframe = new Iframe();
-        $iframe->frame = $this->getFrame();
-        $iframe->only_img = $this->getOnlyImg();
-        $iframe->preview = $this->getPreviews();
-        if ($iframe->save()) {
-            $this->iframe_id = $iframe->getPrimaryKey();
-        } else {
-            var_dump('<pre>');
-            var_dump($iframe->getErrors());
-            var_dump('</pre>');
-            die;
+        if ($this->iframe) {
+            $iframe = new Iframe();
+            $iframe->frame = $this->getFrame();
+            $iframe->only_img = $this->getOnlyImg();
+            $iframe->preview = $this->getPreviews();
+            if ($iframe->save()) {
+                $this->iframe_id = $iframe->getPrimaryKey();
+            } else {
+                var_dump('<pre>');
+                var_dump($iframe->getErrors());
+                var_dump('</pre>');
+                die;
+            }
         }
     }
 
@@ -202,17 +204,19 @@ class Post extends \yii\db\ActiveRecord
     public function updateImage()
     {
         $image = new Image();
-        $image->url = UploadedFile::getInstance($this, 'img');
+        $image->path = UploadedFile::getInstance($this, 'img');
 
         if ($arr = $image->upload('post')) {
 
-            var_dump('<pre>');
-            var_dump($arr);
-            var_dump('</pre>');
-            die;
-            
+            // var_dump('<pre>');
+            // var_dump($arr);
+            // var_dump('</pre>');
+            // die;
+            foreach ($arr as $key => $value) {
+                $image->$key = $value;
+            }
             // $image = new Image();
-            $image->url = $filename;
+            // $image->url = $filename;
             $image->alt = $this->getAlt();
             
             if ($image->save()) {
@@ -287,18 +291,20 @@ class Post extends \yii\db\ActiveRecord
 
     public function updateYoutube()
     {
-        $youtube = new Youtube();
-        $youtube->youtube = $this->getYoutubeFields();
-        $youtube->hide = $this->getHide();
-        $youtube->key = 'key';
-        $youtube->image_id = 2;
-        if ($youtube->save()) {
-            $this->youtube_id = $youtube->getPrimaryKey();
-        } else {
-            var_dump('<pre>');
-            var_dump($youtube->getErrors());
-            var_dump('</pre>');
-            die;
+        if ($this->youtube) {
+            $youtube = new Youtube();
+            $youtube->youtube = $this->getYoutubeFields();
+            $youtube->hide = $this->getHide();
+            $youtube->key = 'key';
+            $youtube->image_id = 2;
+            if ($youtube->save()) {
+                $this->youtube_id = $youtube->getPrimaryKey();
+            } else {
+                var_dump('<pre>');
+                var_dump($youtube->getErrors());
+                var_dump('</pre>');
+                die;
+            }
         }
     }
 

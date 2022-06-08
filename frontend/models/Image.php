@@ -15,6 +15,7 @@ use Yii;
  * @property string|null $format
  * @property int|null $thumb
  * @property int|null $width
+ * @property int|null $height
  * @property int|null $image
  *
  * @property Iframe[] $iframes
@@ -37,7 +38,7 @@ class Image extends \yii\db\ActiveRecord
     public function rules()
     {
         return [
-            [['thWidth', 'thHeight', 'thumb', 'width', 'image'], 'integer'],
+            [['thWidth', 'thHeight', 'thumb', 'width', 'height', 'image'], 'integer'],
             [['alt', 'path'], 'string', 'max' => 255],
             [['format'], 'string', 'max' => 24],
         ];
@@ -57,6 +58,7 @@ class Image extends \yii\db\ActiveRecord
             'format' => 'Format',
             'thumb' => 'Thumb',
             'width' => 'Width',
+            'height' => 'Height',
             'image' => 'Image',
         ];
     }
@@ -68,7 +70,7 @@ class Image extends \yii\db\ActiveRecord
      */
     public function getIframes()
     {
-        return $this->hasMany(Iframe::class, ['image_id' => 'id']);
+        return $this->hasMany(Iframe::className(), ['image_id' => 'id']);
     }
 
     /**
@@ -78,7 +80,7 @@ class Image extends \yii\db\ActiveRecord
      */
     public function getPosts()
     {
-        return $this->hasMany(Post::class, ['image_id' => 'id']);
+        return $this->hasMany(Post::className(), ['image_id' => 'id']);
     }
 
     /**
@@ -88,6 +90,6 @@ class Image extends \yii\db\ActiveRecord
      */
     public function getYoutubes()
     {
-        return $this->hasMany(Youtube::class, ['image_id' => 'id']);
+        return $this->hasMany(Youtube::className(), ['image_id' => 'id']);
     }
 }

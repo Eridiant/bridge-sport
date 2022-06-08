@@ -12,5 +12,8 @@ return [
         'authManager' => [
             'class' => 'yii\rbac\DbManager',
         ],
+        'imageComponent' => [
+            'class' => 'common\components\ImageComponent'
+        ]
     ],
 ];

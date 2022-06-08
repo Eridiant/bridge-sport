@@ -89,6 +89,7 @@ class PageRule implements UrlRuleInterface {
         if (!empty($category)) {
             return ['/post/index', ['category_id' => $category->id]];
         }
+
         $post = Post::find()
             ->select(['id', 'url'])
             ->where(['status' => 1])

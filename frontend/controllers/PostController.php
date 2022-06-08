@@ -45,9 +45,11 @@ class PostController extends AppController
      */
     public function actionShow($id)
     {
-        return $this->render('show', [
-            'model' => $this->findModel($id),
-        ]);
+        $model = $this->findModel($id);
+
+        $this->setMeta( empty($model->title) ? $model->name : $model->title, empty($model->description) ? $model->preview : $model->description, $model->keywords );
+
+        return $this->render('show', compact('model'));
     }
 
     /**

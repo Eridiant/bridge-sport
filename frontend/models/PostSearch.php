@@ -77,6 +77,7 @@ class PostSearch extends Post
 
         $query->andFilterWhere(['like', 'name', $this->name])
             ->andFilterWhere(['in', 'category_id', $this->category_id])
+            ->andFilterWhere(['in', 'status', 1])
             ->andFilterWhere(['like', 'url', $this->url])
             ->andFilterWhere(['like', 'slug', $this->slug])
             ->andFilterWhere(['like', 'preview', $this->preview])

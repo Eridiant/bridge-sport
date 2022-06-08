@@ -21,7 +21,9 @@ class m220102_183300_create_image_table extends Migration
             'format' => $this->string(24),
             'thumb' => $this->tinyInteger(),
             'width' => $this->smallInteger(),
-            'image' => $this->smallInteger(),
+            'height' => $this->smallInteger(),
+            'image' => $this->tinyInteger(),
+            'webp' => $this->tinyInteger(3),
         ]);
     }
 

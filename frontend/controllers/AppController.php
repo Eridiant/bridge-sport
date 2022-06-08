@@ -47,11 +47,21 @@ class AppController extends Controller
         ];
     }
 
-    protected function setMeta($title = null, $description = null)
+    protected function setMeta($title = null, $description = null, $keywords = null, $type = null, $image = null, $secure_url = null)
     {
-        $this->view->title = $title;
+        $this->view->title = $title ?: Yii::$app->params['defaultTitle'];
         // $this->view->registerMetaTag(['name' => 'keywords', 'content' => "$keywords"]);
-        $this->view->registerMetaTag(['name' => 'description', 'content' => "$description"]);
+        $this->view->registerMetaTag(['name' => 'description', 'content' => $description ?: Yii::$app->params['defaultDescription']]);
+        $this->view->registerMetaTag(['name' => 'keywords', 'content' => $keywords ?: Yii::$app->params['defaultKeywords']]);
+        $this->view->registerMetaTag(['name' => 'og:title', 'content' => $title ?: Yii::$app->params['defaultTitle']]);
+        $this->view->registerMetaTag(['name' => 'og:type', 'content' => $type ?: Yii::$app->params['defaultType']]);
+        $this->view->registerMetaTag(['name' => 'og:description', 'content' => $description ?: Yii::$app->params['defaultDescription']]);
+
+        $this->view->registerMetaTag(['name' => 'og:image', 'content' => $image ?: Yii::$app->params['defaultImage']]);
+        $this->view->registerMetaTag(['name' => 'og:image:secure_url', 'content' => $secure_url ?: Yii::$app->params['defaultImageUrl']]);
+        $this->view->registerMetaTag(['name' => 'og:image:type', 'content' => "image/jpeg"]);
+        $this->view->registerMetaTag(['name' => 'og:image:width', 'content' => 1200]);
+        $this->view->registerMetaTag(['name' => 'og:image:height', 'content' => 630]);
     }
 
     public function beforeAction($action)

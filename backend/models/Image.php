@@ -6,18 +6,25 @@ use Yii;
 use yii\db\ActiveRecord;
 use yii\helpers\FileHelper;
 use yii\imagine\Image as Imags;
+use Imagine\Image\ImageInterface;
 
 /**
  * This is the model class for table "{{%image}}".
  *
  * @property int $id
  * @property string|null $alt
- * @property string|null $url
+ * @property string|null $path
+ * @property int|null $thWidth
+ * @property int|null $thHeight
+ * @property string|null $format
+ * @property int|null $thumb
+ * @property int|null $width
+ * @property int|null $height
+ * @property int|null $image
  *
  * @property Iframe[] $iframes
- * @property ImageFormat[] $imageFormats
- * @property ImageSize[] $imageSizes
  * @property Post[] $posts
+ * @property Youtube[] $youtubes
  */
 class Image extends ActiveRecord
 {
@@ -35,8 +42,10 @@ class Image extends ActiveRecord
     public function rules()
     {
         return [
+            [['thWidth', 'thHeight', 'thumb', 'width', 'height', 'image'], 'integer'],
             [['alt'], 'string', 'max' => 255],
-            [['url'], 'safe']
+            [['format'], 'string', 'max' => 24],
+            [['url', 'path'], 'safe']
         ];
     }
 
@@ -48,7 +57,14 @@ class Image extends ActiveRecord
         return [
             'id' => 'ID',
             'alt' => 'Alt',
-            'url' => 'Url',
+            'path' => 'Path',
+            'thWidth' => 'Th Width',
+            'thHeight' => 'Th Height',
+            'format' => 'Format',
+            'thumb' => 'Thumb',
+            'width' => 'Width',
+            'height' => 'Height',
+            'image' => 'Image',
         ];
     }
 
@@ -77,20 +93,20 @@ class Image extends ActiveRecord
      *
      * @return \yii\db\ActiveQuery
      */
-    public function getImageFormats()
-    {
-        return $this->hasMany(ImageFormat::class, ['image_id' => 'id']);
-    }
+    // public function getImageFormats()
+    // {
+    //     return $this->hasMany(ImageFormat::class, ['image_id' => 'id']);
+    // }
 
     /**
      * Gets query for [[ImageSizes]].
      *
      * @return \yii\db\ActiveQuery
      */
-    public function getImageSizes()
-    {
-        return $this->hasMany(ImageSize::class, ['image_id' => 'id']);
-    }
+    // public function getImageSizes()
+    // {
+    //     return $this->hasMany(ImageSize::class, ['image_id' => 'id']);
+    // }
 
     /**
      * Gets query for [[Posts]].
@@ -104,11 +120,12 @@ class Image extends ActiveRecord
 
     private $fixHeight;
     private $findHeight;
-    public function upload($modPath, $format = 0, $fix = 0){
+    public function upload($modPath, $format = 0, $fix = 0)
+    {
 
         $this->fixHeight = $fix;
         if($this->validate()){
-            if (!empty($this->url)) {
+            if (!empty($this->path)) {
                 $arr = [];
                 $year = date('Y');
                 $month = date('m');
@@ -120,15 +137,15 @@ class Image extends ActiveRecord
                     FileHelper::createDirectory("{$_SERVER['DOCUMENT_ROOT']}/frontend/web/images/{$modPath}/{$year}/{$month}", $mode = 0775);
                 }
                 $rand = substr(md5(microtime() . rand(0, 9999)), 0, 7);
-                $file_name_g = "{$modPath}/{$year}/{$month}/{$rand}-" . $this->url->baseName;
+                $file_name_g = "{$modPath}/{$year}/{$month}/{$rand}-" . $this->path->baseName;
                 $path = $_SERVER['DOCUMENT_ROOT'] . "/frontend/web/images/" . $file_name_g;
-                $pathExt = "{$path}.{$this->url->extension}";
-                $this->url->saveAs($pathExt);
+                $pathExt = "{$path}.{$this->path->extension}";
+                $this->path->saveAs($pathExt);
                 $arr['path'] = $file_name_g;
                 // $imagine = new Image();
 
                 // Image::resize($path, 300, 100)
-                //     ->save("{$_SERVER['DOCUMENT_ROOT']}/frontend/web/images/post/{$year}/{$month}/{$rand}-{$this->url->baseName}.jpeg", ['jpeg_quality' => 75]);
+                //     ->save("{$_SERVER['DOCUMENT_ROOT']}/frontend/web/images/post/{$year}/{$month}/{$rand}-{$this->path->baseName}.jpeg", ['jpeg_quality' => 75]);
 
                 $thWidth = 480;
                 $thHeight = 335;
@@ -136,7 +153,12 @@ class Image extends ActiveRecord
                     $format = 'jpg';
                 }
                 $mult = $this->sizeCheck($pathExt, $thWidth, $thHeight);
+
+                // img for admin
                 $this->thb($format, $path, 261, 182);
+                // img for social, поправить что бы вмещалось
+                $this->thb('jpg', $path, 1200, 630);
+                // img for mobaile
                 $this->thb($format, $path, $thWidth, $thHeight);
                 if ($mult >= 4) {
                     $this->thb($format, $path, $thWidth * 4, $thHeight * 4);
@@ -144,10 +166,12 @@ class Image extends ActiveRecord
                 }
                 if ($mult >= 2) {
                     $this->thb($format, $path, $thWidth * 2, $thHeight * 2);
-                    $mult = 2;
+                    $mult = $mult === 4 ? 4 : 2;
                 } else {
                     $mult = 1;
                 }
+
+                $arr['format'] = $format;
 
                 if (function_exists('imagewebp')) {
                     $this->thb('webp', $path, $thWidth, $thHeight);
@@ -157,11 +181,11 @@ class Image extends ActiveRecord
                     if ($mult >= 2) {
                         $this->thb('webp', $path, $thWidth * 2, $thHeight * 2);
                     }
-                    $arr['webp'] = true;
+                    $arr['format'] = 'webp,'. $arr['format'];
+
                 }
                 $arr['thWidth'] = $thWidth;
                 $arr['thHeight'] = $thHeight;
-                $arr['format'] = $format;
                 $arr['thumb'] = $mult;
 
                 // полный формат
@@ -169,12 +193,12 @@ class Image extends ActiveRecord
                 $mult = $this->sizeCheck($pathExt, $width);
                 $this->thb($format, $path, $width);
                 if ($mult >= 4) {
-                    $this->thb($format, $path, $width * 4);
+                    $this->thb($format, $path, $width * 4, $this->findHeight * 4);
                     $mult = 4;
                 }
                 if ($mult >= 2) {
-                    $this->thb($format, $path, $width * 2);
-                    $mult = 2;
+                    $this->thb($format, $path, $width * 2, $this->findHeight * 2);
+                    $mult = $mult === 4 ? 4 : 2;
                 } else {
                     $mult = 1;
                 }
@@ -194,12 +218,12 @@ class Image extends ActiveRecord
                 $arr['image'] = $mult;
 
                 // Imags::thumbnail($path, 100, 100)
-                //     ->save("{$_SERVER['DOCUMENT_ROOT']}/frontend/web/images/{$modPath}/{$year}/{$month}/{$rand}-{$this->url->baseName}.jpeg", ['jpeg_quality' => 75]);
+                //     ->save("{$_SERVER['DOCUMENT_ROOT']}/frontend/web/images/{$modPath}/{$year}/{$month}/{$rand}-{$this->path->baseName}.jpeg", ['jpeg_quality' => 75]);
                 // Imags::thumbnail($path, 100, 100)
-                // ->save("{$_SERVER['DOCUMENT_ROOT']}/frontend/web/images/{$modPath}/{$year}/{$month}/{$rand}-{$this->url->baseName}-.jpg", ['quality' => 80]);
+                // ->save("{$_SERVER['DOCUMENT_ROOT']}/frontend/web/images/{$modPath}/{$year}/{$month}/{$rand}-{$this->path->baseName}-.jpg", ['quality' => 80]);
 
                 // Image::resize($path, 300, 100)
-                //     ->save("{$_SERVER['DOCUMENT_ROOT']}/frontend/web/images/post/{$year}/{$month}/{$rand}-{$this->url->baseName}.jpeg", ['jpeg_quality' => 75]);
+                //     ->save("{$_SERVER['DOCUMENT_ROOT']}/frontend/web/images/post/{$year}/{$month}/{$rand}-{$this->path->baseName}.jpeg", ['jpeg_quality' => 75]);
 
                 return $arr;
             }
@@ -231,6 +255,13 @@ class Image extends ActiveRecord
         return 1;
     }
 
+    private function rsz($format, $path, $width, $height = 0)
+    {
+        $quality = ['jpeg_quality' => 90];
+        Imags::resize("{$path}.{$this->path->extension}", $width, $height)
+                ->save("{$path}-{$width}x{$height}.{$format}", $quality);
+    }
+
     private function thb($format, $path, $width, $height = 0)
     {
         switch ($format) {
@@ -250,10 +281,10 @@ class Image extends ActiveRecord
                 break;
         }
         if ($height) {
-            Imags::thumbnail("{$path}.{$this->url->extension}", $width, $height)
+            Imags::thumbnail("{$path}.{$this->path->extension}", $width, $height)
                 ->save("{$path}-{$width}x{$height}.{$format}", $quality);
         } else {
-            Imags::thumbnail("{$path}.{$this->url->extension}", $width, $this->findHeight)
+            Imags::thumbnail("{$path}.{$this->path->extension}", $width, $this->findHeight)
                 ->save("{$path}-{$width}x{$this->findHeight}.{$format}", $quality);
         }
     }
