@@ -47,7 +47,7 @@ class PostController extends AppController
     {
         $model = $this->findModel($id);
 
-        $this->setMeta( empty($model->title) ? $model->name : $model->title, empty($model->description) ? $model->preview : $model->description, $model->keywords );
+        $this->setMeta( empty($model->title) ? $model->name : $model->title, empty($model->description) ? $model->preview : $model->description, $model->keywords, $model->image->path);
 
         return $this->render('show', compact('model'));
     }
@@ -61,7 +61,12 @@ class PostController extends AppController
      */
     protected function findModel($id)
     {
-        if (($model = Post::findOne(['id' => $id])) !== null) {
+        $model = Post::find()
+            ->with('image')
+            ->where(['id' => $id])
+            ->andWhere(['status' => 1])
+            ->one();
+        if ($model !== null) {
             return $model;
         }
 

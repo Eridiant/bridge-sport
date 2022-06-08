@@ -10,6 +10,7 @@ use yii\filters\AccessControl;
 use yii\web\NotFoundHttpException;
 use frontend\models\StatUserIp;
 use frontend\models\ErrorLog;
+use yii\helpers\Url;
 
 /**
  * Site controller
@@ -47,8 +48,16 @@ class AppController extends Controller
         ];
     }
 
-    protected function setMeta($title = null, $description = null, $keywords = null, $type = null, $image = null, $secure_url = null)
+    protected function setMeta($title = null, $description = null, $keywords = null, $image = null, $type = null)
     {
+        if (is_null($image)) {
+            $secure_url = null;
+        } else {
+            $image = "images/{$image}-1200x630.jpg";
+            $secure_url = Url::to("@web/{$image}", true);
+            $image = "//{$image}";
+        }
+
         $this->view->title = $title ?: Yii::$app->params['defaultTitle'];
         // $this->view->registerMetaTag(['name' => 'keywords', 'content' => "$keywords"]);
         $this->view->registerMetaTag(['name' => 'description', 'content' => $description ?: Yii::$app->params['defaultDescription']]);
