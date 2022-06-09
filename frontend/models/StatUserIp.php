@@ -9,6 +9,8 @@ use Yii;
  *
  * @property int $id
  * @property int $ip
+ * @property string $ip6
+ * @property int|null $status
  * @property string|null $url
  * @property string|null $ref
  * @property string|null $lang_choose
@@ -32,10 +34,12 @@ class StatUserIp extends \yii\db\ActiveRecord
     public function rules()
     {
         return [
-            [['ip'], 'required'],
-            [['created_at'], 'integer'],
-            [['url', 'ref', 'lang_all', 'device'], 'string', 'max' => 255],
+            [['ip', 'ip6'], 'required'],
+            [['ip', 'status', 'created_at'], 'integer'],
+            [['ip6'], 'string', 'max' => 39],
+            [['url', 'ref', 'device'], 'string', 'max' => 255],
             [['lang_choose'], 'string', 'max' => 12],
+            [['lang_all'], 'string', 'max' => 128],
         ];
     }
 
@@ -63,6 +67,8 @@ class StatUserIp extends \yii\db\ActiveRecord
         return [
             'id' => 'ID',
             'ip' => 'Ip',
+            'ip6' => 'Ip6',
+            'status' => 'Status',
             'url' => 'Url',
             'ref' => 'Ref',
             'lang_choose' => 'Lang Choose',

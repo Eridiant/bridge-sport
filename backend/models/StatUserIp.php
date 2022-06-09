@@ -8,7 +8,8 @@ use Yii;
  * This is the model class for table "{{%stat_user_ip}}".
  *
  * @property int $id
- * @property int $ip
+ * @property string $ip
+ * @property int $ip4
  * @property string|null $url
  * @property string|null $ref
  * @property string|null $lang_choose
@@ -32,10 +33,12 @@ class StatUserIp extends \yii\db\ActiveRecord
     public function rules()
     {
         return [
-            [['ip', 'created_at'], 'required'],
-            [['ip', 'created_at'], 'integer'],
-            [['url', 'ref', 'lang_all', 'device'], 'string', 'max' => 255],
+            [['ip', 'ip4'], 'required'],
+            [['ip4', 'created_at'], 'integer'],
+            [['ip'], 'string', 'max' => 39],
+            [['url', 'ref', 'device'], 'string', 'max' => 255],
             [['lang_choose'], 'string', 'max' => 12],
+            [['lang_all'], 'string', 'max' => 128],
         ];
     }
 
@@ -47,12 +50,13 @@ class StatUserIp extends \yii\db\ActiveRecord
         return [
             'id' => 'ID',
             'ip' => 'Ip',
-            'url' => 'Страница',
-            'ref' => 'Рефералка',
-            'lang_choose' => 'Язык',
-            'lang_all' => 'Настройки',
-            'device' => 'Устройство',
-            'created_at' => 'Время',
+            'ip4' => 'Ip4',
+            'url' => 'Url',
+            'ref' => 'Ref',
+            'lang_choose' => 'Lang Choose',
+            'lang_all' => 'Lang All',
+            'device' => 'Device',
+            'created_at' => 'Created At',
         ];
     }
 }

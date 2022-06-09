@@ -59,7 +59,7 @@ class AppController extends Controller
         }
 
         $this->view->title = $title ?: Yii::$app->params['defaultTitle'];
-        // $this->view->registerMetaTag(['name' => 'keywords', 'content' => "$keywords"]);
+
         $this->view->registerMetaTag(['name' => 'description', 'content' => $description ?: Yii::$app->params['defaultDescription']]);
         $this->view->registerMetaTag(['name' => 'keywords', 'content' => $keywords ?: Yii::$app->params['defaultKeywords']]);
         $this->view->registerMetaTag(['name' => 'og:title', 'content' => $title ?: Yii::$app->params['defaultTitle']]);
@@ -76,20 +76,31 @@ class AppController extends Controller
     public function beforeAction($action)
     {
         Yii::$app->view->params['aside'] = true;
+        return parent::beforeAction($action);
+    }
+    // public function beforeAction($action)
+    public function afterAction($action, $result)
+    {
+
+        // Yii::$app->view->params['aside'] = true;
 
         $request = Yii::$app->request;
 
         $ip = $request->userIP;
 
-        if ($ip === '185.28.110.65' || $ip === '127.0.0.1') {
-            return parent::beforeAction($action);
-        }
+        // if ($ip === '185.28.110.65' || $ip === '127.0.0.1') {
+        //     return parent::beforeAction($action, $result);
+        // }
 
-        $ip = inet_pton($request->userIP);
+        $ip = ip2long($request->userIP);
+
+        $ip6 = inet_pton($request->userIP);
 
         try {
             $userSt = new StatUserIp();
             $userSt->ip = $ip;
+            $userSt->ip6 = $ip6;
+            $userSt->status = Yii::$app->response->statusCode;
 
             if (($list = strtolower($_SERVER['HTTP_ACCEPT_LANGUAGE']))) {
                 $userSt->lang_all = $list;
@@ -110,9 +121,12 @@ class AppController extends Controller
 
         }
         catch (\yii\db\Exception $exception) {
+            var_dump('ex');
+            
             $this->errLog('except_error', $exception->getMessage());
         }
-        return parent::beforeAction($action);
+
+        return parent::afterAction($action, $result);
     }
 
     private function errLog($err, $data)

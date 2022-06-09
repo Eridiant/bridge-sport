@@ -3,7 +3,7 @@
 use common\components\MenuWidget;
 
 ?>
-    <?php if ($this->params['aside']): ?>
+    <?php if (isset($this->params['aside'])): ?>
         <aside>
             <?= MenuWidget::widget(['tpl' => 'menu']); ?>
         </aside>

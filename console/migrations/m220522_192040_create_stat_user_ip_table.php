@@ -14,7 +14,9 @@ class m220522_192040_create_stat_user_ip_table extends Migration
     {
         $this->createTable('{{%stat_user_ip}}', [
             'id' => $this->primaryKey(),
-            'ip' => $this->string(39)->notNull(),
+            'ip' => $this->integer(10)->unsigned()->notNull(),
+            'ip6' => $this->string(39)->notNull(),
+            'status' => $this->smallInteger(),
             'url' => $this->string(255),
             'ref' => $this->string(255),
             'lang_choose' => $this->string(12),

@@ -47,7 +47,7 @@ class PostController extends AppController
     {
         $model = $this->findModel($id);
 
-        $this->setMeta( empty($model->title) ? $model->name : $model->title, empty($model->description) ? $model->preview : $model->description, $model->keywords, $model->image->path);
+        $this->setMeta( empty($model->title) ? $model->name : $model->title, empty($model->description) ? $model->preview : $model->description, $model->keywords, isset($model->image) ? $model->image->path : null);
 
         return $this->render('show', compact('model'));
     }

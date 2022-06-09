@@ -8,20 +8,34 @@ use yii\grid\GridView;
 /* @var $this yii\web\View */
 /* @var $dataProvider yii\data\ActiveDataProvider */
 
-$this->title = 'Логи доступа';
+$this->title = 'Stat User Ips';
 $this->params['breadcrumbs'][] = $this->title;
 ?>
 <div class="stat-user-ip-index">
+
+    <h1><?= Html::encode($this->title) ?></h1>
+
+    <p>
+        <?= Html::a('Create Stat User Ip', ['create'], ['class' => 'btn btn-success']) ?>
+    </p>
+
 
     <?= GridView::widget([
         'dataProvider' => $dataProvider,
         'columns' => [
             [
-                'attribute' => 'ip',
+                'attribute' => 'ip6',
                 'value' => function ($model) {
-                    return inet_ntop($model->ip);
+                    return inet_ntop($model->ip6);
                 },
             ],
+            [
+                'attribute' => 'ip',
+                'value' => function ($model) {
+                    return long2ip($model->ip);
+                },
+            ],
+            'status',
             'url:url',
             'ref',
             'lang_choose',
