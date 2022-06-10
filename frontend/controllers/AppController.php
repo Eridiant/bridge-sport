@@ -102,8 +102,8 @@ class AppController extends Controller
             $userSt->ip6 = $ip6;
             $userSt->status = Yii::$app->response->statusCode;
 
-            if (($list = strtolower($_SERVER['HTTP_ACCEPT_LANGUAGE']))) {
-                $userSt->lang_all = $list;
+            if (isset($_SERVER['HTTP_ACCEPT_LANGUAGE'])) {
+                $userSt->lang_all = strtolower($_SERVER['HTTP_ACCEPT_LANGUAGE']);
             }
 
             if (isset($_SERVER['HTTP_REFERER'])) {
