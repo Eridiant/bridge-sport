@@ -42,7 +42,6 @@ class ImageComponent extends Component {
                 $img = [];
             }
 
-
             ob_start();
             include __DIR__ . '/image/index.php';
             return ob_get_clean();

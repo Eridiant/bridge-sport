@@ -134,9 +134,8 @@ class PostController extends Controller
                 //         die;
                 //     }
                 // }
-                
+
                 $check = Post::find()->with('category')
-                            // ->select(['slug', 'category_id'])
                             ->where([
                                 'slug' => $model->slug,
                                 'category_id' => $model->category_id
@@ -152,7 +151,6 @@ class PostController extends Controller
                 }
 
                 if ($model->save()) {
-                    
                     return $this->redirect(['view', 'id' => $model->id]);
                 } else {
                     var_dump('<pre>');
@@ -208,16 +206,20 @@ class PostController extends Controller
     {
         $model = $this->findModel($id);
 
-        if ($this->request->isPost && $model->load($this->request->post()) && $model->save()) {
+        if ($this->request->isPost && $model->load($this->request->post())) {
 
-            if (!is_null(UploadedFile::getInstance($model, 'img'))) {
-                $model->img = UploadedFile::getInstance($model, 'img');
-
-                $model->img = $model->upload();
-            }
+            // if (!is_null(UploadedFile::getInstance($model, 'img'))) {
+            //     $model->img = UploadedFile::getInstance($model, 'img');
+            //     $model->img = $model->upload();
+            // }
 
             if ($model->save()) {
                 return $this->redirect(['view', 'id' => $model->id]);
+            } else {
+                var_dump('<pre>');
+                var_dump($model->getErrors());
+                var_dump('</pre>');
+                die;
             }
 
         }

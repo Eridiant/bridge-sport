@@ -88,9 +88,9 @@ class AppController extends Controller
 
         $ip = $request->userIP;
 
-        // if ($ip === '185.28.110.65' || $ip === '127.0.0.1') {
-        //     return parent::beforeAction($action, $result);
-        // }
+        if ($ip === '185.28.110.65' || $ip === '127.0.0.1') {
+            return parent::afterAction($action, $result);
+        }
 
         $ip = ip2long($request->userIP);
 
