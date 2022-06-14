@@ -10,6 +10,14 @@ use yii\helpers\Html;
 
     <h1><?= Html::encode($model->name) ?></h1>
 
+    <div class="post-img">
+        <picture>
+            <?php if (!empty($model->image->path)): ?>
+                <?= Yii::$app->imageComponent->image($model->image); ?>
+            <?php endif; ?>
+        </picture>
+    </div>
+
     <?php if (!empty($model->img)): ?>
         <img src="<?= $model->img; ?>" alt="">
     <?php endif; ?>

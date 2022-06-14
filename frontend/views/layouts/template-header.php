@@ -13,6 +13,9 @@ use yii\helpers\Url;
             <nav class="nav-item">
                 <a href="<?= Url::to('/') ?>">Главная</a>
             </nav>
+            <div class="aside-icon">
+                <p>&#8801;</p>
+            </div>
         </div>
     </div>
 </header>

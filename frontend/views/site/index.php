@@ -19,13 +19,15 @@ $this->title = 'Bridge sport';
     <?php foreach ($model as $m): ?>
         <div class="news-wrapper">
             <div class="news-img <?= is_null($m->taxonomies) ? $m->taxonomies[0]->label : ''; ?>">
-                <picture>
-                    <?php if (empty($m->image->path)): ?>
-                        <img src="/images/dummy/<?= $m->category_id; ?>.jpg" alt="" class="news-img">
-                    <?php else: ?>
-                        <?= Yii::$app->imageComponent->image($m->image, 'thumb'); ?>
-                    <?php endif; ?>
-                </picture>
+                <a href="<?= Url::to(['/post', 'id' => $m->id]) ?>">
+                    <picture>
+                        <?php if (empty($m->image->path)): ?>
+                            <img src="/images/dummy/<?= $m->category_id; ?>.jpg" alt="" class="news-img">
+                        <?php else: ?>
+                            <?= Yii::$app->imageComponent->image($m->image, 'thumb'); ?>
+                        <?php endif; ?>
+                    </picture>
+                </a>
             </div>
             <div class="news-inner">
                 <div class="news-header">

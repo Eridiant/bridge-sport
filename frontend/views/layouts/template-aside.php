@@ -4,7 +4,19 @@ use common\components\MenuWidget;
 
 ?>
     <?php if (isset($this->params['aside'])): ?>
-        <aside>
-            <?= MenuWidget::widget(['tpl' => 'menu']); ?>
+        <aside class="aside">
+            <div class="aside-wrapper">
+                <header class="aside-header">
+                    <div class="nav-logo">
+                        <a class="title" href="/">Bridge sport</a>
+                    </div>
+                    <div class="aside-close">
+                        <p>&#10007;</p>
+                    </div>
+                </header>
+                <ul>
+                    <?= MenuWidget::widget(['tpl' => 'menu']); ?>
+                </ul>
+            </div>
         </aside>
     <?php endif; ?>
