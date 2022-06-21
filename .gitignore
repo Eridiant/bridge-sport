@@ -46,6 +46,8 @@ phpunit.phar
 
 # ignore post img
 /frontend/web/images/post
+/frontend/web/images/quiz
+/frontend/web/images/temp
 
 # ignore my add
 composer.lock

@@ -111,6 +111,17 @@ a.desc:after {
 .index-wrapper a {
     display: flex;
 }
+iframe, object {
+    width: 100%;
+    height: auto;
+    aspect-ratio: 13/10;
+}
+iframe {
+    border: none
+}
+.wrapper.dn {
+    display: none;
+}
 @media(max-width:767px) {
     .nav li > form > button.logout {
         display:block;

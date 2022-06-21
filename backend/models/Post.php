@@ -208,10 +208,6 @@ class Post extends \yii\db\ActiveRecord
 
         if ($arr = $image->upload('post')) {
 
-            // var_dump('<pre>');
-            // var_dump($arr);
-            // var_dump('</pre>');
-            // die;
             foreach ($arr as $key => $value) {
                 $image->$key = $value;
             }
@@ -256,7 +252,12 @@ class Post extends \yii\db\ActiveRecord
     public function getYoutubeFields()
     {
         if ($this->_youtubeFields === null) {
-            $this->_youtubeFields = $this->getYoutube()->select('id')->one();
+
+            if (!is_null($this->getYoutube()->select('youtube')->one())) {
+                $this->_youtubeFields = $this->getYoutube()->select('youtube')->one()->youtube;
+                return $this->_youtubeFields;
+            }
+            $this->_youtubeFields = $this->getYoutube()->select('youtube')->one();
         }
         return $this->_youtubeFields;
     }
@@ -291,12 +292,50 @@ class Post extends \yii\db\ActiveRecord
 
     public function updateYoutube()
     {
-        if ($this->youtube) {
-            $youtube = new Youtube();
+
+        if ($this->youtubeFields) {
+            if (is_null($this->youtube_id)) {
+                $youtube = new Youtube();
+            } else {
+                $youtube = Youtube::find()->where(['id' => $this->youtube_id])->one();
+            }
+
             $youtube->youtube = $this->getYoutubeFields();
             $youtube->hide = $this->getHide();
-            $youtube->key = 'key';
-            $youtube->image_id = 2;
+            preg_match("#(?<=v=)[a-zA-Z0-9-]+(?=&)|(?<=v\/)[^&\n]+|(?<=v=)[^&\n]+|(?<=youtu.be/)[^&\n]+#", $this->getYoutubeFields(), $key);
+            $youtube->key = $key[0];
+
+            // file_put_contents($file, $current);
+            // $image = new Image();
+            // $image->path = UploadedFile::getInstance($homepage, 'img');
+
+            if ($key[0]) {
+                if (is_null($youtube->image_id)) {
+                    $image = new Image();
+                } else {
+                    $image = Image::find()->where(['id' => $youtube->image_id])->one();
+                }
+                
+                if ($arr = $image->uploadY('post', $key[0])) {
+
+                    foreach ($arr as $key => $value) {
+                        $image->$key = $value;
+                    }
+
+                    $image->alt = $this->getAlt();
+                    
+                    if ($image->save()) {
+                        $youtube->image_id = $image->getPrimaryKey();
+                    } else {
+                        var_dump('<pre>');
+                        var_dump($image->getErrors());
+                        var_dump('</pre>');
+                        die;
+                    }
+                }
+            }
+            
+
             if ($youtube->save()) {
                 $this->youtube_id = $youtube->getPrimaryKey();
             } else {

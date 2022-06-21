@@ -1,5 +1,115 @@
 window.addEventListener('load', () => {
 
+    if (document.querySelector('#post-frame')) {
+
+        let frame = document.querySelector('#post-frame');
+        // console.log(frame);
+
+        let listenerMap = function lm() {
+            function loadScript() {
+                return new Promise(function(resolve, reject) {
+                    // var script = document.createElement("script");
+                    // script.onload = resolve;
+                    // script.onerror = reject;
+                    // script.src = 'https://maps.googleapis.com/maps/api/js?key=AIzaSyAatwjPC0N1Ku1zqWAFebbu66TnvDEbk6w&region=EN&language=en';
+                    // script.type = 'text/javascript';
+                    // document.body.parentNode.appendChild(script);
+
+                    // let iframeDiv = document.createElement('iframe');
+                    let iframeDiv = document.createElement('div');
+                    let iframe = frame.value;
+                    // iframeDiv.onload = resolve;
+                    // iframeDiv.onerror = reject;
+                    // iframeDiv.src = iframe;
+                    iframeDiv.innerHTML = `<iframe src="${iframe}"></iframe>`;
+                    // document.body.appendChild(iframeDiv);
+                    // document.querySelector('.wrapper').classList.add('dn');
+                    document.querySelector('#ifr').appendChild(iframeDiv);
+                    setTimeout(() => {
+                        // document.querySelector('.wrapper').classList.remove('dn');
+                        // html2canvas(document.body).then(function(canvas) {
+                        //     var my_screen = canvas;
+                        //     // console.log(document.querySelector('#ifr'));
+                        //     document.querySelector('#ifr').appendChild(my_screen);
+                        // });
+
+                        // let node = document.querySelector('body');
+                        // domtoimage.toPng(node)
+                        //     .then(function (dataUrl) {
+                        //         var img = new Image();
+                        //         img.src = dataUrl;
+                        //         document.body.appendChild(img);
+                        //     })
+                        //     .catch(function (error) {
+                        //         console.error('oops, something went wrong!', error);
+                        //     });
+                    }, 3000);
+                });
+            }
+
+            loadScript().then(response => {
+                // map.innerHTML = '';
+                
+                // frame.removeEventListener('blur', listenerMap, false);
+
+                // let inner = document.querySelector('#ifr iframe');
+                
+                setTimeout(() => {
+                    // document.querySelector('.wrapper').classList.remove('dn');
+                    html2canvas(document.body).then(function(canvas) {
+                        var my_screen = canvas;
+                        // console.log(document.querySelector('#ifr'));
+                        document.querySelector('#ifr').appendChild(my_screen);
+                    });	
+                }, 3000);
+                // iframe2image(inner, function (err, img) {
+                //     // If there is an error, log it
+                //     if (err) { return console.error(err); }
+                //     // Otherwise, add the image to the canvas
+                //     // context.drawImage(img, 0, 0);
+                //     document.querySelector('#ifr').drawImage(img, 0, 0);
+                // });
+            });
+        }
+        // document.querySelector('#ifr').
+        frame.addEventListener('blur', listenerMap, false);
+        // document.querySelector('#ifr').contentDocument.addEventListener('click', (e) => {
+        //     e.preventDefault();
+        //     // console.log('e.target');
+        //     let inner = document.querySelector('#ifr iframe');
+        //     console.log(inner);
+        // })
+        
+    }
+
+    if (document.querySelector('#map')) {
+        let map = document.querySelector('#map');
+
+        let listenerMap = function lm() {
+            function loadScript() {
+                return new Promise(function(resolve, reject) {
+                    var script = document.createElement("script");
+                    script.onload = resolve;
+                    script.onerror = reject;
+                    script.src = 'https://maps.googleapis.com/maps/api/js?key=AIzaSyAatwjPC0N1Ku1zqWAFebbu66TnvDEbk6w&region=EN&language=en';
+                    script.type = 'text/javascript';
+                    document.body.parentNode.appendChild(script);
+                });
+            }
+            
+            loadScript().then(function() {
+                // map.innerHTML = '';
+                map.removeEventListener('click', listenerMap, false);
+                init();
+                map.classList.add('map-active');
+
+            });
+        }
+        
+        map.addEventListener('click', listenerMap, false);
+        // map.addEventListener('keydown', liMa, false);
+    }
+
     if (document.querySelector('.name')) {
         let name = document.querySelector('.name');
         let translit = document.querySelector('.slug');
@@ -35,6 +145,7 @@ window.addEventListener('load', () => {
         }
     })
 })
+
 
 function callMigrate(cntr) {
     // console.log(wrap.dataset.id);

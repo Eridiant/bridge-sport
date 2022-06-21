@@ -166,13 +166,13 @@ class PostController extends Controller
             }
         }
 
-        // if ($id) {
-        //     $model->category_id = $id;
-        // }
+        if ($id) {
+            $model->category_id = $id;
+        }
 
-        // if ($parent) {
-        //     $model->parent_id = $parent;
-        // }
+        if ($parent) {
+            $model->parent_id = $parent;
+        }
 
         // $attributes = Attribute::find()->all();
 

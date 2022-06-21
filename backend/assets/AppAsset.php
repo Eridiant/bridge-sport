@@ -17,6 +17,8 @@ class AppAsset extends AssetBundle
     public $js = [
         'js/site.js',
         'js/html2canvas.min.js',
+        'js/dom-to-image.min.js',
+        // 'js/iframe2image.withdomvas.min.js',
     ];
     public $depends = [
         'yii\web\YiiAsset',

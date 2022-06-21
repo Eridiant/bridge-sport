@@ -142,4 +142,14 @@ class Post extends \yii\db\ActiveRecord
     {
         return $this->hasMany(Taxonomy::class, ['id' => 'taxonomy_id'])->viaTable('{{%post_taxonomy}}', ['post_id' => 'id']);
     }
+
+    /**
+     * Gets query for [[Youtube]].
+     *
+     * @return \yii\db\ActiveQuery
+     */
+    public function getYoutube()
+    {
+        return $this->hasOne(Youtube::class, ['id' => 'youtube_id']);
+    }
 }
