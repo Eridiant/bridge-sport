@@ -1,5 +1,13 @@
 <?php
 
+use yii\helpers\Html;
+
+/* @var $this \yii\web\View */
+/* @var $content string */
+
+if (Yii::$app->user->isGuest) {
+    Yii::$app->getResponse()->redirect(\Yii::$app->getUser()->loginUrl);
+}
 
 ?>
 <aside class="main-sidebar">
@@ -66,7 +74,7 @@
                         'url' => '#',
                         'items' => [
                             ['label' => 'Логи доступа', 'icon' => 'file-code-o', 'url' => ['/log/index'],],
-                            ['label' => 'Логи ошибок', 'icon' => 'dashboard', 'url' => ['/log/error'],],
+                            ['label' => 'Логи ошибок', 'icon' => 'dashboard', 'url' => ['/log/err'],],
                         ],
                     ],
                     [

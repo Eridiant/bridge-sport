@@ -8,6 +8,7 @@ use yii\data\ActiveDataProvider;
 use yii\web\Controller;
 use yii\web\NotFoundHttpException;
 use yii\filters\VerbFilter;
+use yii\filters\AccessControl;
 
 /**
  * LogController implements the CRUD actions for StatUserIp model.
@@ -22,10 +23,24 @@ class LogController extends Controller
         return array_merge(
             parent::behaviors(),
             [
+                'access' => [
+                    'class' => AccessControl::class,
+                    'rules' => [
+                        [
+                            'actions' => ['login', 'error'],
+                            'allow' => true,
+                        ],
+                        [
+                            'actions' => ['index', 'err'],
+                            'allow' => true,
+                            'roles' => ['@'],
+                        ],
+                    ],
+                ],
                 'verbs' => [
                     'class' => VerbFilter::class,
                     'actions' => [
-                        'delete' => ['POST'],
+                        'delete' => ['POST', 'GET'],
                     ],
                 ],
             ]
@@ -61,7 +76,7 @@ class LogController extends Controller
      *
      * @return string
      */
-    public function actionError()
+    public function actionErr()
     {
         $dataProvider = new ActiveDataProvider([
             'query' => ErrorLog::find(),
@@ -77,7 +92,7 @@ class LogController extends Controller
             */
         ]);
 
-        return $this->render('error', [
+        return $this->render('err', [
             'dataProvider' => $dataProvider,
         ]);
     }

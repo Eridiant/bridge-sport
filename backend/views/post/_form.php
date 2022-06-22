@@ -26,7 +26,10 @@ use backend\models\Taxonomy;
 
         <?= $form->field($model, 'category_id')->dropDownList(\backend\models\Category::find()->select(['name', 'id'])->indexBy('id')->column()) ?>
 
-        <h3><span>продолжение: </span><?= \backend\models\Post::find()->where(['id' => $model->parent_id])->select(['name'])->one()->name; ?></h2>
+        <?php if (\backend\models\Post::find()->where(['id' => $model->parent_id])->exists()): ?>
+            <h3><span>продолжение: </span><?= \backend\models\Post::find()->where(['id' => $model->parent_id])->select(['name'])->one()->name; ?></h3>
+        <?php endif; ?>
+        
         <?= $form->field($model, 'parent_id')->hiddenInput()->label(false) ?>
 
         <?= $form->field($model, 'name', ['inputOptions' => ['class' => 'form-control name']])->textInput(['maxlength' => true]) ?>

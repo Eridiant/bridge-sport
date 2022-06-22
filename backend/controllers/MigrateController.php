@@ -4,6 +4,7 @@ namespace backend\controllers;
 
 use Yii;
 use backend\components\Command;
+use yii\filters\VerbFilter;
 use yii\filters\AccessControl;
 use yii\web\Controller;
 
@@ -28,10 +29,21 @@ class MigrateController extends Controller
                 'class' => AccessControl::class,
                 'rules' => [
                     [
+                        'actions' => ['login', 'error'],
                         'allow' => true,
-                        'roles' => ['@']
+                    ],
+                    [
+                        'actions' => ['index', 'up', 'down'],
+                        'allow' => true,
+                        'roles' => ['@'],
                     ],
 
+                ],
+            ],
+            'verbs' => [
+                'class' => VerbFilter::class,
+                'actions' => [
+                    'delete' => ['POST', 'GET'],
                 ],
             ],
         ];
