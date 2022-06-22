@@ -122,6 +122,12 @@ iframe {
 .wrapper.dn {
     display: none;
 }
+.limit {
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    overflow:hidden;
+}
+
 @media(max-width:767px) {
     .nav li > form > button.logout {
         display:block;

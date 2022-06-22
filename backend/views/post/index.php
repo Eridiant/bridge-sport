@@ -65,9 +65,19 @@ $this->params['breadcrumbs'][] = $this->title;
                 }
             ],
             [
+                'label'=>'предыдущая',
+                'value'=>function($model){
+                    return $model->parent_id ? \backend\models\Post::find()->where(['id' => $model->parent_id])->select(['name'])->one()->name : '';
+                },
+                'contentOptions' => ['class' => 'limit', 'style' => 'max-width: 100px;'],
+            ],
+            [
                 'label' => 'Добавить статью',
                 'format' => 'raw',
                 'value' => function($model){
+                    if (\backend\models\Post::find()->where(['parent_id' => $model->id])->exists()) {
+                        return Html::a('Редактировать', ['/post/create', 'id' => \backend\models\Post::find()->where(['parent_id' => $model->id])->one()->id, 'parent' => $model->id], ['class' => 'limit']);
+                    }
                     return Html::a('Добавить', ['/post/create', 'id' => $model->category_id, 'parent' => $model->id], ['class' => 'profile-link']);
                 },
             ],
@@ -75,6 +85,7 @@ $this->params['breadcrumbs'][] = $this->title;
             //'created_at',
             //'updated_at',
             //'deleted_at',
+            // 'parent_id',
             [
                 'class' => ActionColumn::class,
                 'urlCreator' => function ($action, \backend\models\Post $model, $key, $index, $column) {

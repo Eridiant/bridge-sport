@@ -11,7 +11,7 @@ use backend\models\Taxonomy;
 /* @var $model backend\models\Post */
 /* @var $form yii\widgets\ActiveForm */
 // var_dump('<pre>');
-// var_dump($model);
+// var_dump(\backend\models\Post::find()->where(['id' => $model->parent_id])->select(['name'])->one()->name);
 // var_dump('</pre>');
 // die;
 
@@ -26,7 +26,8 @@ use backend\models\Taxonomy;
 
         <?= $form->field($model, 'category_id')->dropDownList(\backend\models\Category::find()->select(['name', 'id'])->indexBy('id')->column()) ?>
 
-        <?= $form->field($model, 'parent_id')->textInput() ?>
+        <h3><span>продолжение: </span><?= \backend\models\Post::find()->where(['id' => $model->parent_id])->select(['name'])->one()->name; ?></h2>
+        <?= $form->field($model, 'parent_id')->hiddenInput()->label(false) ?>
 
         <?= $form->field($model, 'name', ['inputOptions' => ['class' => 'form-control name']])->textInput(['maxlength' => true]) ?>
 
