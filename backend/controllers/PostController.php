@@ -39,7 +39,7 @@ class PostController extends Controller
                             'allow' => true,
                         ],
                         [
-                            'actions' => ['logout', 'index', 'delete', 'update', 'create'],
+                            'actions' => ['logout', 'index', 'cont', 'delete', 'update', 'create'],
                             'allow' => true,
                             'roles' => ['@'],
                         ],
@@ -82,6 +82,23 @@ class PostController extends Controller
         return $this->render('view', [
             'model' => $this->findModel($id),
         ]);
+    }
+
+    public function actionCont()
+    {
+
+        $request = Yii::$app->request;
+
+        if ($request->isPost) {
+
+            include_once(Yii::getAlias('@app/models/parser/simple_html_dom.php'));
+            $url = $request->post('url');
+
+            $html = file_get_html(trim($url));
+
+            // return $html;
+            return $html->find('body')[0];
+        }
     }
 
     /**

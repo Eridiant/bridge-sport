@@ -11,7 +11,7 @@ window.addEventListener('load', () => {
                     // var script = document.createElement("script");
                     // script.onload = resolve;
                     // script.onerror = reject;
-                    // script.src = 'https://maps.googleapis.com/maps/api/js?key=AIzaSyAatwjPC0N1Ku1zqWAFebbu66TnvDEbk6w&region=EN&language=en';
+                    // script.src = 'https://maps.googleapis.com/maps/api/js?asdfasdfasdfasdfasdfasdfasdf&region=EN&language=en';
                     // script.type = 'text/javascript';
                     // document.body.parentNode.appendChild(script);
 
@@ -71,8 +71,15 @@ window.addEventListener('load', () => {
                 // });
             });
         }
+        let bbo = function bb() {
+            let iframe = frame.value;
+            ajaxRequest('post/cont', {'url':iframe})
+                .then (response => {
+                    document.querySelector('#ifr').innerHTML = response;
+                });
+        }
         // document.querySelector('#ifr').
-        frame.addEventListener('blur', listenerMap, false);
+        frame.addEventListener('blur', bbo, false);
         // document.querySelector('#ifr').contentDocument.addEventListener('click', (e) => {
         //     e.preventDefault();
         //     // console.log('e.target');
@@ -82,6 +89,7 @@ window.addEventListener('load', () => {
         
     }
 
+    // for del
     if (document.querySelector('#map')) {
         let map = document.querySelector('#map');
 
@@ -91,7 +99,7 @@ window.addEventListener('load', () => {
                     var script = document.createElement("script");
                     script.onload = resolve;
                     script.onerror = reject;
-                    script.src = 'https://maps.googleapis.com/maps/api/js?key=AIzaSyAatwjPC0N1Ku1zqWAFebbu66TnvDEbk6w&region=EN&language=en';
+                    script.src = 'https://maps.googleapis.com/maps/api/js?key=asdhfkajshdkfahsd&region=EN&language=en';
                     script.type = 'text/javascript';
                     document.body.parentNode.appendChild(script);
                 });
@@ -109,6 +117,7 @@ window.addEventListener('load', () => {
         map.addEventListener('click', listenerMap, false);
         // map.addEventListener('keydown', liMa, false);
     }
+    // for del
 
     if (document.querySelector('.name')) {
         let name = document.querySelector('.name');
@@ -146,6 +155,37 @@ window.addEventListener('load', () => {
     })
 })
 
+function ajaxRequest(cntr, rqst) {
+    // console.log(wrap.dataset.id);
+    return new Promise((succeed, fail) => {
+        // console.log(wrap.dataset.id);
+        let quizRequest = new XMLHttpRequest();
+        quizRequest.open("POST", `/admin/${cntr}`, true);
+        quizRequest.setRequestHeader('Content-Type', 'application/json');
+
+        quizRequest.setRequestHeader('X-CSRF-Token', document.querySelector('meta[name="csrf-token"]').content);
+        quizRequest.setRequestHeader('X-Requested-With', 'XMLHttpRequest');
+        quizRequest.onload = function() {
+            if(quizRequest.readyState == XMLHttpRequest.DONE && quizRequest.status == 200) {
+                succeed(quizRequest.responseText);
+            } else if (quizRequest.status == 400) {
+                // throw Error('Ошибка: ' + quizRequest.status);
+                fail(new Error(`Request failed: ${quizRequest.status}`));
+            } else {
+                // throw Error('Ошибка, что-то пошло не так.');
+                fail(new Error(`Request failed: ${quizRequest.status}`));
+            }
+        }
+        quizRequest.onerror = function() {console.log(onerror)};
+
+        // let data = {};
+        // let data = { 'flat':i };
+
+        // quizRequest.send('survey_id=2&parent_id=0');
+        // quizRequest.send(JSON.stringify(data));
+        quizRequest.send(JSON.stringify(rqst));
+    })
+}
 
 function callMigrate(cntr) {
     // console.log(wrap.dataset.id);
