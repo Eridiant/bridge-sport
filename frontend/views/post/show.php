@@ -56,7 +56,7 @@ use yii\helpers\Html;
 
     <div class="post-link">
         <?php if (isset($model->parent_id)): ?>
-            <?= Html::a($model->name, ['/post', 'id' => $model->parent_id], ['class' => 'success']) ?>
+            <?= Html::a(\backend\models\Post::find()->where(['id' => $model->parent_id])->one()->name, ['/post', 'id' => $model->parent_id], ['class' => 'success']) ?>
         <?php endif; ?>
         <?php if (\backend\models\Post::find()->where(['parent_id' => $model->id])->exists()): ?>
             <?= Html::a(\backend\models\Post::find()->where(['parent_id' => $model->id])->one()->name, ['/post', 'id' => \backend\models\Post::find()->where(['parent_id' => $model->id])->one()->id], ['class' => 'success']) ?>
