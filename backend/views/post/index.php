@@ -57,11 +57,11 @@ $this->params['breadcrumbs'][] = $this->title;
             [
                 'label' => 'Доступно',
                 'attribute' => 'status',
-                'format' => 'text',
+                'format' => 'raw',
                 'filter' => [0 => 'Не доступно', 1 => 'Доступно'],
                 // 'filter' => Post::find()->select(['active', 'id'])->indexBy('id')->column(),
                 'value' => function($model) {
-                    return $model->status ? 'Доступно' : 'Не доступно';
+                    return $model->status ? '<span class="green">Доступно</span>' : '<span class="red">Не доступно</span>';
                 }
             ],
             [
@@ -85,7 +85,7 @@ $this->params['breadcrumbs'][] = $this->title;
             //'created_at',
             //'updated_at',
             //'deleted_at',
-            // 'parent_id',
+            //'parent_id',
             [
                 'class' => ActionColumn::class,
                 'urlCreator' => function ($action, \backend\models\Post $model, $key, $index, $column) {

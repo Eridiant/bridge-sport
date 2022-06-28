@@ -63,7 +63,7 @@ class ImageComponent extends Component {
                         break;
                 }
                 $thumb = $model->thumb;
-                $sources .= implode(", ", array_reverse($img)) . " media='(max-width: 480px)" . "'>";
+                $sources .= implode(", ", array_reverse($img)) . "' media='(max-width: 480px)'" . ">";
                 $img = [];
             }
             ob_start();

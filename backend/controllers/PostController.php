@@ -39,7 +39,7 @@ class PostController extends Controller
                             'allow' => true,
                         ],
                         [
-                            'actions' => ['logout', 'index', 'cont', 'delete', 'update', 'create'],
+                            'actions' => ['logout', 'index', 'cont', 'view', 'delete', 'update', 'create'],
                             'allow' => true,
                             'roles' => ['@'],
                         ],
@@ -63,7 +63,11 @@ class PostController extends Controller
     public function actionIndex()
     {
         $searchModel = new PostSearch();
-        $dataProvider = $searchModel->search($this->request->queryParams);
+        $params = $this->request->queryParams;
+        // if ($params) {
+        //     $params["PostSearch"] += ["deleted_at" => null];
+        // }
+        $dataProvider = $searchModel->search($params);
 
         return $this->render('index', [
             'searchModel' => $searchModel,
@@ -116,56 +120,9 @@ class PostController extends Controller
                 $model->author_id = Yii::$app->user->getId();
 
                 $model->url = $this->createUrl($model->category_id, $model->slug);
-
-                // $image = new Image();
-                // $image->url = UploadedFile::getInstance($model, 'img');
-
-                // if ($filename = $image->upload()) {
-
-                //     // $image = new Image();
-                //     $image->url = $filename;
-                //     $image->alt = $model->alt;
-                    
-                //     if ($image->save()) {
-                //         $model->image_id = $image->getPrimaryKey();
-                //     } else {
-                //         var_dump('<pre>');
-                //         var_dump($image->getErrors());
-                //         var_dump('</pre>');
-                //         die;
-                //     }
-                // }
-
-                // if ($model->iframe) {
-                //     $iframe = new Iframe();
-                //     $iframe->frame = $model->iframe;
-                //     $iframe->only_img = $model->only_img;
-                //     $iframe->preview = $model->preview;
-                //     if ($iframe->save()) {
-                //         $model->iframe_id = $iframe->getPrimaryKey();
-                //     } else {
-                //         var_dump('<pre>');
-                //         var_dump($iframe->getErrors());
-                //         var_dump('</pre>');
-                //         die;
-                //     }
-                // }
-
-                // if ($model->youtube) {
-                //     $youtube = new Youtube();
-                //     $youtube->youtube = $model->youtube;
-                //     $youtube->hide = $model->hide;
-                //     $youtube->key = 'key';
-                //     // $youtube->image_id = 'image';
-                //     if ($youtube->save()) {
-                //         $model->youtube_id = $youtube->getPrimaryKey();
-                //     } else {
-                //         var_dump('<pre>');
-                //         var_dump($youtube->getErrors());
-                //         var_dump('</pre>');
-                //         die;
-                //     }
-                // }
+                if ($model->status) {
+                    $model->published_at = time();
+                }
 
                 $check = Post::find()->with('category')
                             ->where([
@@ -245,6 +202,10 @@ class PostController extends Controller
             //     $model->img = $model->upload();
             // }
 
+            if ($model->status && !$model->published_at) {
+                $model->published_at = time();
+            }
+
             if ($model->save()) {
                 return $this->redirect(['view', 'id' => $model->id]);
             } else {
@@ -270,7 +231,32 @@ class PostController extends Controller
      */
     public function actionDelete($id)
     {
-        $this->findModel($id)->delete();
+        $mod = $this->findModel($id);
+
+        
+        $ms_id = [];
+        $ms_id_del = [];
+
+        $ms_id[] = $mod->id;
+        while ($mdl = Post::find()->where(['parent_id' => end($ms_id)])->one()) {
+            $ms_id[] = $mdl->id;
+        }
+
+        $transaction = Yii::$app->db->beginTransaction();
+        try {
+            foreach ($ms_id as $value) {
+                $model = $this->findModel($value);
+                $model->deleted_at = time();
+                $model->save();
+            }
+            $transaction->commit();
+        } catch (\Exception $e) {
+            $transaction->rollBack();
+            throw $e;
+        } catch (\Throwable $e) {
+            $transaction->rollBack();
+            throw $e;
+        }
 
         return $this->redirect(['index']);
     }

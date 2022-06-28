@@ -60,8 +60,8 @@ class Post extends \yii\db\ActiveRecord
         return [
             [['category_id', 'name', 'slug'], 'required'],
             [['category_id', 'parent_id', 'image_id', 'iframe_id', 'youtube_id', 'indexing', 'status', 'author_id', 'published_at', 'created_at', 'updated_at', 'deleted_at'], 'integer'],
-            [['url', 'preview', 'text', 'iframe', 'description'], 'string'],
-            [['taxonomiesArray', 'alt', 'img', 'youtube', 'youtubeFields', 'hide', 'onlyImg', 'frame', 'previews'], 'safe'],
+            [['url', 'preview', 'text', 'description'], 'string'],
+            [['taxonomiesArray', 'alt', 'img', 'youtube', 'youtubeFields', 'hide', 'onlyImg', 'frame', 'previews', 'iframe', 'iframeAlt', 'youtubeAlt', 'iframeHide'], 'safe'],
             [['name', 'slug', 'dial', 'title', 'keywords'], 'string', 'max' => 255],
             [['category_id'], 'exist', 'skipOnError' => true, 'targetClass' => Category::class, 'targetAttribute' => ['category_id' => 'id']],
             [['iframe_id'], 'exist', 'skipOnError' => true, 'targetClass' => Iframe::class, 'targetAttribute' => ['iframe_id' => 'id']],
@@ -138,18 +138,52 @@ class Post extends \yii\db\ActiveRecord
 
 
     private $_iframe;
+    private $_iframeAlt;
+    private $_iframeHide;
     private $_onlyImg;
     private $_preview;
     public function getFrame()
     {
+        if ($this->_iframe === null) {
+            if (!is_null($this->getIframe()->select('frame')->one())) {
+                $this->_iframe = $this->getIframe()->select('frame')->one()->frame;
+                return $this->_iframe;
+            }
+            $this->_iframe = $this->getIframe()->select('frame')->one();
+        }
         return $this->_iframe;
     }
     public function setFrame($value)
     {
         $this->_iframe = $value;
     }
+    public function getIframeHide()
+    {
+        if ($this->_iframeHide === null && !is_null($this->getIframe()->one())) {
+            $this->_iframeHide = $this->getIframe()->one()->hide;
+        }
+        return $this->_iframeHide;
+    }
+    public function setIframeHide($value)
+    {
+        $this->_iframeHide = $value;
+    }
+    public function getIframeAlt()
+    {
+        if ($this->_iframeAlt === null && !is_null($this->getIframe()->one())) {
+            $this->_iframeAlt = $this->getIframe()->one()->image->alt;
+        }
+        return $this->_iframeAlt;
+    }
+    public function setIframeAlt($value)
+    {
+        $this->_iframeAlt = $value;
+    }
     public function getOnlyImg()
     {
+        if ($this->_onlyImg === null && !is_null($this->getIframe()->one())) {
+            $this->_onlyImg = $this->getIframe()->one()->only_img;
+        }
         return $this->_onlyImg;
     }
     public function setOnlyImg($value)
@@ -158,6 +192,9 @@ class Post extends \yii\db\ActiveRecord
     }
     public function getPreviews()
     {
+        if ($this->_preview === null && !is_null($this->getIframe()->one())) {
+            $this->_preview = $this->getIframe()->one()->preview;
+        }
         return $this->_preview;
     }
     public function setPreviews($value)
@@ -167,11 +204,47 @@ class Post extends \yii\db\ActiveRecord
 
     public function updateFrame()
     {
-        if ($this->iframe) {
-            $iframe = new Iframe();
-            $iframe->frame = $this->getFrame();
+
+        if ($this->frame || $this->iframeAlt || $this->onlyImg || $this->preview) {
+            if (is_null($this->iframe_id)) {
+                $iframe = new Iframe();
+            } else {
+                $iframe = Iframe::find()->where(['id' => $this->iframe_id])->one();
+            }
+            $ifr = trim($this->getFrame());
             $iframe->only_img = $this->getOnlyImg();
             $iframe->preview = $this->getPreviews();
+            $iframe->hide = $this->getIframeHide();
+
+            if (is_null($iframe->image_id)) {
+                $image = new Image();
+            } else {
+                $image = Image::find()->where(['id' => $iframe->image_id])->one();
+            }
+
+            $image->alt = $this->getIframeAlt();
+
+            if ($ifr && !(isset($iframe->frame) && $iframe->frame === $ifr)) {
+                $iframe->frame = $ifr;
+                
+                if ($arr = $image->uploadFr('post', $ifr)) {
+
+                    foreach ($arr as $key => $value) {
+                        $image->$key = $value;
+                    }
+
+                }
+            }
+
+            if ($image->save()) {
+                $iframe->image_id = $image->getPrimaryKey();
+            } else {
+                var_dump('<pre>');
+                var_dump($image->getErrors());
+                var_dump('</pre>');
+                die;
+            }
+
             if ($iframe->save()) {
                 $this->iframe_id = $iframe->getPrimaryKey();
             } else {
@@ -195,6 +268,9 @@ class Post extends \yii\db\ActiveRecord
     }
     public function getAlt()
     {
+        if ($this->_alt === null && !is_null($this->getImage()->one())) {
+            $this->_alt = $this->getImage()->one()->alt;
+        }
         return $this->_alt;
     }
     public function setAlt($value)
@@ -203,18 +279,28 @@ class Post extends \yii\db\ActiveRecord
     }
     public function updateImage()
     {
-        $image = new Image();
-        $image->path = UploadedFile::getInstance($this, 'img');
 
-        if ($arr = $image->upload('post')) {
-
-            foreach ($arr as $key => $value) {
-                $image->$key = $value;
+        if ($this->alt || UploadedFile::getInstance($this, 'img')) {
+            if (is_null($this->image_id)) {
+                $image = new Image();
+            } else {
+                $image = Image::find()->where(['id' => $this->image_id])->one();
             }
-            // $image = new Image();
-            // $image->url = $filename;
+
+            if (UploadedFile::getInstance($this, 'img')) {
+                $image->path = UploadedFile::getInstance($this, 'img');
+        
+                if ($arr = $image->upload('post')) {
+        
+                    foreach ($arr as $key => $value) {
+                        $image->$key = $value;
+                    }
+    
+                }
+            }
+    
             $image->alt = $this->getAlt();
-            
+    
             if ($image->save()) {
                 $this->image_id = $image->getPrimaryKey();
             } else {
@@ -248,6 +334,7 @@ class Post extends \yii\db\ActiveRecord
 
 
     // private $_youtube;
+    private $_youtubeAlt;
     private $_youtubeFields;
     public function getYoutubeFields()
     {
@@ -262,9 +349,24 @@ class Post extends \yii\db\ActiveRecord
         return $this->_youtubeFields;
     }
 
+    public function getYoutubeAlt()
+    {
+        if ($this->_youtubeAlt === null && !is_null($this->getYoutube()->one())) {
+            $this->_youtubeAlt = $this->getYoutube()->one()->image->alt;
+        }
+        return $this->_youtubeAlt;
+    }
+    public function setYoutubeAlt($value)
+    {
+        $this->_youtubeAlt = $value;
+    }
+
     private $_hide;
     public function getHide()
     {
+        if ($this->_hide === null && !is_null($this->getYoutube()->one())) {
+            $this->_hide = $this->getYoutube()->one()->hide;
+        }
         return $this->_hide;
     }
 
@@ -279,9 +381,9 @@ class Post extends \yii\db\ActiveRecord
 
     public function beforeSave($insert)
     {
+        $this->updateFrame();
         $this->updateImage();
         $this->updateYoutube();
-        $this->updateFrame();
         // var_dump('<pre>');
         // var_dump($this);
         // var_dump('</pre>');
@@ -293,7 +395,7 @@ class Post extends \yii\db\ActiveRecord
     public function updateYoutube()
     {
 
-        if ($this->youtubeFields) {
+        if ($this->youtubeFields || $this->hide || $this->youtubeAlt) {
             if (is_null($this->youtube_id)) {
                 $youtube = new Youtube();
             } else {
@@ -303,38 +405,39 @@ class Post extends \yii\db\ActiveRecord
             $youtube->youtube = $this->getYoutubeFields();
             $youtube->hide = $this->getHide();
             preg_match("#(?<=v=)[a-zA-Z0-9-]+(?=&)|(?<=v\/)[^&\n]+|(?<=v=)[^&\n]+|(?<=youtu.be/)[^&\n]+#", $this->getYoutubeFields(), $key);
-            $youtube->key = $key[0];
 
             // file_put_contents($file, $current);
             // $image = new Image();
             // $image->path = UploadedFile::getInstance($homepage, 'img');
 
-            if ($key[0]) {
-                if (is_null($youtube->image_id)) {
-                    $image = new Image();
-                } else {
-                    $image = Image::find()->where(['id' => $youtube->image_id])->one();
-                }
-                
+            if (is_null($youtube->image_id)) {
+                $image = new Image();
+            } else {
+                $image = Image::find()->where(['id' => $youtube->image_id])->one();
+            }
+
+            $image->alt = $this->getYoutubeAlt();
+
+            if ($key[0] && !(isset($youtube->key) && $youtube->key === $key[0])) {
+                $youtube->key = $key[0];
+
                 if ($arr = $image->uploadY('post', $key[0])) {
 
                     foreach ($arr as $key => $value) {
                         $image->$key = $value;
                     }
 
-                    $image->alt = $this->getAlt();
-                    
-                    if ($image->save()) {
-                        $youtube->image_id = $image->getPrimaryKey();
-                    } else {
-                        var_dump('<pre>');
-                        var_dump($image->getErrors());
-                        var_dump('</pre>');
-                        die;
-                    }
                 }
             }
             
+            if ($image->save()) {
+                $youtube->image_id = $image->getPrimaryKey();
+            } else {
+                var_dump('<pre>');
+                var_dump($image->getErrors());
+                var_dump('</pre>');
+                die;
+            }
 
             if ($youtube->save()) {
                 $this->youtube_id = $youtube->getPrimaryKey();

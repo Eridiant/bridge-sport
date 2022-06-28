@@ -44,7 +44,7 @@ class Image extends ActiveRecord
         return [
             [['thWidth', 'thHeight', 'thumb', 'width', 'height', 'image'], 'integer'],
             [['alt'], 'string', 'max' => 255],
-            [['format'], 'string', 'max' => 24],
+            [['format', 'rand'], 'string', 'max' => 24],
             [['url', 'path'], 'safe']
         ];
     }
@@ -58,6 +58,7 @@ class Image extends ActiveRecord
             'id' => 'ID',
             'alt' => 'Alt',
             'path' => 'Path',
+            'rand' => 'Rand',
             'thWidth' => 'Th Width',
             'thHeight' => 'Th Height',
             'format' => 'Format',
@@ -118,7 +119,37 @@ class Image extends ActiveRecord
         return $this->hasMany(Post::class, ['image_id' => 'id']);
     }
 
-    public function uploadY($modPath, $key, $format = 0, $fix = 0)
+    private function checkFolder($modPath)
+    {
+        $year = date('Y');
+        $month = date('m');
+
+        if (!FileHelper::findDirectories(Yii::getAlias("@frontend/web/images/{$modPath}/", $year))) {
+            FileHelper::createDirectory("{$_SERVER['DOCUMENT_ROOT']}/frontend/web/images/{$modPath}/{$year}", $mode = 0775);
+        }
+        if (!FileHelper::findDirectories(Yii::getAlias("@frontend/web/images/{$modPath}/{$year}/", $month))) {
+            FileHelper::createDirectory("{$_SERVER['DOCUMENT_ROOT']}/frontend/web/images/{$modPath}/{$year}/{$month}", $mode = 0775);
+        }
+    }
+
+    private function cropFrame($rand, $path)
+    {
+        $quality = ['jpeg_quality' => 80];
+        $img = Imags::thumbnail(Yii::getAlias("@frontend/web/images/temp/{$rand}.jpg"), 897, 630);
+        $img = Imags::frame($img, 152, 'fff', 100);
+        Imags::crop($img, 1200, 630, [0, 152])
+            // ->save(Yii::getAlias("@frontend/web/images/temp/{$rand}1.jpg"));
+            ->save("{$path}-1200x630.jpg", $quality);
+    }
+
+    private function cropImage($pathExt, $rand, $width, $height)
+    {
+        // Обрежет по ширине u высоте
+        Imags::crop($pathExt, $width, $height)
+            ->save(Yii::getAlias("@frontend/web/images/temp/{$rand}.jpg"));
+    }
+
+    public function uploadFr($modPath, $key, $format = 0, $fix = 0)
     {
         $this->fixHeight = $fix;
 
@@ -127,20 +158,39 @@ class Image extends ActiveRecord
                 $arr = [];
                 $year = date('Y');
                 $month = date('m');
-
-                if (!FileHelper::findDirectories(Yii::getAlias("@frontend/web/images/{$modPath}/", $year))) {
-                    FileHelper::createDirectory("{$_SERVER['DOCUMENT_ROOT']}/frontend/web/images/{$modPath}/{$year}", $mode = 0775);
-                }
-                if (!FileHelper::findDirectories(Yii::getAlias("@frontend/web/images/{$modPath}/{$year}/", $month))) {
-                    FileHelper::createDirectory("{$_SERVER['DOCUMENT_ROOT']}/frontend/web/images/{$modPath}/{$year}/{$month}", $mode = 0775);
-                }
-                $rand = substr(md5(microtime() . rand(0, 9999)), 0, 7);
-                $file_name_g = "{$modPath}/{$year}/{$month}/{$rand}-{$key}";
-                $path = $_SERVER['DOCUMENT_ROOT'] . "/frontend/web/images/" . $file_name_g;
-                file_put_contents("{$path}.jpg", file_get_contents("https://i.ytimg.com/vi/{$key}/maxresdefault.jpg"));
-                $pathExt = "{$path}.jpg";
-                // $this->path->saveAs($pathExt);
+                $this->checkFolder($modPath);
                 
+                $params = http_build_query(array(
+                    "access_key" => Key::find()->where(['key' => 'access_key'])->one()->value,
+                    "url" => $key,
+                    // "css" => "",
+                    "width" => "2383",
+                    "height" => "1800",
+                    "quality" => "100",
+                ));
+                
+                $image_data = file_get_contents("https://api.apiflash.com/v1/urltoimage?" . $params);
+                
+                
+
+                $rand = substr(md5(microtime() . rand(0, 9999)), 0, 7);
+                $file_name_g = "{$modPath}/{$year}/{$month}/{$rand}";
+                // $path = $_SERVER['DOCUMENT_ROOT'] . "/frontend/web/images/temp/{$rand}";
+                // $path = $_SERVER['DOCUMENT_ROOT'] . "/frontend/web/images/" . $file_name_g;
+
+                $path = Yii::getAlias("@frontend/web/images/{$file_name_g}");
+
+                // for del
+                // $path = $_SERVER['DOCUMENT_ROOT'] . "/frontend/web/images/temp/screenshot";
+                // for del
+                $pathExt = Yii::getAlias("@frontend/web/images/temp/{$rand}.jpeg");
+                file_put_contents($pathExt, $image_data);
+
+                // $this->path->saveAs($pathExt);
+                $this->cropImage($pathExt, $rand, 2383, 1674);
+                $pathExt = Yii::getAlias("@frontend/web/images/temp/{$rand}.jpg");
+
+                $arr['rand'] = $rand;
                 $arr['path'] = $file_name_g;
                 // $imagine = new Image();
 
@@ -155,17 +205,18 @@ class Image extends ActiveRecord
                 $mult = $this->sizeCheck($pathExt, $thWidth, $thHeight);
 
                 // img for admin
-                $this->thb($format, $path, 261, 182);
+                $this->thb($format, $path, $pathExt, 261, 182);
                 // img for social, поправить что бы вмещалось
-                $this->thb('jpg', $path, 1200, 630);
+                $this->cropFrame($rand, $path);
+                // $this->thb('jpg', $path, $pathExt, 1200, 630);
                 // img for mobaile
-                $this->thb($format, $path, $thWidth, $thHeight);
+                $this->thb($format, $path, $pathExt, $thWidth, $thHeight);
                 if ($mult >= 4) {
-                    $this->thb($format, $path, $thWidth * 4, $thHeight * 4);
+                    $this->thb($format, $path, $pathExt, $thWidth * 4, $thHeight * 4);
                     $mult = 4;
                 }
                 if ($mult >= 2) {
-                    $this->thb($format, $path, $thWidth * 2, $thHeight * 2);
+                    $this->thb($format, $path, $pathExt, $thWidth * 2, $thHeight * 2);
                     $mult = $mult === 4 ? 4 : 2;
                 } else {
                     $mult = 1;
@@ -191,13 +242,117 @@ class Image extends ActiveRecord
                 // полный формат
                 $width = 1178;
                 $mult = $this->sizeCheck($pathExt, $width);
-                $this->thb($format, $path, $width);
+                $this->thb($format, $path, $pathExt, $width);
                 if ($mult >= 4) {
-                    $this->thb($format, $path, $width * 4, $this->findHeight * 4);
+                    $this->thb($format, $path, $pathExt, $width * 4, $this->findHeight * 4);
                     $mult = 4;
                 }
                 if ($mult >= 2) {
-                    $this->thb($format, $path, $width * 2, $this->findHeight * 2);
+                    $this->thb($format, $path, $pathExt, $width * 2, $this->findHeight * 2);
+                    $mult = $mult === 4 ? 4 : 2;
+                } else {
+                    $mult = 1;
+                }
+                if (function_exists('imagewebp')) {
+                    $this->thb('webp', $path, $width, $this->findHeight);
+                    if ($mult >= 4) {
+                        $this->thb('webp', $path, $width * 4, $this->findHeight * 4);
+                    }
+                    if ($mult >= 2) {
+                        $this->thb('webp', $path, $width * 2, $this->findHeight * 2);
+                    }
+                    $arr['webp'] = true;
+                }
+
+                $arr['width'] = $width;
+                $arr['height'] = $this->findHeight;
+                $arr['image'] = $mult;
+
+                return $arr;
+            }
+            
+        }else{
+            return false;
+        }
+    }
+
+    public function uploadY($modPath, $key, $format = 0, $fix = 0)
+    {
+        $this->fixHeight = $fix;
+
+        if(true){
+            if (true) {
+                $arr = [];
+                $year = date('Y');
+                $month = date('m');
+
+                $this->checkFolder($modPath);
+
+                $rand = substr(md5(microtime() . rand(0, 9999)), 0, 7);
+                $file_name_g = "{$modPath}/{$year}/{$month}/{$rand}-{$key}";
+                $path = $_SERVER['DOCUMENT_ROOT'] . "/frontend/web/images/" . $file_name_g;
+                $pathExt = Yii::getAlias("@frontend/web/images/temp/{$rand}.jpg");
+                file_put_contents($pathExt, file_get_contents("https://i.ytimg.com/vi/{$key}/maxresdefault.jpg"));
+                // $pathExt = "{$path}.jpg";
+                // $this->path->saveAs($pathExt);
+                $arr['rand'] = $rand;
+                $arr['path'] = $file_name_g;
+                // $imagine = new Image();
+
+                // Image::resize($path, 300, 100)
+                //     ->save("{$_SERVER['DOCUMENT_ROOT']}/frontend/web/images/post/{$year}/{$month}/{$rand}-{$this->path->baseName}.jpeg", ['jpeg_quality' => 75]);
+
+                $thWidth = 480;
+                $thHeight = 335;
+                if (!$format) {
+                    $format = 'jpg';
+                }
+                $mult = $this->sizeCheck($pathExt, $thWidth, $thHeight);
+
+                // img for admin
+                $this->thb($format, $path, $pathExt, 261, 182);
+                // img for social, поправить что бы вмещалось
+                $this->thb('jpg', $path, $pathExt, 1200, 630);
+                // img for mobaile
+                $this->thb($format, $path, $pathExt, $thWidth, $thHeight);
+                if ($mult >= 4) {
+                    $this->thb($format, $path, $pathExt, $thWidth * 4, $thHeight * 4);
+                    $mult = 4;
+                }
+                if ($mult >= 2) {
+                    $this->thb($format, $path, $pathExt, $thWidth * 2, $thHeight * 2);
+                    $mult = $mult === 4 ? 4 : 2;
+                } else {
+                    $mult = 1;
+                }
+
+                $arr['format'] = $format;
+
+                if (function_exists('imagewebp')) {
+                    $this->thb('webp', $path, $thWidth, $thHeight);
+                    if ($mult >= 4) {
+                        $this->thb('webp', $path, $thWidth * 4, $thHeight * 4);
+                    }
+                    if ($mult >= 2) {
+                        $this->thb('webp', $path, $thWidth * 2, $thHeight * 2);
+                    }
+                    $arr['format'] = 'webp,'. $arr['format'];
+
+                }
+                $arr['thWidth'] = $thWidth;
+                $arr['thHeight'] = $thHeight;
+                $arr['thumb'] = $mult;
+
+                // полный формат
+                $width = 1178;
+                $mult = $this->sizeCheck($pathExt, $width);
+                $this->thb($format, $path, $pathExt, $width);
+                if ($mult >= 4) {
+                    $this->thb($format, $path, $pathExt, $width * 4, $this->findHeight * 4);
+                    $mult = 4;
+                }
+                if ($mult >= 2) {
+                    $this->thb($format, $path, $pathExt, $width * 2, $this->findHeight * 2);
                     $mult = $mult === 4 ? 4 : 2;
                 } else {
                     $mult = 1;
@@ -237,17 +392,16 @@ class Image extends ActiveRecord
                 $year = date('Y');
                 $month = date('m');
 
-                if (!FileHelper::findDirectories(Yii::getAlias("@frontend/web/images/{$modPath}/", $year))) {
-                    FileHelper::createDirectory("{$_SERVER['DOCUMENT_ROOT']}/frontend/web/images/{$modPath}/{$year}", $mode = 0775);
-                }
-                if (!FileHelper::findDirectories(Yii::getAlias("@frontend/web/images/{$modPath}/{$year}/", $month))) {
-                    FileHelper::createDirectory("{$_SERVER['DOCUMENT_ROOT']}/frontend/web/images/{$modPath}/{$year}/{$month}", $mode = 0775);
-                }
+                $this->checkFolder($modPath);
+
                 $rand = substr(md5(microtime() . rand(0, 9999)), 0, 7);
                 $file_name_g = "{$modPath}/{$year}/{$month}/{$rand}-" . $this->path->baseName;
                 $path = $_SERVER['DOCUMENT_ROOT'] . "/frontend/web/images/" . $file_name_g;
-                $pathExt = "{$path}.{$this->path->extension}";
+                // $pathExt = "{$path}.{$this->path->extension}";
+                $pathExt = Yii::getAlias("@frontend/web/images/temp/{$rand}.{$this->path->extension}");
                 $this->path->saveAs($pathExt);
+
+                $arr['rand'] = $rand;
                 $arr['path'] = $file_name_g;
                 // $imagine = new Image();
 
@@ -262,17 +416,17 @@ class Image extends ActiveRecord
                 $mult = $this->sizeCheck($pathExt, $thWidth, $thHeight);
 
                 // img for admin
-                $this->thb($format, $path, 261, 182);
+                $this->thb($format, $path, $pathExt, 261, 182);
                 // img for social, поправить что бы вмещалось
-                $this->thb('jpg', $path, 1200, 630);
+                $this->thb('jpg', $path, $pathExt, 1200, 630);
                 // img for mobaile
-                $this->thb($format, $path, $thWidth, $thHeight);
+                $this->thb($format, $path, $pathExt, $thWidth, $thHeight);
                 if ($mult >= 4) {
-                    $this->thb($format, $path, $thWidth * 4, $thHeight * 4);
+                    $this->thb($format, $path, $pathExt, $thWidth * 4, $thHeight * 4);
                     $mult = 4;
                 }
                 if ($mult >= 2) {
-                    $this->thb($format, $path, $thWidth * 2, $thHeight * 2);
+                    $this->thb($format, $path, $pathExt, $thWidth * 2, $thHeight * 2);
                     $mult = $mult === 4 ? 4 : 2;
                 } else {
                     $mult = 1;
@@ -298,13 +452,13 @@ class Image extends ActiveRecord
                 // полный формат
                 $width = 1178;
                 $mult = $this->sizeCheck($pathExt, $width);
-                $this->thb($format, $path, $width);
+                $this->thb($format, $path, $pathExt, $width);
                 if ($mult >= 4) {
-                    $this->thb($format, $path, $width * 4, $this->findHeight * 4);
+                    $this->thb($format, $path, $pathExt, $width * 4, $this->findHeight * 4);
                     $mult = 4;
                 }
                 if ($mult >= 2) {
-                    $this->thb($format, $path, $width * 2, $this->findHeight * 2);
+                    $this->thb($format, $path, $pathExt, $width * 2, $this->findHeight * 2);
                     $mult = $mult === 4 ? 4 : 2;
                 } else {
                     $mult = 1;
@@ -362,20 +516,20 @@ class Image extends ActiveRecord
         return 1;
     }
 
-    private function rsz($format, $path, $width, $height = 0)
+    private function rsz($format, $path, $pathExt, $width, $height = 0)
     {
         $quality = ['jpeg_quality' => 90];
         Imags::resize("{$path}.{$this->path->extension}", $width, $height)
                 ->save("{$path}-{$width}x{$height}.{$format}", $quality);
     }
 
-    private function thb($format, $path, $width, $height = 0)
+    private function thb($format, $path, $pathExt, $width, $height = 0)
     {
 
         if (isset($this->path->extension)) {
             $ext = $this->path->extension;
         } else {
-            $ext = 'jpg';
+            $ext = 'jpeg';
         }
 
         switch ($format) {
@@ -395,10 +549,10 @@ class Image extends ActiveRecord
                 break;
         }
         if ($height) {
-            Imags::thumbnail("{$path}.{$ext}", $width, $height)
+            Imags::thumbnail($pathExt, $width, $height)
                 ->save("{$path}-{$width}x{$height}.{$format}", $quality);
         } else {
-            Imags::thumbnail("{$path}.{$ext}", $width, $this->findHeight)
+            Imags::thumbnail($pathExt, $width, $this->findHeight)
                 ->save("{$path}-{$width}x{$this->findHeight}.{$format}", $quality);
         }
     }

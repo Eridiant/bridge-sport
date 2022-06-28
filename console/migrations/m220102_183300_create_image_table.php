@@ -16,6 +16,7 @@ class m220102_183300_create_image_table extends Migration
             'id' => $this->primaryKey(),
             'alt' => $this->string(255),
             'path' => $this->string(255),
+            'rand' => $this->string(24),
             'thWidth' => $this->smallInteger(),
             'thHeight' => $this->smallInteger(),
             'format' => $this->string(24),

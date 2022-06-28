@@ -127,6 +127,15 @@ iframe {
     white-space: nowrap;
     overflow:hidden;
 }
+.red {
+    color: #a81a1a;
+}
+.orange {
+    color: #ce9b02;
+}
+.green {
+    color: #2ca82a;
+}
 
 @media(max-width:767px) {
     .nav li > form > button.logout {

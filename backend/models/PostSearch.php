@@ -41,7 +41,7 @@ class PostSearch extends Post
     public function search($params)
     {
         $query = Post::find();
-
+        // ->where(['deleted_at' => null])
         // add conditions that should always apply here
 
         $dataProvider = new ActiveDataProvider([
@@ -50,11 +50,15 @@ class PostSearch extends Post
 
         $this->load($params);
 
+        $query->where(['deleted_at' => $this->deleted_at]);
+
         if (!$this->validate()) {
             // uncomment the following line if you do not want to return any records when validation fails
             // $query->where('0=1');
+            
             return $dataProvider;
         }
+
 
         // grid filtering conditions
         $query->andFilterWhere([
@@ -71,6 +75,8 @@ class PostSearch extends Post
         ]);
 
         $query->andFilterWhere(['like', 'name', $this->name])
+            // ->andFilterWhere(['like', 'deleted_at', $this->deleted_at])
+            ->andFilterWhere(['in', 'deleted_at', $this->deleted_at])
             ->andFilterWhere(['like', 'url', $this->url])
             ->andFilterWhere(['like', 'slug', $this->slug])
             ->andFilterWhere(['like', 'preview', $this->preview])

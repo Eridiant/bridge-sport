@@ -19,6 +19,7 @@ class m220102_183304_create_iframe_table extends Migration
             'id' => $this->primaryKey(),
             'image_id' => $this->integer(),
             'frame' => $this->text(),
+            'hide' => $this->tinyInteger(3),
             'only_img' => $this->tinyInteger(3),
             'preview' => $this->tinyInteger(3),
         ]);

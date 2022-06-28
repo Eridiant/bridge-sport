@@ -79,7 +79,7 @@ window.addEventListener('load', () => {
                 });
         }
         // document.querySelector('#ifr').
-        frame.addEventListener('blur', bbo, false);
+        // frame.addEventListener('blur', bbo, false);
         // document.querySelector('#ifr').contentDocument.addEventListener('click', (e) => {
         //     e.preventDefault();
         //     // console.log('e.target');

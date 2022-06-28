@@ -32,7 +32,7 @@ class Iframe extends \yii\db\ActiveRecord
     public function rules()
     {
         return [
-            [['image_id', 'only_img', 'preview'], 'integer'],
+            [['image_id', 'only_img', 'preview', 'hide'], 'integer'],
             [['frame'], 'string'],
             [['image_id'], 'exist', 'skipOnError' => true, 'targetClass' => Image::class, 'targetAttribute' => ['image_id' => 'id']],
         ];
@@ -49,6 +49,7 @@ class Iframe extends \yii\db\ActiveRecord
             'frame' => 'Frame',
             'only_img' => 'Only Img',
             'preview' => 'Preview',
+            'hide' => 'Preview',
         ];
     }
 

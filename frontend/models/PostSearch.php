@@ -43,12 +43,17 @@ class PostSearch extends Post
         if ($params) {
             $this->category_id =  $params["category_id"] ?: $params["category_id"];
         }
-        $query = Post::find()->with(['image', 'taxonomies', 'category']);
+        $query = Post::find()->with(['image', 'taxonomies', 'category', 'iframe']);
 
         // add conditions that should always apply here
 
         $dataProvider = new ActiveDataProvider([
             'query' => $query,
+            'sort' => [
+                'defaultOrder' => [
+                    'published_at' => SORT_DESC,
+                ]
+            ],
         ]);
 
         $this->load($params);

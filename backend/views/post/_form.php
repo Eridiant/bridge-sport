@@ -46,6 +46,7 @@ use backend\models\Taxonomy;
         ]);?>
 
         <hr>
+        <h4>Загрузить изображение</h4>
         <div class="row">
             <div class="col-xs-4">
                 <?= $form->field($model, 'img')->fileInput() ?>
@@ -55,23 +56,23 @@ use backend\models\Taxonomy;
             </div>
         </div>
         <hr>
-        <?= $form->field($model, 'dial')->textInput(['maxlength' => true]) ?>
+        <!-- <?//= $form->field($model, 'dial')->textInput(['maxlength' => true]) ?>
 
-        <hr>
-        <p>добавить сдачу с BBO</p>
-        <code>https://black-cat.bridge-sport.ru/</code>
-        <br>
-        <code>https://www.bridgebase.com/tools/handviewer.html?bbo=y&myhand=M-2427888616-1653591601</code>
-        <?= $form->field($model, 'frame')->textarea(['rows' => 3]) ?>
+        <hr> -->
+        <h4>добавить сдачу с BBO</h4>
+        <?= $form->field($model, 'frame')->textInput() ?>
+        <?= $form->field($model, 'iframeAlt')->textInput() ?>
         <div class="wrapper-form">
             <?= $form->field($model, 'onlyImg')->checkbox() ?>
+            <?= $form->field($model, 'iframeHide')->checkbox() ?>
             <?= $form->field($model, 'previews')->checkbox() ?>
         </div>
 
         <hr>
 
-        <p>добавить видео с Youtube</p>
+        <h4>добавить видео с Youtube</h4>
         <?= $form->field($model, 'youtubeFields')->textInput() ?>
+        <?= $form->field($model, 'youtubeAlt')->textInput() ?>
         <?= $form->field($model, 'hide')->checkbox() ?>
         <hr>
 
