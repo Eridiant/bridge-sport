@@ -40,9 +40,11 @@ class PostSearch extends Post
      */
     public function search($params)
     {
-        if ($params) {
-            $this->category_id =  $params["category_id"] ?: $params["category_id"];
+
+        if ($params && isset($params["category_id"])) {
+            $this->category_id = $params["category_id"];
         }
+
         $query = Post::find()->with(['image', 'taxonomies', 'category', 'iframe']);
 
         // add conditions that should always apply here
