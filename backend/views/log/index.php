@@ -23,8 +23,11 @@ $this->params['breadcrumbs'][] = $this->title;
         'columns' => [
             [
                 'attribute' => 'ip6',
+                'format' => 'raw',
                 'value' => function ($model) {
-                    return inet_ntop($model->ip6);
+                    $status = floor($model->status / 100);
+                    $ip = inet_ntop($model->ip6);
+                    return "<span class='color' data-status=\"{$status}\">{$ip}</span>";
                 },
             ],
             [
