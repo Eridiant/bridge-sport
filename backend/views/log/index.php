@@ -29,16 +29,26 @@ $this->params['breadcrumbs'][] = $this->title;
             ],
             [
                 'attribute' => 'ip',
+                'format' => 'raw',
                 'value' => function ($model) {
-                    return long2ip($model->ip);
+                    $status = floor($model->status / 100);
+                    $ip = long2ip($model->ip);
+                    return "<span class='color' data-status=\"{$status}\">{$ip}</span>";
                 },
             ],
-            'status',
-            'url:url',
-            'ref',
-            'lang_choose',
-            'lang_all',
-            'device',
+            [
+                'attribute' => 'status',
+                'format' => 'raw',
+                'value' => function ($model) {
+                    $status = floor($model->status / 100);
+                    return "<span class='color' data-status=\"{$status}\">{$model->status}</span>";
+                },
+            ],
+            'url:ntext',
+            'ref:ntext',
+            'lang_choose:ntext',
+            'lang_all:ntext',
+            'device:ntext',
             [
                 'attribute' => 'created_at',
                 'value' => function ($model) {

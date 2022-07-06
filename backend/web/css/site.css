@@ -136,6 +136,24 @@ iframe {
 .green {
     color: #2ca82a;
 }
+/* .color {
+    color: #a81a1a;
+} */
+.color[data-status="1"] {
+    color: #2ca82a
+}
+.color[data-status="2"] {
+    color: #2ca82a
+}
+.color[data-status="3"] {
+    color: #ce9b02
+}
+.color[data-status="4"] {
+    color: red;
+}
+.color[data-status="5"] {
+    color: red;
+}
 
 @media(max-width:767px) {
     .nav li > form > button.logout {

@@ -44,9 +44,6 @@ return [
         'assetManager' => [
             'appendTimestamp' => true,
         ],
-        'assetManager' => [
-            'appendTimestamp' => true,
-        ],
         'errorHandler' => [
             'errorAction' => 'site/error',
         ],
