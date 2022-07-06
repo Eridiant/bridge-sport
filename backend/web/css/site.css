@@ -139,19 +139,13 @@ iframe {
 /* .color {
     color: #a81a1a;
 } */
-.color[data-status="1"] {
+.green-col {
     color: #2ca82a
 }
-.color[data-status="2"] {
-    color: #2ca82a
-}
-.color[data-status="3"] {
+.orange-col {
     color: #ce9b02
 }
-.color[data-status="4"] {
-    color: red;
-}
-.color[data-status="5"] {
+.red-col {
     color: red;
 }
 

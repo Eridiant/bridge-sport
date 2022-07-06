@@ -20,33 +20,37 @@ $this->params['breadcrumbs'][] = $this->title;
 
     <?= GridView::widget([
         'dataProvider' => $dataProvider,
+        'rowOptions'=>function ($model){
+            switch (floor($model->status / 100)) {
+                case '3':
+                    $class = 'orange-col';
+                    break;
+                case '4':
+                case '5':
+                    $class = 'red-col';
+                    break;
+                default:
+                    $class = 'green-col';
+                    break;
+            }
+            return [
+                'class' => $class
+            ];
+        },
         'columns' => [
             [
                 'attribute' => 'ip6',
-                'format' => 'raw',
                 'value' => function ($model) {
-                    $status = floor($model->status / 100);
-                    $ip = inet_ntop($model->ip6);
-                    return "<span class='color' data-status=\"{$status}\">{$ip}</span>";
+                    return inet_ntop($model->ip6);
                 },
             ],
             [
                 'attribute' => 'ip',
-                'format' => 'raw',
                 'value' => function ($model) {
-                    $status = floor($model->status / 100);
-                    $ip = long2ip($model->ip);
-                    return "<span class='color' data-status=\"{$status}\">{$ip}</span>";
+                    return long2ip($model->ip);
                 },
             ],
-            [
-                'attribute' => 'status',
-                'format' => 'raw',
-                'value' => function ($model) {
-                    $status = floor($model->status / 100);
-                    return "<span class='color' data-status=\"{$status}\">{$model->status}</span>";
-                },
-            ],
+            'status',
             'url:ntext',
             'ref:ntext',
             'lang_choose:ntext',
