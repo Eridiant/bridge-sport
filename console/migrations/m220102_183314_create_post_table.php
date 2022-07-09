@@ -21,12 +21,14 @@ class m220102_183314_create_post_table extends Migration
             'id' => $this->primaryKey(),
             'category_id' => $this->integer(4)->notNull(),
             'parent_id' => $this->integer(11),
+            'thread_id' => $this->integer(11),
             'name' => $this->string(255)->notNull(),
             'url' => $this->text(),
             'slug' => $this->string(255)->notNull(),
             'preview' => $this->text(),
             'text' => $this->text(),
             'image_id' => $this->integer(11),
+            'image_header' => $this->tinyInteger()->notNull()->defaultValue(0),
             'dial' => $this->string(255),
             'iframe_id' => $this->integer(11),
             'youtube_id' => $this->integer(11),
@@ -42,6 +44,11 @@ class m220102_183314_create_post_table extends Migration
             'deleted_at' => $this->integer(11),
         ]);
 
+        $this->createIndex(
+            '{{%idx-post-thread_id}}',
+            '{{%post}}',
+            'thread_id'
+        );
         $this->createIndex(
             '{{%idx-post-url}}',
             '{{%post}}',
@@ -136,6 +143,12 @@ class m220102_183314_create_post_table extends Migration
         // drops index for column `youtube_id`
         $this->dropIndex(
             '{{%idx-post-youtube_id}}',
+            '{{%post}}'
+        );
+
+        // drops index for column `thread_id`
+        $this->dropIndex(
+            '{{%idx-post-thread_id}}',
             '{{%post}}'
         );
 

@@ -161,6 +161,7 @@ class PostController extends Controller
 
         if ($parent) {
             $model->parent_id = $parent;
+            $model->thread_id = \backend\models\Post::find()->where(['id' => $parent])->one()->thread_id ? \backend\models\Post::find()->where(['id' => $parent])->one()->thread_id : $parent;
         }
 
         // $attributes = Attribute::find()->all();

@@ -31,6 +31,7 @@ use backend\models\Taxonomy;
         <?php endif; ?>
         
         <?= $form->field($model, 'parent_id')->hiddenInput()->label(false) ?>
+        <?= $form->field($model, 'thread_id')->hiddenInput()->label(false) ?>
 
         <?= $form->field($model, 'name', ['inputOptions' => ['class' => 'form-control name']])->textInput(['maxlength' => true]) ?>
 
@@ -40,7 +41,7 @@ use backend\models\Taxonomy;
 
         <?= $form->field($model, 'text')->widget(CKEditor::className(),[
             'editorOptions' => [
-                'preset' => 'standard', //разработанны стандартные настройки basic, standard, full данную возможность не обязательно использовать
+                'preset' => 'full', //разработанны стандартные настройки basic, standard, full данную возможность не обязательно использовать
                 'inline' => false, //по умолчанию false
             ],
         ]);?>
@@ -55,6 +56,7 @@ use backend\models\Taxonomy;
                 <?= $form->field($model, 'alt')->textInput(['maxlength' => true]) ?>
             </div>
         </div>
+        <?= $form->field($model, 'image_header')->checkbox() ?>
         <hr>
         <!-- <?//= $form->field($model, 'dial')->textInput(['maxlength' => true]) ?>
 

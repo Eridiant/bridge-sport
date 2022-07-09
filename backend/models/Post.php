@@ -59,7 +59,7 @@ class Post extends \yii\db\ActiveRecord
     {
         return [
             [['category_id', 'name', 'slug'], 'required'],
-            [['category_id', 'parent_id', 'image_id', 'iframe_id', 'youtube_id', 'indexing', 'status', 'author_id', 'published_at', 'created_at', 'updated_at', 'deleted_at'], 'integer'],
+            [['category_id', 'parent_id', 'thread_id', 'image_id', 'iframe_id', 'youtube_id', 'image_header', 'indexing', 'status', 'author_id', 'published_at', 'created_at', 'updated_at', 'deleted_at'], 'integer'],
             [['url', 'preview', 'text', 'description'], 'string'],
             [['taxonomiesArray', 'alt', 'img', 'youtube', 'youtubeFields', 'hide', 'onlyImg', 'frame', 'previews', 'iframe', 'iframeAlt', 'youtubeAlt', 'iframeHide'], 'safe'],
             [['name', 'slug', 'dial', 'title', 'keywords'], 'string', 'max' => 255],
@@ -93,12 +93,14 @@ class Post extends \yii\db\ActiveRecord
             'id' => 'ID',
             'category_id' => 'Category ID',
             'parent_id' => 'Parent ID',
+            'thread_id' => 'Thread ID',
             'name' => 'Name',
             'url' => 'Url',
             'slug' => 'Slug',
             'preview' => 'Preview',
             'text' => 'Text',
             'image_id' => 'Image ID',
+            'image_header' => 'Image Header',
             'dial' => 'Dial',
             'iframe_id' => 'Iframe ID',
             'youtube_id' => 'Youtube ID',
@@ -204,7 +206,11 @@ class Post extends \yii\db\ActiveRecord
 
     public function updateFrame()
     {
-
+        // var_dump('<pre>');
+        // var_dump($this->frame, $this->iframeAlt, $this->onlyImg, $this->preview, $this->frame || $this->iframeAlt || $this->onlyImg || $this->preview);
+        // var_dump('</pre>');
+        // die;
+        
         if ($this->frame || $this->iframeAlt || $this->onlyImg || $this->preview) {
             if (is_null($this->iframe_id)) {
                 $iframe = new Iframe();

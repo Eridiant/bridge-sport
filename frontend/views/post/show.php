@@ -14,13 +14,13 @@ use yii\helpers\Html;
 
     <div class="post-img">
         <picture>
-            <?php if (!empty($model->image->path)): ?>
+            <?php if (!empty($model->image->path) && $model->image_header): ?>
                 <?= Yii::$app->imageComponent->image($model->image); ?>
             <?php endif; ?>
         </picture>
     </div>
 
-    <h1><?= Html::encode($model->name) ?></h1>
+    <h1><?= $model->name ?></h1>
 
     <?php if (!empty($model->img)): ?>
         <img src="<?= $model->img; ?>" alt="">
@@ -55,11 +55,18 @@ use yii\helpers\Html;
     <?php endif; ?>
 
     <div class="post-link">
-        <?php if (isset($model->parent_id)): ?>
-            <?= Html::a(\backend\models\Post::find()->where(['id' => $model->parent_id])->one()->name, ['/post', 'id' => $model->parent_id], ['class' => 'success']) ?>
-        <?php endif; ?>
-        <?php if (\backend\models\Post::find()->where(['parent_id' => $model->id])->exists()): ?>
-            <?= Html::a(\backend\models\Post::find()->where(['parent_id' => $model->id])->one()->name, ['/post', 'id' => \backend\models\Post::find()->where(['parent_id' => $model->id])->one()->id], ['class' => 'success']) ?>
-        <?php endif; ?>
+        <div class="post-row">
+            <?php if (isset($model->thread_id)): ?>
+                <?= Html::a(\backend\models\Post::find()->where(['id' => $model->thread_id])->one()->name, ['/post', 'id' => $model->thread_id], ['class' => 'success']) ?>
+            <?php endif; ?>
+        </div>
+        <div class="post-row">
+            <?php if (isset($model->parent_id)): ?>
+                <?= Html::a("&xlarr;" . \backend\models\Post::find()->where(['id' => $model->parent_id])->one()->name, ['/post', 'id' => $model->parent_id], ['class' => 'successs']) ?> |
+            <?php endif; ?>
+            <?php if (\backend\models\Post::find()->where(['parent_id' => $model->id])->exists()): ?>
+                <?= Html::a(\backend\models\Post::find()->where(['parent_id' => $model->id])->one()->name . "&xrarr;", ['/post', 'id' => \backend\models\Post::find()->where(['parent_id' => $model->id])->one()->id], ['class' => 'success']) ?>
+            <?php endif; ?>
+        </div>
     </div>
 </div>
