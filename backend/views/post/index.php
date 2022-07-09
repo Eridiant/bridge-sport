@@ -45,9 +45,17 @@ $this->params['breadcrumbs'][] = $this->title;
             //     'filter' => Category::find()->select(['name', 'id'])->indexBy('id')->column(),
             //     'value' => 'category.name',
             // ],
-            'name',
+            // 'name',
+            [
+                // 'label' => 'Доступно',
+                'attribute' => 'name',
+                'format' => 'raw',
+                'value' => function($model) {
+                    return "<a href=" . Url::to($model->url, true) . ">{$model->name}</a>";
+                }
+            ],
             // 'slug',
-            // 'url:ntext',
+            // 'url:url',
             //'preview:ntext',
             // 'description:ntext',
             //'img',
