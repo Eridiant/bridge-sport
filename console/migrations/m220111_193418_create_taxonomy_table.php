@@ -15,7 +15,6 @@ class m220111_193418_create_taxonomy_table extends Migration
         $this->createTable('{{%taxonomy}}', [
             'id' => $this->primaryKey(11),
             'label' => $this->string(255),
-            'singular' => $this->string(255),
             'attr_key' => $this->string(255),
             'value' => $this->smallInteger(1),
         ]);

@@ -11,6 +11,7 @@ use Yii;
  * @property int $parent_id
  * @property string $name
  * @property string $slug
+ * @property string|null $singular
  * @property string|null $keywords
  * @property string|null $description
  * @property int $active
@@ -37,7 +38,7 @@ class Category extends \yii\db\ActiveRecord
             [['parent_id', 'active', 'deleted_at'], 'integer'],
             [['name', 'slug'], 'required'],
             [['description'], 'string'],
-            [['name', 'slug', 'keywords'], 'string', 'max' => 255],
+            [['name', 'slug', 'keywords', 'singular'], 'string', 'max' => 255],
         ];
     }
 
@@ -51,6 +52,7 @@ class Category extends \yii\db\ActiveRecord
             'parent_id' => 'Parent ID',
             'name' => 'Name',
             'slug' => 'Slug',
+            'singular' => 'В единственном числе',
             'keywords' => 'Keywords',
             'description' => 'Description',
             'active' => 'Active',

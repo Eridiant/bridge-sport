@@ -19,9 +19,9 @@ document.addEventListener('DOMContentLoaded', () => {
     })
 
     let survey = document.querySelector('#survey');
-    let surveyBy = document.querySelector('#survey span');
     if (survey) {
         
+        let surveyBy = document.querySelector('#survey span');
         let aski = document.querySelector('#aski');
         let results = [];
 
@@ -47,23 +47,32 @@ document.addEventListener('DOMContentLoaded', () => {
             if (selected) {
                 let iady = selected.id;
                 results.push(iady);
-                console.log('parent', selected.dataset.parent);
+
                 iady = nswr[iady]?.id ? nswr[iady]?.id : prnt[selected.dataset.parent]?.id;
+
                 slct(iady);
             } else {
-                slct(-1);
+                let ai = aski.dataset.parent ? prnt[aski.dataset.parent]?.id : -1;
+                // console.log('ai', ai, aski.dataset.parent);
+                slct(ai);
             }
 
             function slct(i = 0) {
-                console.log('fff', results, srv[i]);
+                console.log('fff', results);
                 i = i === -1 ? Object.keys(srv)[0] : i;
                 if (srv[i]) {
                     srv[i].answers.forEach( el => {
                         ansr += `<div class="post-input"><input type="radio" name="radio" id="${el.id}" data-parent="${i}"><label for="${el.id}">${el.description}</label></div>`
                     })
                     aski.innerHTML = `<p>${srv[i].description}</p><div class="post-inputs">${ansr}</div>`;
-                    survey.disabled = true;
-                    surveyBy.innerHTML = 'выберите ответ';
+                    if (srv[i].answers.length) {
+                        survey.disabled = true;
+                        surveyBy.innerHTML = 'выберите ответ';
+                        aski.dataset.parent = '';
+                    } else {
+                        surveyBy.innerHTML = 'далее';
+                        aski.dataset.parent = i;
+                    }
                 } else {
                     let data = {'survey': srv[Object.keys(srv)[0]]?.survey_id, 'results': results};
                     xhRequest(data, '/survey/quiz')
@@ -71,7 +80,8 @@ document.addEventListener('DOMContentLoaded', () => {
                             let model = JSON.parse(response);
                             aski.innerHTML = model;
                             surveyBy.innerHTML = 'пройти тест заново';
-                            // console.log(model, status);
+                            aski.removeAttribute("data-parent");
+                            results = [];
                         })
                         .catch(error => {
                             console.log(error);

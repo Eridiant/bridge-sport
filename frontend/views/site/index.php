@@ -33,7 +33,7 @@ $this->title = 'Bridge sport';
             </div>
             <div class="news-inner">
                 <div class="news-header">
-                <p><?= $m->category->name; ?></p>
+                <p><?= $m->category->singular ?? $m->category->name; ?></p>
                     <p>
                         <?php if ($m->taxonomies): ?>
                             <?php foreach ($m->taxonomies as $taxonomy): ?>
