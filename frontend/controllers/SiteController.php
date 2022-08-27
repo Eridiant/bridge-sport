@@ -7,12 +7,14 @@ use frontend\models\ResendVerificationEmailForm;
 use frontend\models\VerifyEmailForm;
 use yii\base\InvalidArgumentException;
 use yii\web\BadRequestHttpException;
+use yii\data\Pagination;
 use common\models\LoginForm;
 use frontend\models\PasswordResetRequestForm;
 use frontend\models\ResetPasswordForm;
 use frontend\models\SignupForm;
 use frontend\models\ContactForm;
 use frontend\models\Post;
+use frontend\models\Survey;
 use frontend\models\PostSearch;
 use yii\web\NotFoundHttpException;
 
@@ -78,10 +80,27 @@ class SiteController extends AppController
         // $model = Post::find()
         // ->where(['status' => 1])
         // ->all();
-        $searchModel = new PostSearch();
-        $dataProvider = $searchModel->search($this->request->queryParams);
+        // $searchModel = new PostSearch();
+        // $dataProvider = $searchModel->search($this->request->queryParams);
         // $dataProvider = $dataProvider->;
-        $model = $dataProvider->getModels();
+        $model = Post::find()
+            ->with(['image', 'taxonomies', 'category', 'iframe'])
+            ->where(['status' => 1]);
+
+        // $model = $model->union($survey);
+        $model = $model->all();
+
+        // $pages = new Pagination(['totalCount' => $query->count(), 'pageSize' => 2]);
+
+        // $model = $query->offset($pages->offset)
+        //     ->limit($pages->limit)
+        //     ->all();
+        // var_dump('<pre>');
+        // var_dump($models);
+        // var_dump('</pre>');
+        // die;
+        
+        // $model = $dataProvider->getModels();
 
         return $this->render('index', compact('model'));
     }

@@ -47,6 +47,10 @@ class PostSearch extends Post
 
         $query = Post::find()->with(['image', 'taxonomies', 'category', 'iframe']);
 
+        // $model = Survey::find();
+
+        // $query->union($model);
+
         // add conditions that should always apply here
 
         $dataProvider = new ActiveDataProvider([

@@ -31,11 +31,14 @@ use Yii;
  * @property int $created_at
  * @property int|null $updated_at
  * @property int|null $deleted_at
+ * @property int $comments_status
+ * @property int|null $survey_id
  *
  * @property Category $category
  * @property Iframe $iframe
  * @property Image $image
  * @property PostTaxonomy[] $postTaxonomies
+ * @property Survey $survey
  * @property Taxonomy[] $taxonomies
  * @property Youtube $youtube
  */
@@ -56,7 +59,7 @@ class Post extends \yii\db\ActiveRecord
     {
         return [
             [['category_id', 'name', 'slug', 'created_at'], 'required'],
-            [['category_id', 'parent_id', 'thread_id', 'image_id', 'image_header', 'iframe_id', 'youtube_id', 'indexing', 'status', 'author_id', 'published_at', 'created_at', 'updated_at', 'deleted_at'], 'integer'],
+            [['category_id', 'parent_id', 'thread_id', 'image_id', 'image_header', 'iframe_id', 'youtube_id', 'indexing', 'status', 'author_id', 'published_at', 'created_at', 'updated_at', 'deleted_at', 'comments_status', 'survey_id'], 'integer'],
             [['url', 'preview', 'text', 'description'], 'string'],
             [['name', 'slug', 'dial', 'title', 'keywords'], 'string', 'max' => 255],
             [['category_id'], 'exist', 'skipOnError' => true, 'targetClass' => Category::className(), 'targetAttribute' => ['category_id' => 'id']],
@@ -127,6 +130,16 @@ class Post extends \yii\db\ActiveRecord
     public function getImage()
     {
         return $this->hasOne(Image::className(), ['id' => 'image_id']);
+    }
+
+    /**
+     * Gets query for [[Survey]].
+     *
+     * @return \yii\db\ActiveQuery
+     */
+    public function getSurvey()
+    {
+        return $this->hasOne(Survey::class, ['id' => 'survey_id']);
     }
 
     /**

@@ -8,19 +8,20 @@ use yii\helpers\FileHelper;
 use yii\web\UploadedFile;
 // use yii\imagine\Image;
 
-
 /**
  * This is the model class for table "{{%post}}".
  *
  * @property int $id
  * @property int $category_id
  * @property int|null $parent_id
+ * @property int|null $thread_id
  * @property string $name
  * @property string|null $url
  * @property string $slug
  * @property string|null $preview
  * @property string|null $text
  * @property int|null $image_id
+ * @property int $image_header
  * @property string|null $dial
  * @property int|null $iframe_id
  * @property int|null $youtube_id
@@ -34,11 +35,14 @@ use yii\web\UploadedFile;
  * @property int $created_at
  * @property int|null $updated_at
  * @property int|null $deleted_at
+ * @property int $comments_status
+ * @property int|null $survey_id
  *
  * @property Category $category
  * @property Iframe $iframe
  * @property Image $image
  * @property PostTaxonomy[] $postTaxonomies
+ * @property Survey $survey
  * @property Taxonomy[] $taxonomies
  * @property Youtube $youtube
  */
@@ -59,7 +63,7 @@ class Post extends \yii\db\ActiveRecord
     {
         return [
             [['category_id', 'name', 'slug'], 'required'],
-            [['category_id', 'parent_id', 'thread_id', 'image_id', 'iframe_id', 'youtube_id', 'image_header', 'indexing', 'status', 'author_id', 'published_at', 'created_at', 'updated_at', 'deleted_at'], 'integer'],
+            [['category_id', 'parent_id', 'thread_id', 'image_id', 'iframe_id', 'youtube_id', 'image_header', 'indexing', 'status', 'author_id', 'published_at', 'created_at', 'updated_at', 'deleted_at', 'comments_status', 'survey_id'], 'integer'],
             [['url', 'preview', 'text', 'description'], 'string'],
             [['taxonomiesArray', 'alt', 'img', 'youtube', 'youtubeFields', 'hide', 'onlyImg', 'frame', 'previews', 'iframe', 'iframeAlt', 'youtubeAlt', 'iframeHide'], 'safe'],
             [['name', 'slug', 'dial', 'title', 'keywords'], 'string', 'max' => 255],
@@ -115,7 +119,19 @@ class Post extends \yii\db\ActiveRecord
             'updated_at' => 'Updated At',
             'deleted_at' => 'Deleted At',
             'youtubeFields' => 'Ссылка на ютуб',
+            'comments_status' => 'Comments Status',
+            'survey_id' => 'Survey ID',
         ];
+    }
+
+    /**
+     * Gets query for [[Survey]].
+     *
+     * @return \yii\db\ActiveQuery
+     */
+    public function getSurvey()
+    {
+        return $this->hasOne(Survey::class, ['id' => 'survey_id']);
     }
 
     /**

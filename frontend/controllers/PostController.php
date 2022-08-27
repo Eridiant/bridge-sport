@@ -4,6 +4,7 @@ namespace frontend\controllers;
 
 use frontend\models\Post;
 use frontend\models\PostSearch;
+use frontend\models\Quiz;
 use yii\web\Controller;
 use yii\web\NotFoundHttpException;
 use yii\filters\VerbFilter;
@@ -52,9 +53,49 @@ class PostController extends AppController
             $socialImage = (!empty($model->iframe->image->path) && !$model->iframe->hide) ? $model->iframe->image->path : $model->image->path;
         }
 
-        $this->setMeta( empty($model->title) ? $model->name : $model->title, empty($model->description) ? $model->preview : $model->description, $model->keywords, $socialImage);
+        $survey = '';
+        $answer = '';
+        $parent = '';
+        if (!empty($model->survey)) {
+            $survey_id = $model->survey->id;
+            $survey = Quiz::find()
+                ->where('survey_id=:survey_id')
+                ->addParams([':survey_id' => $survey_id])
+                ->indexBy('id')
+                ->with('answers')
+                ->asArray()
+                ->all();
+                
+            $answer = Quiz::find()
+                ->where('survey_id=:survey_id')
+                ->addParams([':survey_id' => $survey_id])
+                ->indexBy('answer_id')
+                ->select(['id', 'answer_id'])
+                ->asArray()
+                ->all();
 
-        return $this->render('show', compact('model'));
+            $parent = Quiz::find()
+                ->where('survey_id=:survey_id')
+                ->addParams([':survey_id' => $survey_id])
+                ->indexBy('parent_id')
+                ->select(['id', 'parent_id'])
+                ->asArray()
+                ->all();
+
+            // $survey = $survey
+
+            // var_dump('<pre>');
+            // print_r($survey);
+            // var_dump('</pre>');
+            // die;
+
+            // $survey = json_encode($survey);
+        }
+
+
+        $this->setMeta(empty($model->title) ? $model->name : $model->title, empty($model->description) ? $model->preview : $model->description, $model->keywords, $socialImage);
+
+        return $this->render('show', compact('model', 'survey', 'parent', 'answer'));
     }
 
     /**

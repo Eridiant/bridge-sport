@@ -10,6 +10,14 @@ use yii\helpers\Html;
 // die;
 
 ?>
+
+<script>
+    var srv = <?= json_encode($survey); ?>; // Don't forget the extra semicolon! , JSON_FORCE_OBJECT
+    var prnt = <?= json_encode($parent); ?>; // Don't forget the extra semicolon! , JSON_FORCE_OBJECT
+    var nswr = <?= json_encode($answer); ?>; // Don't forget the extra semicolon! , JSON_FORCE_OBJECT
+    
+</script>
+
 <div class="post-view">
 
     <div class="post-img">
@@ -54,6 +62,13 @@ use yii\helpers\Html;
         </div>
     <?php endif; ?>
 
+    <?php if (!empty($model->survey)): ?>
+        <form action="/">
+            <div id="aski" class="post-survey"></div>
+            <button id="survey" class="custom-btn btn-8" type="button"><span>пройти квиз</span></button>
+        </form>
+    <?php endif; ?>
+
     <div class="post-link">
         <div class="post-row">
             <?php if (isset($model->thread_id)): ?>
@@ -69,4 +84,6 @@ use yii\helpers\Html;
             <?php endif; ?>
         </div>
     </div>
+
+
 </div>

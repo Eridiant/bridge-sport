@@ -74,6 +74,16 @@ class Survey extends \yii\db\ActiveRecord
     }
 
     /**
+     * Gets query for [[Posts]].
+     *
+     * @return \yii\db\ActiveQuery
+     */
+    public function getPosts()
+    {
+        return $this->hasMany(Post::class, ['survey_id' => 'id']);
+    }
+
+    /**
      * Gets query for [[Quizzes]].
      *
      * @return \yii\db\ActiveQuery

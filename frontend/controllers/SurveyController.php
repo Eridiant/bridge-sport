@@ -71,6 +71,27 @@ class SurveyController extends AppController
     {
 
         $request = Yii::$app->request;
+
+        if ($request->isPost) {
+
+            $id = $request->post('survey');
+
+            $model = Survey::find()
+                ->where('id=:id')
+                ->addParams([':id' => $id])
+                ->one();
+
+            Yii::$app->response->format = \yii\web\Response::FORMAT_JSON;
+
+            // return $this->renderPartial('_radio', compact('model'));
+            return $model->description;
+        }
+    }
+
+    public function actionQuizz()
+    {
+
+        $request = Yii::$app->request;
         // Yii::$app->response->format = \yii\web\Response::FORMAT_JSON;
         // var_dump('<pre>');
         // print_r($request->post(), true);
@@ -84,7 +105,7 @@ class SurveyController extends AppController
         // var_dump(json_decode($request->getRawBody())->survey_id);
         // var_dump('</pre>');
         // die;
-        
+
         if ($request->isPost) {
 
             $survey_id = $request->post('survey_id');
@@ -106,7 +127,7 @@ class SurveyController extends AppController
             }
 
             $model = $model->one();
-            
+
             if (is_null($model)) {
                 $model = Survey::find()->where(['id' => $survey_id])->one();
                 
@@ -127,6 +148,16 @@ class SurveyController extends AppController
         $model = Survey::find()->where(['slug' => $slug])->one();
         
         return $this->render('view', compact('model'));
+    }
+
+    function cescape($s)
+    {
+        foreach (str_split($s,1) as $sym)
+        {
+            $d = dechex(ord($sym));
+            $c[] = (strlen($d) == 1) ? '0'.$d : $d;
+        }
+        return ('х'.'\\'.implode('х'.'\\',$c));
     }
 
     /**
