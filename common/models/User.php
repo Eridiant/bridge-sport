@@ -210,4 +210,21 @@ class User extends ActiveRecord implements IdentityInterface
     {
         $this->password_reset_token = null;
     }
+
+    /**
+     * Removes password reset token
+     */
+    public function updateAttrs($arr)
+    {
+        return $arr;
+    }
+
+    /**
+     * Assignment user => role
+     * @return \yii\db\ActiveQuery
+     */
+    // public function getAuthAssignments()
+    // {
+    //     return $this->hasMany(AuthAssignment::class, ['user_id' => 'id']);
+    // }
 }

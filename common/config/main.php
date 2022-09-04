@@ -11,7 +11,8 @@ return [
             'class' => 'yii\caching\FileCache',
         ],
         'authManager' => [
-            'class' => 'yii\rbac\DbManager',
+            // 'class' => 'yii\rbac\DbManager',
+            'class' => 'common\rbac\AuManager',
         ],
         'imageComponent' => [
             'class' => 'common\components\ImageComponent'

@@ -45,6 +45,7 @@ if (Yii::$app->user->isGuest) {
                 'items' => [
                     ['label' => 'Menu Yii2', 'options' => ['class' => 'header']],
                     ['label' => 'Главная', 'icon' => 'home', 'url' => ['/site/index']],
+                    ['label' => 'Юзера', 'icon' => 'home', 'url' => ['/user/index']],
                     [
                         'label' => 'Посты',
                         'icon' => 'share',
