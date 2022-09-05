@@ -14,7 +14,7 @@ use yii\filters\AccessControl;
 /**
  * AnswerController implements the CRUD actions for Answer model.
  */
-class AnswerController extends Controller
+class AnswerController extends AppController
 {
     /**
      * @inheritDoc

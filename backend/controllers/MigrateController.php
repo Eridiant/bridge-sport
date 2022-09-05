@@ -17,37 +17,37 @@ use yii\web\Controller;
  * Class MigrationController
  * @package frontend\controllers
  */
-class MigrateController extends Controller
+class MigrateController extends AppController
 {
     /**
      * {@inheritdoc}
      */
-    public function behaviors()
-    {
-        return [
-            'access' => [
-                'class' => AccessControl::class,
-                'rules' => [
-                    [
-                        'actions' => ['login', 'error'],
-                        'allow' => true,
-                    ],
-                    [
-                        'actions' => ['index', 'up', 'down'],
-                        'allow' => true,
-                        'roles' => ['@'],
-                    ],
+    // public function behaviors()
+    // {
+    //     return [
+    //         'access' => [
+    //             'class' => AccessControl::class,
+    //             'rules' => [
+    //                 [
+    //                     'actions' => ['login', 'error'],
+    //                     'allow' => true,
+    //                 ],
+    //                 [
+    //                     'actions' => ['index', 'up', 'down'],
+    //                     'allow' => true,
+    //                     'roles' => ['@'],
+    //                 ],
 
-                ],
-            ],
-            'verbs' => [
-                'class' => VerbFilter::class,
-                'actions' => [
-                    'delete' => ['POST', 'GET'],
-                ],
-            ],
-        ];
-    }
+    //             ],
+    //         ],
+    //         'verbs' => [
+    //             'class' => VerbFilter::class,
+    //             'actions' => [
+    //                 'delete' => ['POST', 'GET'],
+    //             ],
+    //         ],
+    //     ];
+    // }
 
     public function actionIndex()
     {

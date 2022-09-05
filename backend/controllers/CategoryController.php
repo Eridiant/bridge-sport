@@ -12,39 +12,39 @@ use yii\filters\AccessControl;
 /**
  * CategoryController implements the CRUD actions for Category model.
  */
-class CategoryController extends Controller
+class CategoryController extends AppController
 {
     /**
      * @inheritDoc
      */
-    public function behaviors()
-    {
-        return array_merge(
-            parent::behaviors(),
-            [
-                'access' => [
-                    'class' => AccessControl::class,
-                    'rules' => [
-                        [
-                            'actions' => ['login', 'error'],
-                            'allow' => true,
-                        ],
-                        [
-                            'actions' => ['index', 'view', 'create', 'update', 'delete'],
-                            'allow' => true,
-                            'roles' => ['@'],
-                        ],
-                    ],
-                ],
-                'verbs' => [
-                    'class' => VerbFilter::class,
-                    'actions' => [
-                        'delete' => ['POST', 'GET'],
-                    ],
-                ],
-            ]
-        );
-    }
+    // public function behaviors()
+    // {
+    //     return array_merge(
+    //         parent::behaviors(),
+    //         [
+    //             'access' => [
+    //                 'class' => AccessControl::class,
+    //                 'rules' => [
+    //                     [
+    //                         'actions' => ['login', 'error'],
+    //                         'allow' => true,
+    //                     ],
+    //                     [
+    //                         'actions' => ['index', 'view', 'create', 'update', 'delete'],
+    //                         'allow' => true,
+    //                         'roles' => ['@'],
+    //                     ],
+    //                 ],
+    //             ],
+    //             'verbs' => [
+    //                 'class' => VerbFilter::class,
+    //                 'actions' => [
+    //                     'delete' => ['POST', 'GET'],
+    //                 ],
+    //             ],
+    //         ]
+    //     );
+    // }
 
     /**
      * Lists all Category models.

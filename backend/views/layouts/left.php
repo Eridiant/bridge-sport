@@ -1,13 +1,13 @@
 <?php
 
 use yii\helpers\Html;
+use yii\helpers\Url;
+
 
 /* @var $this \yii\web\View */
 /* @var $content string */
 
-if (Yii::$app->user->isGuest) {
-    Yii::$app->getResponse()->redirect(\Yii::$app->getUser()->loginUrl);
-}
+
 
 ?>
 <aside class="main-sidebar">

@@ -132,18 +132,50 @@ class AuManager extends PhpManager
 
     /**
      * {@inheritdoc}
+     * The roles returned by this method include the roles assigned via [[$defaultRoles]].
+     */
+    // public function getRolesByUser($userId)
+    // {
+    //     if ($this->isEmptyUserId($userId)) {
+    //         return [];
+    //     }
+
+    //     $query = (new Query())->select('b.*')
+    //         ->from(['a' => $this->assignmentTable, 'b' => $this->itemTable])
+    //         ->where('{{a}}.[[item_name]]={{b}}.[[name]]')
+    //         ->andWhere(['a.user_id' => (string) $userId])
+    //         ->andWhere(['b.type' => Item::TYPE_ROLE]);
+
+    //     $roles = $this->getDefaultRoleInstances();
+    //     foreach ($query->all($this->db) as $row) {
+    //         $roles[$row['name']] = $this->populateItem($row);
+    //     }
+
+    //     return $roles;
+    // }
+
+    /**
+     * {@inheritdoc}
      */
     public function assign($role, $userId)
     {
+        $assignment = Assignment::find()
+            ->where('user_id=:user_id')
+            ->addParams([':user_id' => $userId])
+            ->one();
+
+        if ($assignment) {
+            $assignment->item_name = $role->name;
+            $assignment->save();
+            unset($this->checkAccessAssignments[(string) $userId]);
+            return $assignment;
+        }
+
         $assignment = new Assignment([
             'user_id' => $userId,
             'item_name' => $role->name,
             'created_at' => time(),
         ]);
-// var_dump('<pre>');
-// var_dump($this->db);
-// var_dump('</pre>');
-// die;
 
         $this->db->createCommand()
             ->insert($this->assignmentTable, [

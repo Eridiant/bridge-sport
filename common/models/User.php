@@ -54,6 +54,7 @@ class User extends ActiveRecord implements IdentityInterface
     public function rules()
     {
         return [
+            // [['role'], 'string'],
             ['status', 'default', 'value' => self::STATUS_INACTIVE],
             ['status', 'in', 'range' => [self::STATUS_ACTIVE, self::STATUS_INACTIVE, self::STATUS_DELETED]],
         ];
@@ -219,12 +220,19 @@ class User extends ActiveRecord implements IdentityInterface
         return $arr;
     }
 
+    // private $_role;
     /**
      * Assignment user => role
      * @return \yii\db\ActiveQuery
      */
-    // public function getAuthAssignments()
-    // {
-    //     return $this->hasMany(AuthAssignment::class, ['user_id' => 'id']);
-    // }
+    public function getRole()
+    {
+        // $user = AuthAssignment::find()
+        //     ->where(['user_id' => $this->id])
+        //     ->one();
+
+        // return $user['item_name'];
+        // return 'admin';
+        return $this->hasOne(AuthAssignment::class, ['user_id' => 'id']);
+    }
 }

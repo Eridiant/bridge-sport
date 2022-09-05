@@ -13,39 +13,39 @@ use yii\filters\AccessControl;
 /**
  * LogController implements the CRUD actions for StatUserIp model.
  */
-class LogController extends Controller
+class LogController extends AppController
 {
     /**
      * @inheritDoc
      */
-    public function behaviors()
-    {
-        return array_merge(
-            parent::behaviors(),
-            [
-                'access' => [
-                    'class' => AccessControl::class,
-                    'rules' => [
-                        [
-                            'actions' => ['login', 'error'],
-                            'allow' => true,
-                        ],
-                        [
-                            'actions' => ['index', 'err'],
-                            'allow' => true,
-                            'roles' => ['@'],
-                        ],
-                    ],
-                ],
-                'verbs' => [
-                    'class' => VerbFilter::class,
-                    'actions' => [
-                        'delete' => ['POST', 'GET'],
-                    ],
-                ],
-            ]
-        );
-    }
+    // public function behaviors()
+    // {
+    //     return array_merge(
+    //         parent::behaviors(),
+    //         [
+    //             'access' => [
+    //                 'class' => AccessControl::class,
+    //                 'rules' => [
+    //                     [
+    //                         'actions' => ['login', 'error'],
+    //                         'allow' => true,
+    //                     ],
+    //                     [
+    //                         'actions' => ['index', 'err'],
+    //                         'allow' => true,
+    //                         'roles' => ['@'],
+    //                     ],
+    //                 ],
+    //             ],
+    //             'verbs' => [
+    //                 'class' => VerbFilter::class,
+    //                 'actions' => [
+    //                     'delete' => ['POST', 'GET'],
+    //                 ],
+    //             ],
+    //         ]
+    //     );
+    // }
 
     /**
      * Lists all StatUserIp models.

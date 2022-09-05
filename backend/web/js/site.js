@@ -153,6 +153,28 @@ window.addEventListener('load', () => {
                 .catch(error => console.error('error'));
         }
     })
+
+    let users = document.querySelector('#users');
+    if (users) {
+        users.addEventListener('change',(e) => {
+            // console.log(e.target.closest('.user').dataset.id);
+            // console.log(e.target.value);
+            // alert('changed');
+            let data = {'user':e.target.closest('.user').dataset.id, 'role':e.target.value}
+            ajaxRequest("user/role", data)
+                .then(response => {
+                    if (!response) {
+                        alert('error');
+                    }
+                    // console.log(response);
+                    // console.log(JSON.parse(response));
+                })
+                .catch(error => {
+                    alert(error);
+                    console.log(error);
+                });
+        });
+    }
 })
 
 function ajaxRequest(cntr, rqst) {

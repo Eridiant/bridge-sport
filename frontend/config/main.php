@@ -74,6 +74,8 @@ return [
                 '' => 'site/index',
                 'index' => 'site/index',
                 'post' => 'post/index',
+                // 'signup' => 'site/signup',
+                // 'login' => 'site/login',
                 'survey' => 'survey/index',
                 'survey/quiz' => 'survey/quiz',
                 'survey/quizz' => 'survey/quizz',

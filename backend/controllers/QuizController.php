@@ -13,39 +13,39 @@ use yii\filters\AccessControl;
 /**
  * QuizController implements the CRUD actions for Quiz model.
  */
-class QuizController extends Controller
+class QuizController extends AppController
 {
     /**
      * @inheritDoc
      */
-    public function behaviors()
-    {
-        return array_merge(
-            parent::behaviors(),
-            [
-                'access' => [
-                    'class' => AccessControl::class,
-                    'rules' => [
-                        [
-                            'actions' => ['login', 'error'],
-                            'allow' => true,
-                        ],
-                        [
-                            'actions' => ['index', 'edit', 'check', 'view', 'create', 'update', 'delete'],
-                            'allow' => true,
-                            'roles' => ['@'],
-                        ],
-                    ],
-                ],
-                'verbs' => [
-                    'class' => VerbFilter::class,
-                    'actions' => [
-                        'delete' => ['POST', 'GET'],
-                    ],
-                ],
-            ]
-        );
-    }
+    // public function behaviors()
+    // {
+    //     return array_merge(
+    //         parent::behaviors(),
+    //         [
+    //             'access' => [
+    //                 'class' => AccessControl::class,
+    //                 'rules' => [
+    //                     [
+    //                         'actions' => ['login', 'error'],
+    //                         'allow' => true,
+    //                     ],
+    //                     [
+    //                         'actions' => ['index', 'edit', 'check', 'view', 'create', 'update', 'delete'],
+    //                         'allow' => true,
+    //                         'roles' => ['@'],
+    //                     ],
+    //                 ],
+    //             ],
+    //             'verbs' => [
+    //                 'class' => VerbFilter::class,
+    //                 'actions' => [
+    //                     'delete' => ['POST', 'GET'],
+    //                 ],
+    //             ],
+    //         ]
+    //     );
+    // }
 
     /**
      * Lists all Quiz models.

@@ -3,7 +3,7 @@
 namespace backend\controllers;
 
 use Yii;
-use backend\models\User;
+use common\models\User;
 use yii\data\ActiveDataProvider;
 use yii\web\Controller;
 use yii\web\NotFoundHttpException;
@@ -12,25 +12,25 @@ use yii\filters\VerbFilter;
 /**
  * UserController implements the CRUD actions for User model.
  */
-class UserController extends Controller
+class UserController extends AppController
 {
     /**
      * @inheritDoc
      */
-    public function behaviors()
-    {
-        return array_merge(
-            parent::behaviors(),
-            [
-                'verbs' => [
-                    'class' => VerbFilter::className(),
-                    'actions' => [
-                        'delete' => ['POST'],
-                    ],
-                ],
-            ]
-        );
-    }
+    // public function behaviors()
+    // {
+    //     return array_merge(
+    //         parent::behaviors(),
+    //         [
+    //             'verbs' => [
+    //                 'class' => VerbFilter::className(),
+    //                 'actions' => [
+    //                     'delete' => ['POST'],
+    //                 ],
+    //             ],
+    //         ]
+    //     );
+    // }
 
     /**
      * Lists all User models.
@@ -58,11 +58,49 @@ class UserController extends Controller
         ]);
     }
 
+    public function actionRole()
+    {
+        $request = Yii::$app->request;
+
+        if ($request->isPost) {
+            $id = $request->post('user');
+            $role = $request->post('role');
+            $userRole = Yii::$app->authManager->getRole($role);
+            Yii::$app->authManager->assign($userRole, $id);
+            return true;
+        }
+        // return $this->render('view', [
+        //     'model' => $this->findModel($id),
+        // ]);
+    }
+
     public function actionExect()
     {
         // $role = Yii::$app->authManager->createRole('admin');
         // $role->description = 'Администратор';
         // Yii::$app->authManager->add($role);
+
+        // $role = Yii::$app->authManager->createRole('student');
+        // $role->description = 'Студент';
+        // Yii::$app->authManager->add($role);
+
+        // $role = Yii::$app->authManager->createRole('user');
+        // $role->description = 'Пользователь';
+        // Yii::$app->authManager->add($role);
+
+        // $role = Yii::$app->authManager->createRole('guest');
+        // $role->description = 'Гость';
+        // Yii::$app->authManager->add($role);
+
+        // $role = Yii::$app->authManager->getRole('admin');
+        // $permit = Yii::$app->authManager->getRole('student');
+        // Yii::$app->authManager->addChild($role, $permit);
+
+        // var_dump('<pre>');
+        // var_dump(Yii::$app->authManager->getItems('1'));
+        // var_dump('</pre>');
+        // die;
+        
 
         // $permit = Yii::$app->authManager->createPermission('canAdmin');
         // $permit->description = 'могучий админ';
@@ -92,22 +130,22 @@ class UserController extends Controller
      * If creation is successful, the browser will be redirected to the 'view' page.
      * @return string|\yii\web\Response
      */
-    public function actionCreate()
-    {
-        $model = new User();
+    // public function actionCreate()
+    // {
+    //     $model = new User();
 
-        if ($this->request->isPost) {
-            if ($model->load($this->request->post()) && $model->save()) {
-                return $this->redirect(['view', 'id' => $model->id]);
-            }
-        } else {
-            $model->loadDefaultValues();
-        }
+    //     if ($this->request->isPost) {
+    //         if ($model->load($this->request->post()) && $model->save()) {
+    //             return $this->redirect(['view', 'id' => $model->id]);
+    //         }
+    //     } else {
+    //         $model->loadDefaultValues();
+    //     }
 
-        return $this->render('create', [
-            'model' => $model,
-        ]);
-    }
+    //     return $this->render('create', [
+    //         'model' => $model,
+    //     ]);
+    // }
 
     /**
      * Updates an existing User model.
