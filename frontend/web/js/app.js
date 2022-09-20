@@ -8,7 +8,7 @@ document.addEventListener('DOMContentLoaded', () => {
             let tgs = tg.closest('.submit').dataset;
 
             let form = document.querySelector('form input:checked');
-            console.log(tgs.quiz, tgs.id, form.dataset.answer);
+            // console.log(tgs.quiz, tgs.id, form.dataset.answer);
 
             quizAjax(tgs.quiz, tgs.id, form.dataset.answer);
             
@@ -17,6 +17,117 @@ document.addEventListener('DOMContentLoaded', () => {
             quizAjax(wrap.dataset.id);
         }
     })
+
+    let message = document.querySelector('.messages');
+    if (message) {
+        message.addEventListener('click', (e) => {
+            e.preventDefault();
+            let target = e.target;
+            let wrapper = target.closest('.messages-wrapper');
+            message.querySelectorAll('.messages-errors').forEach(el => {
+                el.innerHTML = '';
+            });
+            // let answer = target.closest('.messages-answer');
+            if (target.closest('.messages-answer')) {
+                let edit = target.closest('a[data-edit]');
+                if (edit !== null) {
+                    let data = {
+                        'post': message.dataset.post,
+                        'id': target.closest('.messages-answer').dataset.messageId,
+                        'parent': target.closest('.messages-answer').dataset.parentId
+                    };
+
+                    // console.log(target.querySelector('.messages-answer').dataset.messageId);
+                    if (Number(edit.dataset.edit)) {
+                        return;
+                        xhRequest(data, '/post/edit-message')
+                            .then(response => {
+                                let er = '';
+                                if (er = JSON.parse(response).data?.validate?.message) {
+                                    // target.closest('.messages-form').querySelector('.messages-errors').innerHTML = er;
+                                }
+                                // console.log(JSON.parse(response));
+                            })
+                            .catch(error => {
+                                console.log(error);
+                            });
+                    } else {
+                        xhRequest(data, '/post/delete-message')
+                            .then(response => {
+                                let reply = '';
+                                if (reply = JSON.parse(response).data?.reply) {
+                                    target.closest('.messages-inner').innerHTML = reply;
+                                }
+                                let msg = '';
+                                if (msg = JSON.parse(response).data?.message) {
+                                    target.closest('.messages-wrap').innerHTML = msg;
+                                }
+                            })
+                            .catch(error => {
+                                console.log(error);
+                            });
+                    }
+                    return;
+                }
+                let form = wrapper.querySelector('.messages-form');
+                let hide = document.querySelector('.messages-wrapper .messages-form:not(.hide)');
+                if (hide) {
+                    hide.classList.add('hide');
+                    hide.querySelector('.messages-reply').innerHTML = '';
+                }
+                wrapper.querySelector('.messages-reply').innerHTML = 'ответить ' + target.closest('.messages-answer').dataset.user + '\'у';
+                form.classList.remove('hide');
+                form.dataset.answerUser = target.closest('.messages-answer').dataset.userId;
+                form.dataset.messageId = target?.closest('.messages-answer:not(.message)')?.dataset?.messageId;
+                form.scrollIntoView(false);
+                wrapper.querySelector('.messages-textarea').focus();
+                // form.dataset.messageId = message_id;
+            }
+
+            // let send = target.closest('.messages-btn'); 
+            if (target.closest('.messages-btn')) {
+                // console.log(message);
+                let data = {
+                    'post': message.dataset.post,
+                    'message': target.closest('.messages-form').querySelector('.messages-textarea').innerHTML,
+                    'answer': target.closest('.messages-form').dataset.answerUser,
+                    'parent': wrapper?.querySelector('.messages-answer').dataset.parentId,
+                    'answerId': target.closest('.messages-form').dataset.messageId
+                };
+
+                xhRequest(data, '/post/message')
+                    .then(response => {
+                        let er = '';
+                        if (er = JSON.parse(response).data?.validate?.message) {
+                            target.closest('.messages-form').querySelector('.messages-errors').innerHTML = er;
+                        }
+                        let reply = '';
+                        if (reply = JSON.parse(response).data?.reply) {
+                            let el = document.createElement("div");
+                            el.className = "messages-inner";
+                            el.innerHTML = reply;
+                            wrapper.insertBefore(el, wrapper.querySelector('.messages-form'));
+                            wrapper.querySelector('.messages-textarea').innerHTML = '';
+                            wrapper.querySelector('.messages-reply').innerHTML = '';
+                        }
+                        let msg = '';
+                        if (msg = JSON.parse(response).data?.message) {
+                            let el = document.createElement("div");
+                            el.className = "messages-wrapper";
+                            el.innerHTML = msg;
+                            message.insertBefore(el, message.querySelector('.messages-form.msg'));
+                            message.querySelector('.messages-textarea.msg').innerHTML = '';
+                        }
+                        // console.log(JSON.parse(response));
+                    })
+                    .catch(error => {
+                        console.log(error);
+                    });
+            }
+        })
+
+        // newLines = str.split('\n').length-1;
+    }
 
     let survey = document.querySelector('#survey');
     if (survey) {
@@ -58,7 +169,7 @@ document.addEventListener('DOMContentLoaded', () => {
             }
 
             function slct(i = 0) {
-                console.log('fff', results);
+                // console.log('fff', results);
                 i = i === -1 ? Object.keys(srv)[0] : i;
                 if (srv[i]) {
                     srv[i].answers.forEach( el => {
@@ -89,7 +200,6 @@ document.addEventListener('DOMContentLoaded', () => {
                 }
             }
         });
-
     }
 
     

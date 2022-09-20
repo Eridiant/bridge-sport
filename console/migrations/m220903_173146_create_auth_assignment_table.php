@@ -15,6 +15,7 @@ class m220903_173146_create_auth_assignment_table extends Migration
         $this->createTable('{{%auth_assignment}}', [
             'item_name' => $this->string(64)->notNull(),
             'user_id' => $this->string(64)->notNull(),
+            'baned_at' => $this->integer(),
             'created_at' => $this->integer(),
         ]);
 

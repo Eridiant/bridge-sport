@@ -2,7 +2,10 @@
 
 namespace frontend\controllers;
 
+use Yii;
 use frontend\models\Post;
+use frontend\models\Message;
+use frontend\models\MessageReply;
 use frontend\models\PostSearch;
 use frontend\models\Quiz;
 use yii\web\Controller;
@@ -36,6 +39,98 @@ class PostController extends AppController
             'searchModel' => $searchModel,
             'dataProvider' => $dataProvider,
         ]);
+    }
+
+    public function actionMessage()
+    {
+        $request = Yii::$app->request;
+
+        if ($request->isPost) {
+            $post = $request->post('post');
+            $message = $request->post('message');
+            $answer = $request->post('answer');
+            $parent = $request->post('parent');
+            $answer_id = $request->post('answerId') !== 'undefined' ? $request->post('answerId') : null;
+
+            Yii::$app->response->format = \yii\web\Response::FORMAT_JSON;
+            if ($parent) {
+                $model = new MessageReply();
+                $model->message_id = $parent;
+                $model->answer_user = Yii::$app->user->id == $answer ? null : $answer;
+                $model->user_id = Yii::$app->user->id;
+                
+                $model->answer_id = $answer_id;
+                $model->message = $message;
+                if (!$model->validate()) {
+                    return ['data' => ['validate' => $model->errors]];
+                }
+                if ($model->save()) {
+                    $render = $this->renderPartial('_reply', compact('model'));
+                    return ['data' => ['reply' => $render]];
+                } else {
+                    return ['data' => ['error' => $model->getErrors()]];
+                }
+            } else {
+                $model = new Message();
+                $model->user_id = Yii::$app->user->id;
+                $model->message = $message;
+                $model->post_id = $post;
+                if (!$model->validate()) {
+                    return ['data' => ['validate' => $model->errors]];
+                }
+                if ($model->save()) {
+                    $wrapper = 1;
+                    $render = $this->renderPartial('_message', compact('model', 'wrapper'));
+                    return ['data' => ['message' => $render]];
+                } else {
+                    return ['data' => ['error' => $model->getErrors()]];
+                }
+            }
+        }
+    }
+
+    public function actionDeleteMessage()
+    {
+        $request = Yii::$app->request;
+
+        if ($request->isPost) {
+
+            $post = (int)$request->post('post');
+            $id = (int)$request->post('id');
+            $parent = (int)$request->post('parent');
+
+            Yii::$app->response->format = \yii\web\Response::FORMAT_JSON;
+
+            if (!$parent) {
+                $model = MessageReply::findOne($id);
+            } else {
+                $model = Message::findOne($id);
+            }
+
+            if ($model === null || $model->user_id !== Yii::$app->user->id) {
+                return;
+            }
+
+            if ($model->deleted_at === null) {
+                $model->deleted_at = time();
+            } else {
+                $model->deleted_at = null;
+            }
+
+            if ($model->save()) {
+                if (!$parent) {
+                    $render = $this->renderPartial('_reply', compact('model'));
+                    return ['data' => ['reply' => $render]];
+                } else {
+                    $wrapper = 0;
+                    $render = $this->renderPartial('_message', compact('model', 'wrapper'));
+                    return ['data' => ['message' => $render]];
+                }
+                
+            } else {
+                return ['data' => ['error' => $model->getErrors()]];
+            }
+        }
     }
 
     /**
@@ -91,11 +186,11 @@ class PostController extends AppController
 
             // $survey = json_encode($survey);
         }
-
+        $wrapper = 1;
 
         $this->setMeta(empty($model->title) ? $model->name : $model->title, empty($model->description) ? $model->preview : $model->description, $model->keywords, $socialImage);
 
-        return $this->render('show', compact('model', 'survey', 'parent', 'answer'));
+        return $this->render('show', compact('model', 'survey', 'parent', 'answer', 'wrapper'));
     }
 
     /**
@@ -108,7 +203,7 @@ class PostController extends AppController
     protected function findModel($id)
     {
         $model = Post::find()
-            ->with('image')
+            ->with('image', 'messages')
             ->where(['id' => $id])
             ->andWhere(['status' => 1])
             ->one();

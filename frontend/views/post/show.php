@@ -85,5 +85,33 @@ use yii\helpers\Html;
         </div>
     </div>
 
+</div>
+<div class="messages" data-post="<?= $model->id; ?>">
+    <p>сообщения</p>
+    <?php foreach ($model->messages as $message): ?>
+        <div class="messages-wrapper">
+            <?= $this->render('_messages', ['model' => $message, 'wrapper' => $wrapper]); ?>
+            <?php foreach ($message->messageReplies as $reply): ?>
+                <div class="messages-inner">
+                    <?= $this->render('_reply', ['model' => $reply]); ?>
+                </div>
+            <?php endforeach; ?>
+            <div class="messages-form hide">
+                <p class="messages-reply"></p>
+                <div class="messages-textarea" contentEditable></div>
+                <div class="messages-btn">
+                    <svg width="36" height="36"><use xlink:href="/images/icons.svg#button-arrow"></use></svg>
+                </div>
+                <p class="messages-errors"></p>
+            </div>
+        </div>
+    <?php endforeach; ?>
 
+    <div class="messages-form msg">
+        <div class="messages-textarea msg" contentEditable></div>
+        <div class="messages-btn">
+            <svg width="36" height="36"><use xlink:href="/images/icons.svg#button-arrow"></use></svg>
+        </div>
+        <p class="messages-errors"></p>
+    </div>
 </div>

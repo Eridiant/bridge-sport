@@ -4,6 +4,7 @@ namespace frontend\models;
 
 use Yii;
 
+
 /**
  * This is the model class for table "{{%post}}".
  *
@@ -33,10 +34,12 @@ use Yii;
  * @property int|null $deleted_at
  * @property int $comments_status
  * @property int|null $survey_id
+ * @property int|null $comments_hide
  *
  * @property Category $category
  * @property Iframe $iframe
  * @property Image $image
+ * @property Message[] $messages
  * @property PostTaxonomy[] $postTaxonomies
  * @property Survey $survey
  * @property Taxonomy[] $taxonomies
@@ -59,13 +62,13 @@ class Post extends \yii\db\ActiveRecord
     {
         return [
             [['category_id', 'name', 'slug', 'created_at'], 'required'],
-            [['category_id', 'parent_id', 'thread_id', 'image_id', 'image_header', 'iframe_id', 'youtube_id', 'indexing', 'status', 'author_id', 'published_at', 'created_at', 'updated_at', 'deleted_at', 'comments_status', 'survey_id'], 'integer'],
+            [['category_id', 'parent_id', 'thread_id', 'image_id', 'image_header', 'iframe_id', 'youtube_id', 'indexing', 'status', 'author_id', 'published_at', 'created_at', 'updated_at', 'deleted_at', 'comments_status', 'comments_hide', 'survey_id'], 'integer'],
             [['url', 'preview', 'text', 'description'], 'string'],
             [['name', 'slug', 'dial', 'title', 'keywords'], 'string', 'max' => 255],
-            [['category_id'], 'exist', 'skipOnError' => true, 'targetClass' => Category::className(), 'targetAttribute' => ['category_id' => 'id']],
-            [['iframe_id'], 'exist', 'skipOnError' => true, 'targetClass' => Iframe::className(), 'targetAttribute' => ['iframe_id' => 'id']],
-            [['image_id'], 'exist', 'skipOnError' => true, 'targetClass' => Image::className(), 'targetAttribute' => ['image_id' => 'id']],
-            [['youtube_id'], 'exist', 'skipOnError' => true, 'targetClass' => Youtube::className(), 'targetAttribute' => ['youtube_id' => 'id']],
+            [['category_id'], 'exist', 'skipOnError' => true, 'targetClass' => Category::class, 'targetAttribute' => ['category_id' => 'id']],
+            [['iframe_id'], 'exist', 'skipOnError' => true, 'targetClass' => Iframe::class, 'targetAttribute' => ['iframe_id' => 'id']],
+            [['image_id'], 'exist', 'skipOnError' => true, 'targetClass' => Image::class, 'targetAttribute' => ['image_id' => 'id']],
+            [['youtube_id'], 'exist', 'skipOnError' => true, 'targetClass' => Youtube::class, 'targetAttribute' => ['youtube_id' => 'id']],
         ];
     }
 
@@ -75,6 +78,7 @@ class Post extends \yii\db\ActiveRecord
     public function attributeLabels()
     {
         return [
+
             'id' => 'ID',
             'category_id' => 'Category ID',
             'parent_id' => 'Parent ID',
@@ -99,6 +103,9 @@ class Post extends \yii\db\ActiveRecord
             'created_at' => 'Created At',
             'updated_at' => 'Updated At',
             'deleted_at' => 'Deleted At',
+            'comments_status' => 'Comments Status',
+            'survey_id' => 'Survey ID',
+            'comments_hide' => 'Comments Hide',
         ];
     }
 
@@ -109,7 +116,17 @@ class Post extends \yii\db\ActiveRecord
      */
     public function getCategory()
     {
-        return $this->hasOne(Category::className(), ['id' => 'category_id']);
+        return $this->hasOne(Category::class, ['id' => 'category_id']);
+    }
+
+    /**
+     * Gets query for [[Messages]].
+     *
+     * @return \yii\db\ActiveQuery
+     */
+    public function getMessages()
+    {
+        return $this->hasMany(Message::class, ['post_id' => 'id']);
     }
 
     /**
@@ -119,7 +136,7 @@ class Post extends \yii\db\ActiveRecord
      */
     public function getIframe()
     {
-        return $this->hasOne(Iframe::className(), ['id' => 'iframe_id']);
+        return $this->hasOne(Iframe::class, ['id' => 'iframe_id']);
     }
 
     /**
@@ -129,7 +146,7 @@ class Post extends \yii\db\ActiveRecord
      */
     public function getImage()
     {
-        return $this->hasOne(Image::className(), ['id' => 'image_id']);
+        return $this->hasOne(Image::class, ['id' => 'image_id']);
     }
 
     /**
@@ -149,7 +166,7 @@ class Post extends \yii\db\ActiveRecord
      */
     public function getPostTaxonomies()
     {
-        return $this->hasMany(PostTaxonomy::className(), ['post_id' => 'id']);
+        return $this->hasMany(PostTaxonomy::class, ['post_id' => 'id']);
     }
 
     /**
@@ -159,7 +176,7 @@ class Post extends \yii\db\ActiveRecord
      */
     public function getTaxonomies()
     {
-        return $this->hasMany(Taxonomy::className(), ['id' => 'taxonomy_id'])->viaTable('{{%post_taxonomy}}', ['post_id' => 'id']);
+        return $this->hasMany(Taxonomy::class, ['id' => 'taxonomy_id'])->viaTable('{{%post_taxonomy}}', ['post_id' => 'id']);
     }
 
     /**
@@ -169,6 +186,6 @@ class Post extends \yii\db\ActiveRecord
      */
     public function getYoutube()
     {
-        return $this->hasOne(Youtube::className(), ['id' => 'youtube_id']);
+        return $this->hasOne(Youtube::class, ['id' => 'youtube_id']);
     }
 }
