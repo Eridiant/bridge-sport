@@ -85,8 +85,7 @@ class PostController extends AppController
                     return ['data' => ['validate' => $model->errors]];
                 }
                 if ($model->save()) {
-                    $wrapper = 1;
-                    $render = $this->renderPartial('_message', compact('model', 'wrapper'));
+                    $render = $this->renderPartial('_xml', compact('model'));
                     return ['data' => ['message' => $render]];
                 } else {
                     return ['data' => ['error' => $model->getErrors()]];
@@ -132,8 +131,7 @@ class PostController extends AppController
                     $render = $this->renderPartial('_reply', compact('model'));
                     return ['data' => ['reply' => $render]];
                 } else {
-                    $wrapper = 0;
-                    $render = $this->renderPartial('_message', compact('model', 'wrapper'));
+                    $render = $this->renderPartial('_xml', compact('model'));
                     return ['data' => ['message' => $render]];
                 }
                 
@@ -196,11 +194,9 @@ class PostController extends AppController
 
             // $survey = json_encode($survey);
         }
-        $wrapper = 1;
-
         $this->setMeta(empty($model->title) ? $model->name : $model->title, empty($model->description) ? $model->preview : $model->description, $model->keywords, $socialImage);
 
-        return $this->render('show', compact('model', 'survey', 'parent', 'answer', 'wrapper'));
+        return $this->render('show', compact('model', 'survey', 'parent', 'answer'));
     }
 
     /**

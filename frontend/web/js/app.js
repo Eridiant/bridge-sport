@@ -76,6 +76,7 @@ document.addEventListener('DOMContentLoaded', () => {
                     hide.classList.add('hide');
                     hide.querySelector('.messages-reply').innerHTML = '';
                 }
+                console.log(wrapper.querySelector('.messages-reply'), target.closest('.messages-answer').dataset.user);
                 wrapper.querySelector('.messages-reply').innerHTML = 'ответить ' + target.closest('.messages-answer').dataset.user + '\'у';
                 form.classList.remove('hide');
                 form.dataset.answerUser = target.closest('.messages-answer').dataset.userId;
