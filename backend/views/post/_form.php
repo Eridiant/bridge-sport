@@ -101,6 +101,12 @@ use backend\models\Taxonomy;
                     // '2'=>'Доступ ограничен',
             ]) ?>
 
+            <?= $form->field($model, 'comments_hide')->dropDownList([
+                    '0'=>'Доступны',
+                    '1'=>'Скрыты',
+                    // '2'=>'Доступ ограничен',
+            ]) ?>
+
         </div>
 
         <hr>

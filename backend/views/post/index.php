@@ -94,6 +94,9 @@ $this->params['breadcrumbs'][] = $this->title;
             //'updated_at',
             //'deleted_at',
             //'parent_id',
+            //'comments_status',
+            //'survey_id',
+            //'comments_hide',
             [
                 'class' => ActionColumn::class,
                 'urlCreator' => function ($action, \backend\models\Post $model, $key, $index, $column) {

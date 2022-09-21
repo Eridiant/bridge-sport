@@ -33,6 +33,7 @@ $this->params['breadcrumbs'][] = $this->title;
             'post_id',
             'user_id',
             'message:ntext',
+            'history:ntext',
             'show',
             'created_at',
             'updated_at',

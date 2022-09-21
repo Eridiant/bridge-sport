@@ -45,7 +45,15 @@ use yii\helpers\Url;
                 'items' => [
                     ['label' => 'Menu Yii2', 'options' => ['class' => 'header']],
                     ['label' => 'Главная', 'icon' => 'home', 'url' => ['/site/index']],
-                    ['label' => 'Юзера', 'icon' => 'home', 'url' => ['/user/index']],
+                    [
+                        'label' => 'Пользователи',
+                        'icon' => 'home',
+                        'url' => ['#'],
+                        'items' => [
+                            ['label' => 'Пользователи', 'icon' => 'home', 'url' => ['/user/index']],
+                            ['label' => 'Сообщения', 'icon' => 'home', 'url' => ['/message/index']],
+                        ],
+                    ],
                     [
                         'label' => 'Посты',
                         'icon' => 'share',

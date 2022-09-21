@@ -9,9 +9,11 @@ use Yii;
  *
  * @property int $id
  * @property int $message_id
- * @property int $answer_id
+ * @property int|null $answer_id
+ * @property int|null $answer_user
  * @property int $user_id
  * @property string|null $message
+ * @property string|null $history
  * @property int|null $show
  * @property int $created_at
  * @property int|null $updated_at
@@ -36,11 +38,11 @@ class MessageReply extends \yii\db\ActiveRecord
     public function rules()
     {
         return [
-            [['message_id', 'answer_id', 'user_id', 'created_at'], 'required'],
-            [['message_id', 'answer_id', 'user_id', 'show', 'created_at', 'updated_at', 'deleted_at'], 'integer'],
-            [['message'], 'string'],
-            [['message_id'], 'exist', 'skipOnError' => true, 'targetClass' => Message::className(), 'targetAttribute' => ['message_id' => 'id']],
-            [['user_id'], 'exist', 'skipOnError' => true, 'targetClass' => User::className(), 'targetAttribute' => ['user_id' => 'id']],
+            [['message_id', 'user_id', 'created_at'], 'required'],
+            [['message_id', 'answer_id', 'answer_user', 'user_id', 'show', 'created_at', 'updated_at', 'deleted_at'], 'integer'],
+            [['message', 'history'], 'string'],
+            [['message_id'], 'exist', 'skipOnError' => true, 'targetClass' => Message::class, 'targetAttribute' => ['message_id' => 'id']],
+            [['user_id'], 'exist', 'skipOnError' => true, 'targetClass' => User::class, 'targetAttribute' => ['user_id' => 'id']],
         ];
     }
 
@@ -53,8 +55,10 @@ class MessageReply extends \yii\db\ActiveRecord
             'id' => 'ID',
             'message_id' => 'Message ID',
             'answer_id' => 'Answer ID',
+            'answer_user' => 'Answer User',
             'user_id' => 'User ID',
             'message' => 'Message',
+            'history' => 'History',
             'show' => 'Show',
             'created_at' => 'Created At',
             'updated_at' => 'Updated At',
@@ -69,7 +73,7 @@ class MessageReply extends \yii\db\ActiveRecord
      */
     public function getMessage0()
     {
-        return $this->hasOne(Message::className(), ['id' => 'message_id']);
+        return $this->hasOne(Message::class, ['id' => 'message_id']);
     }
 
     /**
@@ -79,6 +83,6 @@ class MessageReply extends \yii\db\ActiveRecord
      */
     public function getUser()
     {
-        return $this->hasOne(User::className(), ['id' => 'user_id']);
+        return $this->hasOne(User::class, ['id' => 'user_id']);
     }
 }

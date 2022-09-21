@@ -84,6 +84,7 @@ use yii\helpers\Html;
         </div>
     </div>
 </div>
-
-<?= $this->render('_discussion', ['model' => $model]); ?>
+<?php if (!$model->comments_hide): ?>
+    <?= $this->render('_discussion', ['model' => $model]); ?>
+<?php endif; ?>
 

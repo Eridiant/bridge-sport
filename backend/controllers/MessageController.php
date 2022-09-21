@@ -12,25 +12,25 @@ use yii\filters\VerbFilter;
 /**
  * MessageController implements the CRUD actions for Message model.
  */
-class MessageController extends Controller
+class MessageController extends AppController
 {
     /**
      * @inheritDoc
      */
-    public function behaviors()
-    {
-        return array_merge(
-            parent::behaviors(),
-            [
-                'verbs' => [
-                    'class' => VerbFilter::className(),
-                    'actions' => [
-                        'delete' => ['POST'],
-                    ],
-                ],
-            ]
-        );
-    }
+    // public function behaviors()
+    // {
+    //     return array_merge(
+    //         parent::behaviors(),
+    //         [
+    //             'verbs' => [
+    //                 'class' => VerbFilter::className(),
+    //                 'actions' => [
+    //                     'delete' => ['POST'],
+    //                 ],
+    //             ],
+    //         ]
+    //     );
+    // }
 
     /**
      * Lists all Message models.
@@ -39,8 +39,12 @@ class MessageController extends Controller
      */
     public function actionIndex()
     {
+        $query = Message::find()->select(['user_id', 'post_id', 'message', 'history', 'show', 'created_at', 'deleted_at']);
+        $query2 = MessageReply::find()->select(['user_id', 'answer_id as `post_id`', 'message', 'history', 'show', 'created_at', 'deleted_at']);
+        $query->union($query2);
         $dataProvider = new ActiveDataProvider([
-            'query' => Message::find(),
+            // 'query' => Message::find(),
+            'query' => $query,
             /*
             'pagination' => [
                 'pageSize' => 50
@@ -52,6 +56,20 @@ class MessageController extends Controller
             ],
             */
         ]);
+        // $dataProvider2 = new ActiveDataProvider([
+        //     'query' => MessageReply::find(),
+            /*
+            'pagination' => [
+                'pageSize' => 50
+            ],
+            'sort' => [
+                'defaultOrder' => [
+                    'id' => SORT_DESC,
+                ]
+            ],
+            */
+        // ]);
+        // $dataProvider = array_merge($dataProvider1->getModels(), $dataProvider2->getModels());
 
         return $this->render('index', [
             'dataProvider' => $dataProvider,

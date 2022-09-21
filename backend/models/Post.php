@@ -37,10 +37,12 @@ use yii\web\UploadedFile;
  * @property int|null $deleted_at
  * @property int $comments_status
  * @property int|null $survey_id
+ * @property int|null $comments_hide
  *
  * @property Category $category
  * @property Iframe $iframe
  * @property Image $image
+ * @property Message[] $messages
  * @property PostTaxonomy[] $postTaxonomies
  * @property Survey $survey
  * @property Taxonomy[] $taxonomies
@@ -63,7 +65,7 @@ class Post extends \yii\db\ActiveRecord
     {
         return [
             [['category_id', 'name', 'slug'], 'required'],
-            [['category_id', 'parent_id', 'thread_id', 'image_id', 'iframe_id', 'youtube_id', 'image_header', 'indexing', 'status', 'author_id', 'published_at', 'created_at', 'updated_at', 'deleted_at', 'comments_status', 'survey_id'], 'integer'],
+            [['category_id', 'parent_id', 'thread_id', 'image_id', 'iframe_id', 'youtube_id', 'image_header', 'indexing', 'status', 'author_id', 'published_at', 'created_at', 'updated_at', 'deleted_at', 'comments_status', 'survey_id', 'comments_hide'], 'integer'],
             [['url', 'preview', 'text', 'description'], 'string'],
             [['taxonomiesArray', 'alt', 'img', 'youtube', 'youtubeFields', 'hide', 'onlyImg', 'frame', 'previews', 'iframe', 'iframeAlt', 'youtubeAlt', 'iframeHide'], 'safe'],
             [['name', 'slug', 'dial', 'title', 'keywords'], 'string', 'max' => 255],
@@ -118,9 +120,9 @@ class Post extends \yii\db\ActiveRecord
             'created_at' => 'Created At',
             'updated_at' => 'Updated At',
             'deleted_at' => 'Deleted At',
-            'youtubeFields' => 'Ссылка на ютуб',
             'comments_status' => 'Comments Status',
             'survey_id' => 'Survey ID',
+            'comments_hide' => 'Comments Hide',
         ];
     }
 

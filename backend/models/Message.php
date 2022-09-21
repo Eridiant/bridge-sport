@@ -11,6 +11,7 @@ use Yii;
  * @property int $post_id
  * @property int $user_id
  * @property string|null $message
+ * @property string|null $history
  * @property int|null $show
  * @property int $created_at
  * @property int|null $updated_at
@@ -38,9 +39,9 @@ class Message extends \yii\db\ActiveRecord
         return [
             [['post_id', 'user_id', 'created_at'], 'required'],
             [['post_id', 'user_id', 'show', 'created_at', 'updated_at', 'deleted_at'], 'integer'],
-            [['message'], 'string'],
-            [['post_id'], 'exist', 'skipOnError' => true, 'targetClass' => Post::className(), 'targetAttribute' => ['post_id' => 'id']],
-            [['user_id'], 'exist', 'skipOnError' => true, 'targetClass' => User::className(), 'targetAttribute' => ['user_id' => 'id']],
+            [['message', 'history'], 'string'],
+            [['post_id'], 'exist', 'skipOnError' => true, 'targetClass' => Post::class, 'targetAttribute' => ['post_id' => 'id']],
+            [['user_id'], 'exist', 'skipOnError' => true, 'targetClass' => User::class, 'targetAttribute' => ['user_id' => 'id']],
         ];
     }
 
@@ -54,6 +55,7 @@ class Message extends \yii\db\ActiveRecord
             'post_id' => 'Post ID',
             'user_id' => 'User ID',
             'message' => 'Message',
+            'history' => 'History',
             'show' => 'Show',
             'created_at' => 'Created At',
             'updated_at' => 'Updated At',
@@ -68,7 +70,7 @@ class Message extends \yii\db\ActiveRecord
      */
     public function getMessageReplies()
     {
-        return $this->hasMany(MessageReply::className(), ['message_id' => 'id']);
+        return $this->hasMany(MessageReply::class, ['message_id' => 'id']);
     }
 
     /**
@@ -78,7 +80,7 @@ class Message extends \yii\db\ActiveRecord
      */
     public function getPost()
     {
-        return $this->hasOne(Post::className(), ['id' => 'post_id']);
+        return $this->hasOne(Post::class, ['id' => 'post_id']);
     }
 
     /**
@@ -88,6 +90,6 @@ class Message extends \yii\db\ActiveRecord
      */
     public function getUser()
     {
-        return $this->hasOne(User::className(), ['id' => 'user_id']);
+        return $this->hasOne(User::class, ['id' => 'user_id']);
     }
 }

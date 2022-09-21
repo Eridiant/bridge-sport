@@ -4,6 +4,8 @@ namespace backend\controllers;
 
 use Yii;
 use common\models\User;
+use backend\models\Message;
+use backend\models\MessageReply;
 use yii\data\ActiveDataProvider;
 use yii\web\Controller;
 use yii\web\NotFoundHttpException;
