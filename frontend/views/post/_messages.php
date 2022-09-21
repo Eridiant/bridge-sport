@@ -1,4 +1,8 @@
 <?php
+
+if (!$model->show && $model->user_id !== Yii::$app->user->id) {
+    return;
+}
 if ($model->deleted_at) {
     if (count($model->messageReplies)) {
         ?>
@@ -11,7 +15,7 @@ if ($model->deleted_at) {
                 </div>
                 <div class="messages-footer">
                     <div class="messages-answer message" data-message-id="<?= $model->id; ?>" data-user="<?= $model->user->username; ?>" data-user-id="<?= $model->user->id; ?>" data-parent-id="<?= $model->id; ?>">
-                        <?php if ($model->user->id === Yii::$app->user->id): ?>
+                        <?php if ($model->user->id === Yii::$app->user->id && Yii::$app->user->can('canMessage')): ?>
                             <a href="#" data-edit="0">Восстановить</a>
                         <?php endif; ?>
                     </div>
@@ -34,10 +38,12 @@ if ($model->deleted_at) {
                 <div class="messages-footer">
                     <span><?= Yii::$app->formatter->asDate($model->created_at, 'php:Y-m-d H:m'); ?></span>
                     <div class="messages-answer message" data-message-id="<?= $model->id; ?>" data-user="<?= $model->user->username; ?>" data-user-id="<?= $model->user->id; ?>" data-parent-id="<?= $model->id; ?>">
-                        <a href="#">Ответить</a>
-                        <?php if ($model->user->id === Yii::$app->user->id): ?>
-                            <a href="#" data-edit="1">Редактировать</a>
-                            <a href="#" data-edit="0">Удалить</a>
+                        <?php if (Yii::$app->user->can('canMessage')): ?>
+                            <a href="#">Ответить</a>
+                            <?php if ($model->user->id === Yii::$app->user->id): ?>
+                                <!-- <a href="#" data-edit="1">Редактировать</a> -->
+                                <a href="#" data-edit="0">Удалить</a>
+                            <?php endif; ?>
                         <?php endif; ?>
                     </div>
                 </div>

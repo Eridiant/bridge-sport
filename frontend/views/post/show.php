@@ -5,17 +5,16 @@ use yii\helpers\Html;
 /* @var $this yii\web\View */
 /* @var $model frontend\models\Post */
 // var_dump('<pre>');
-// var_dump($model->youtube->image);
+// var_dump($model);
 // var_dump('</pre>');
 // die;
 
 ?>
 
 <script>
-    var srv = <?= json_encode($survey); ?>; // Don't forget the extra semicolon! , JSON_FORCE_OBJECT
-    var prnt = <?= json_encode($parent); ?>; // Don't forget the extra semicolon! , JSON_FORCE_OBJECT
-    var nswr = <?= json_encode($answer); ?>; // Don't forget the extra semicolon! , JSON_FORCE_OBJECT
-    
+    var srv = <?= json_encode($survey); ?>;
+    var prnt = <?= json_encode($parent); ?>;
+    var nswr = <?= json_encode($answer); ?>;
 </script>
 
 <div class="post-view">
@@ -96,22 +95,25 @@ use yii\helpers\Html;
                     <?= $this->render('_reply', ['model' => $reply]); ?>
                 </div>
             <?php endforeach; ?>
-            <div class="messages-form hide">
-                <p class="messages-reply"></p>
-                <div class="messages-textarea" contentEditable></div>
-                <div class="messages-btn">
-                    <svg width="36" height="36"><use xlink:href="/images/icons.svg#button-arrow"></use></svg>
+            <?php if (Yii::$app->user->can('canMessage')): ?>
+                <div class="messages-form hide">
+                    <p class="messages-reply"></p>
+                    <div class="messages-textarea" contentEditable></div>
+                    <div class="messages-btn">
+                        <svg width="36" height="36"><use xlink:href="/images/icons.svg#button-arrow"></use></svg>
+                    </div>
+                    <p class="messages-errors"></p>
                 </div>
-                <p class="messages-errors"></p>
-            </div>
+            <?php endif; ?>
         </div>
     <?php endforeach; ?>
-
-    <div class="messages-form msg">
-        <div class="messages-textarea msg" contentEditable></div>
-        <div class="messages-btn">
-            <svg width="36" height="36"><use xlink:href="/images/icons.svg#button-arrow"></use></svg>
+    <?php if (Yii::$app->user->can('canMessage')): ?>
+        <div class="messages-form msg">
+            <div class="messages-textarea msg" contentEditable></div>
+            <div class="messages-btn">
+                <svg width="36" height="36"><use xlink:href="/images/icons.svg#button-arrow"></use></svg>
+            </div>
+            <p class="messages-errors"></p>
         </div>
-        <p class="messages-errors"></p>
-    </div>
+    <?php endif; ?>
 </div>

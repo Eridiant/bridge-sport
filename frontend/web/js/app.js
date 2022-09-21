@@ -18,6 +18,7 @@ document.addEventListener('DOMContentLoaded', () => {
         }
     })
 
+    // message
     let message = document.querySelector('.messages');
     if (message) {
         message.addEventListener('click', (e) => {
@@ -79,7 +80,7 @@ document.addEventListener('DOMContentLoaded', () => {
                 form.classList.remove('hide');
                 form.dataset.answerUser = target.closest('.messages-answer').dataset.userId;
                 form.dataset.messageId = target?.closest('.messages-answer:not(.message)')?.dataset?.messageId;
-                form.scrollIntoView(false);
+                form.scrollIntoView({block: "nearest", behavior: "smooth"});
                 wrapper.querySelector('.messages-textarea').focus();
                 // form.dataset.messageId = message_id;
             }

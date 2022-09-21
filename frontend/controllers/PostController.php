@@ -43,6 +43,10 @@ class PostController extends AppController
 
     public function actionMessage()
     {
+        if (!Yii::$app->user->can('canMessage')) {
+            return false;
+        }
+
         $request = Yii::$app->request;
 
         if ($request->isPost) {
@@ -60,6 +64,7 @@ class PostController extends AppController
                 $model->user_id = Yii::$app->user->id;
                 
                 $model->answer_id = $answer_id;
+                $model->show = (int) Yii::$app->user->can('user');
                 $model->message = $message;
                 if (!$model->validate()) {
                     return ['data' => ['validate' => $model->errors]];
@@ -75,6 +80,7 @@ class PostController extends AppController
                 $model->user_id = Yii::$app->user->id;
                 $model->message = $message;
                 $model->post_id = $post;
+                $model->show = (int) Yii::$app->user->can('user');
                 if (!$model->validate()) {
                     return ['data' => ['validate' => $model->errors]];
                 }
@@ -91,6 +97,10 @@ class PostController extends AppController
 
     public function actionDeleteMessage()
     {
+        if (!Yii::$app->user->can('canMessage')) {
+            return false;
+        }
+
         $request = Yii::$app->request;
 
         if ($request->isPost) {
@@ -203,9 +213,13 @@ class PostController extends AppController
     protected function findModel($id)
     {
         $model = Post::find()
-            ->with('image', 'messages')
-            ->where(['id' => $id])
+            // ->with('image', 'messages', 'messageReply', 'replies')
+            // ->with('image', 'messages')
+            // ->with(['image'])
+            // ->joinWith(['messages'])
+            ->where(['{{%post}}.id' => $id])
             ->andWhere(['status' => 1])
+            // ->andWhere(['show' => 1])
             ->one();
         if ($model !== null) {
             return $model;

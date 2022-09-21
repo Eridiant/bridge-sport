@@ -76,7 +76,7 @@ return [
                 'post' => 'post/index',
                 'post/message' => 'post/message',
                 'post/delete-message' => 'post/delete-message',
-                'post/edit-message' => 'post/edit-message',
+                // 'post/edit-message' => 'post/edit-message',
                 // 'signup' => 'site/signup',
                 // 'login' => 'site/login',
                 'survey' => 'survey/index',

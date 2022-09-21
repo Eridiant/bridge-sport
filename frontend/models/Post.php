@@ -129,6 +129,19 @@ class Post extends \yii\db\ActiveRecord
         return $this->hasMany(Message::class, ['post_id' => 'id']);
     }
 
+    public function getReplies()
+    {
+        return $this->hasMany(Message::class, ['post_id' => 'id'])
+            ->viaTable(MessageReply::class, ['message_id' => 'id']);
+    }
+
+    public function getUsers()
+    {
+        return $this->hasMany(User::class, ['id' => 'user_id'])
+            ->viaTable('{{%message}}', ['post_id' => 'id']);
+        // $this->hasMany(Taxonomy::class, ['id' => 'taxonomy_id'])->viaTable('{{%post_taxonomy}}', ['post_id' => 'id']);
+    }
+
     /**
      * Gets query for [[Iframe]].
      *

@@ -22,9 +22,23 @@ return [
     'user' => [
         'type' => 1,
         'description' => 'Пользователь',
+        'children' => [
+            'applicant',
+        ],
     ],
     'guest' => [
         'type' => 1,
         'description' => 'Гость',
+    ],
+    'applicant' => [
+        'type' => 1,
+        'description' => 'Новый пользователь',
+        'children' => [
+            'canMessage',
+        ],
+    ],
+    'canMessage' => [
+        'type' => 2,
+        'description' => 'разрешить сообщения',
     ],
 ];

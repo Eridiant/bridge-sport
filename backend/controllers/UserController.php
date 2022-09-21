@@ -108,8 +108,30 @@ class UserController extends AppController
 
         // $userRole = Yii::$app->authManager->getRole('admin');
         // Yii::$app->authManager->assign($userRole, Yii::$app->user->getId());
-        var_dump(\Yii::$app->user->can('admin'));
+        // var_dump(\Yii::$app->user->can('admin'));
         
+        // $role = Yii::$app->authManager->createRole('applicant');
+        // $role->description = 'Новый пользователь';
+        // Yii::$app->authManager->add($role);
+
+        // $role = Yii::$app->authManager->getRole('admin');
+        // $permit = Yii::$app->authManager->getRole('student');
+        // Yii::$app->authManager->addChild($role, $permit);
+
+        // $permit = Yii::$app->authManager->createPermission('canMessage');
+        // $permit->description = 'разрешить сообщения';
+        // Yii::$app->authManager->add($permit);
+        // $role = Yii::$app->authManager->getRole('applicant');
+        // $permit = Yii::$app->authManager->getPermission('canMessage');
+        // Yii::$app->authManager->addChild($role, $permit);
+
+
+        // $permit = Yii::$app->authManager->createPermission('canMessageShow');
+        // $permit->description = 'сообщения без модерации';
+        // Yii::$app->authManager->add($permit);
+        // $role = Yii::$app->authManager->getRole('user');
+        // $permit = Yii::$app->authManager->getPermission('canMessageShow');
+        // Yii::$app->authManager->addChild($role, $permit);
     }
 
     /**
