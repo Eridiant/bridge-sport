@@ -83,6 +83,7 @@ return [
                 'survey/quiz' => 'survey/quiz',
                 'survey/quizz' => 'survey/quizz',
                 'survey/<slug:[\w-]+>' => 'survey/view',
+                'syst/<slug:[\w-]+>' => 'syst/view',
                 // 'survey/<slug:[\w-]+>' => 'survey/view',
                 // '<url:\w+>' => 'page/index',
                 [

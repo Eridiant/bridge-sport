@@ -61,6 +61,19 @@ return [
                 '<controller:\w+>/<action:\w+>' => '<controller>/<action>',
             ],
         ],
+        'urlManagerFrontend' => [
+            'class' => 'yii\web\UrlManager',
+            'baseUrl' => '',
+            'enablePrettyUrl' => true,
+            'enableStrictParsing' => true,
+            'showScriptName' => false,
+            'rules' => [
+                // ['class' => 'frontend\components\MyClassUrlRule'],
+                '' => 'site/index',
+                'syst/<slug:[\w-]+>' => 'syst/view',
+                '<controller:\w+>/<action:\w+>/' => '<controller>/<action>',
+            ],
+        ],
     ],
     'params' => $params,
 ];

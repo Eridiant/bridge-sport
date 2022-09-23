@@ -28,7 +28,7 @@ use yii\helpers\Url;
         </div>
 
         <!-- search form -->
-        <form action="#" method="get" class="sidebar-form">
+        <!-- <form action="#" method="get" class="sidebar-form">
             <div class="input-group">
                 <input type="text" name="q" class="form-control" placeholder="Search..."/>
                 <span class="input-group-btn">
@@ -36,7 +36,7 @@ use yii\helpers\Url;
                     </button>
                 </span>
             </div>
-        </form>
+        </form> -->
         <!-- /.search form -->
 
         <?= dmstr\widgets\Menu::widget(
@@ -75,6 +75,7 @@ use yii\helpers\Url;
                             ['label' => 'Ответ', 'icon' => 'home', 'url' => ['/answer/index']],
                         ],
                     ],
+                    ['label' => 'Системы tmp', 'icon' => 'dashboard', 'url' => ['/syst/index']],
                     ['label' => 'Обновления', 'icon' => 'dashboard', 'url' => ['/migrate/index']],
                     ['label' => 'Login', 'url' => ['site/login'], 'visible' => Yii::$app->user->isGuest],
                     [
