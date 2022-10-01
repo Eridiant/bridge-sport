@@ -2,6 +2,7 @@
 
 namespace backend\controllers;
 
+use Yii;
 use backend\models\Message;
 use backend\models\MessageReply;
 use yii\data\ActiveDataProvider;
@@ -10,7 +11,7 @@ use yii\web\NotFoundHttpException;
 use yii\filters\VerbFilter;
 
 /**
- * MessageController implements the CRUD actions for Message model.
+ * MessageController implements the CRUD actions for Message model. 
  */
 class MessageController extends AppController
 {
@@ -39,9 +40,14 @@ class MessageController extends AppController
      */
     public function actionIndex()
     {
-        $query = Message::find()->select(['user_id', 'post_id', 'message', 'history', 'show', 'created_at', 'deleted_at']);
-        $query2 = MessageReply::find()->select(['user_id', 'answer_id as `post_id`', 'message', 'history', 'show', 'created_at', 'deleted_at']);
+        $query = Message::find()->select(['id', 'user_id', 'post_id', 'message', 'history', 'show', 'created_at', 'deleted_at', 'message_id'])->where(['show' => 0]);
+        
+        $query2 = MessageReply::find()->select(['id', 'user_id', 'answer_id as `post_id`', 'message', 'history', 'show', 'created_at', 'deleted_at', 'message_id'])->where(['show' => 0]);
         $query->union($query2);
+        // var_dump('<pre>');
+        // var_dump($query->all());
+        // var_dump('</pre>');
+        // die;
         $dataProvider = new ActiveDataProvider([
             // 'query' => Message::find(),
             'query' => $query,
@@ -141,6 +147,62 @@ class MessageController extends AppController
     public function actionDelete($id)
     {
         $this->findModel($id)->delete();
+
+        return $this->redirect(['index']);
+    }
+
+    public function actionShow($id)
+    {
+        $model = $this->findModel($id);
+        $model->show = 1;
+        if ($model->save()) {
+            return $this->redirect(['index']);
+        }
+    }
+
+    public function actionShowAll($id)
+    {
+        $params = [':user_id' => $id];
+        Yii::$app->db->transaction(function($db) {
+            $db->createCommand()
+                ->update('{{%message}}', ['show' => 1], 'user_id = :user_id')
+                ->bindValues($params)
+                ->execute();
+            $db->createCommand()
+                ->update('{{%message_reply}}', ['show' => 1], 'user_id = :user_id')
+                ->bindValues($params)
+                ->execute();
+        });
+        
+
+        
+        return $this->redirect(['index']);
+    }
+
+    public function actionDeleteAll($id)
+    {
+        $params = [':user_id' => $id];
+        $id = (int) $id;
+
+        $db = Yii::$app->db;
+        $transaction = $db->beginTransaction();
+
+        try {
+            $db->createCommand()
+                ->delete('{{%message}}', ['show' => 0, 'user_id' => $id])
+                // ->bindValues($params)
+                ->execute();
+            $db->createCommand()
+                ->delete('{{%message_reply}}', ['show' => 0, 'user_id' => $id])
+                // ->bindValues($params)
+                ->execute();
+            $transaction->commit();
+        } catch(\Exception $e) {
+            $transaction->rollBack();
+            throw $e;
+        } catch(\Throwable $e) {
+            $transaction->rollBack();
+        }
 
         return $this->redirect(['index']);
     }

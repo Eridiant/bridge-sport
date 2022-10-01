@@ -19,6 +19,7 @@ class m220911_134559_create_message_table extends Migration
             'id' => $this->primaryKey(),
             'post_id' => $this->integer()->notNull(),
             'user_id' => $this->integer()->notNull(),
+            'message_id' => $this->tinyInteger(),
             'message' => $this->text(),
             'history' => $this->text(),
             'show' => $this->tinyInteger(),

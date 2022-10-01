@@ -97,7 +97,7 @@ class PostController extends AppController
     public function actionDeleteMessage()
     {
         if (!Yii::$app->user->can('canMessage')) {
-            return false;
+            return ['data' => ['error' => 'access is denied']];
         }
 
         $request = Yii::$app->request;
@@ -117,7 +117,7 @@ class PostController extends AppController
             }
 
             if ($model === null || $model->user_id !== Yii::$app->user->id) {
-                return;
+                return ['data' => ['error' => 'access is denied | model == null']];
             }
 
             if ($model->deleted_at === null) {

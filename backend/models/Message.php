@@ -38,7 +38,7 @@ class Message extends \yii\db\ActiveRecord
     {
         return [
             [['post_id', 'user_id', 'created_at'], 'required'],
-            [['post_id', 'user_id', 'show', 'created_at', 'updated_at', 'deleted_at'], 'integer'],
+            [['post_id', 'user_id', 'show', 'created_at', 'updated_at', 'deleted_at', 'message_id'], 'integer'],
             [['message', 'history'], 'string'],
             [['post_id'], 'exist', 'skipOnError' => true, 'targetClass' => Post::class, 'targetAttribute' => ['post_id' => 'id']],
             [['user_id'], 'exist', 'skipOnError' => true, 'targetClass' => User::class, 'targetAttribute' => ['user_id' => 'id']],

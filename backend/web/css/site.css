@@ -125,7 +125,62 @@ iframe {
 .limit {
     text-overflow: ellipsis;
     white-space: nowrap;
-    overflow:hidden;
+    overflow: hidden;
+    word-break: break-word;
+}
+.show-limit {
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    overflow: hidden;
+    transition: .4s;
+}
+.show-limit br {
+    display: none;
+}
+.show-limit:hover {
+    text-overflow: unset;
+    word-break: break-all;
+    white-space: normal;
+}
+.tooltips {
+    position: relative;
+    overflow: visible;
+}
+.m-40 {
+    max-width: 40%;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    overflow-y: hidden;
+    word-break: break-word;
+}
+.m-25 {
+    max-width: 25%;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    overflow-y: hidden;
+    word-break: break-word;
+}
+.tooltips::after { 
+    content: attr(data-tooltip); 
+    position: absolute;
+    display: flex;
+    flex-basis: 40%;
+    max-width: 100%;
+    white-space: pre;
+    word-break: break-word;
+    word-break: break-all;
+    bottom: -10px;
+    left: 0;
+    opacity: 0;
+    transition: .3s;
+    padding: 0 5px;
+    border: 1px solid #2c79bd;
+    border-radius: 3px;
+    background-color: #fff;
+}
+.tooltips:hover::after { 
+    content: attr(data-tooltip);
+    opacity: 1;
 }
 .red {
     color: #a81a1a;

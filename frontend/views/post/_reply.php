@@ -3,7 +3,7 @@ if (!$model->show && $model->user_id !== Yii::$app->user->id) {
     return;
 }
 if ($model->deleted_at) {
-    if (count($model->answers)) { ?>
+    if (count($model->answers) || Yii::$app->user->id === $model->user_id) { ?>
                 <p class="messages-user">
                     <?= $model->user->username; ?>
                 </p>

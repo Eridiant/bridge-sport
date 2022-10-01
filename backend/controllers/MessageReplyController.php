@@ -2,44 +2,44 @@
 
 namespace backend\controllers;
 
-use backend\models\Syst;
+use backend\models\MessageReply;
 use yii\data\ActiveDataProvider;
 use yii\web\Controller;
 use yii\web\NotFoundHttpException;
 use yii\filters\VerbFilter;
 
 /**
- * SystController implements the CRUD actions for Syst model.
+ * MessageReplyController implements the CRUD actions for MessageReply model.
  */
-class SystController extends AppController
+class MessageReplyController extends Controller
 {
     /**
      * @inheritDoc
      */
-    public function behaviors()
-    {
-        return array_merge(
-            parent::behaviors(),
-            [
-                'verbs' => [
-                    'class' => VerbFilter::class,
-                    'actions' => [
-                        'delete' => ['POST'],
-                    ],
-                ],
-            ]
-        );
-    }
+    // public function behaviors()
+    // {
+    //     return array_merge(
+    //         parent::behaviors(),
+    //         [
+    //             'verbs' => [
+    //                 'class' => VerbFilter::className(),
+    //                 'actions' => [
+    //                     'delete' => ['POST'],
+    //                 ],
+    //             ],
+    //         ]
+    //     );
+    // }
 
     /**
-     * Lists all Syst models.
+     * Lists all MessageReply models.
      *
      * @return string
      */
     public function actionIndex()
     {
         $dataProvider = new ActiveDataProvider([
-            'query' => Syst::find(),
+            'query' => MessageReply::find(),
             /*
             'pagination' => [
                 'pageSize' => 50
@@ -58,7 +58,7 @@ class SystController extends AppController
     }
 
     /**
-     * Displays a single Syst model.
+     * Displays a single MessageReply model.
      * @param int $id ID
      * @return string
      * @throws NotFoundHttpException if the model cannot be found
@@ -71,13 +71,13 @@ class SystController extends AppController
     }
 
     /**
-     * Creates a new Syst model.
+     * Creates a new MessageReply model.
      * If creation is successful, the browser will be redirected to the 'view' page.
      * @return string|\yii\web\Response
      */
     public function actionCreate()
     {
-        $model = new Syst();
+        $model = new MessageReply();
 
         if ($this->request->isPost) {
             if ($model->load($this->request->post()) && $model->save()) {
@@ -93,7 +93,7 @@ class SystController extends AppController
     }
 
     /**
-     * Updates an existing Syst model.
+     * Updates an existing MessageReply model.
      * If update is successful, the browser will be redirected to the 'view' page.
      * @param int $id ID
      * @return string|\yii\web\Response
@@ -113,7 +113,7 @@ class SystController extends AppController
     }
 
     /**
-     * Deletes an existing Syst model.
+     * Deletes an existing MessageReply model.
      * If deletion is successful, the browser will be redirected to the 'index' page.
      * @param int $id ID
      * @return \yii\web\Response
@@ -123,19 +123,40 @@ class SystController extends AppController
     {
         $this->findModel($id)->delete();
 
-        return $this->redirect(['index']);
+        return $this->redirect(['/message/index']);
+    }
+
+    public function actionShow($id)
+    {
+        $model = $this->findModel($id);
+        $model->show = 1;
+        if ($model->save()) {
+            return $this->redirect(['/message/index']);
+        }
+    }
+
+    public function createsUrls($action, $model, $key, $index)
+    {
+        if (is_callable($this->urlCreator)) {
+            return call_user_func($this->urlCreator, $action, $model, $key, $index, $this);
+        }
+
+        $params = is_array($key) ? $key : ['id' => (string) $key];
+        $params[0] = $this->controller ? $this->controller . '/' . $action : $action;
+
+        return Url::toRoute($params);
     }
 
     /**
-     * Finds the Syst model based on its primary key value.
+     * Finds the MessageReply model based on its primary key value.
      * If the model is not found, a 404 HTTP exception will be thrown.
      * @param int $id ID
-     * @return Syst the loaded model
+     * @return MessageReply the loaded model
      * @throws NotFoundHttpException if the model cannot be found
      */
     protected function findModel($id)
     {
-        if (($model = Syst::findOne(['id' => $id])) !== null) {
+        if (($model = MessageReply::findOne(['id' => $id])) !== null) {
             return $model;
         }
 

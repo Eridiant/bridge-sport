@@ -12,7 +12,7 @@ use yii\filters\VerbFilter;
 /**
  * SysItmController implements the CRUD actions for SysItm model.
  */
-class SysItmController extends Controller
+class SysItmController extends AppController
 {
     /**
      * @inheritDoc
