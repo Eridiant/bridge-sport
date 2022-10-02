@@ -173,9 +173,19 @@ class SiteController extends AppController
      *
      * @return mixed
      */
-    public function actionAbout()
+    // public function actionAbout()
+    // {
+    //     return $this->render('about');
+    // }
+
+    /**
+     * Displays confirm page.
+     *
+     * @return mixed
+     */
+    public function actionConfirm()
     {
-        return $this->render('about');
+        return $this->render('confirm');
     }
 
     /**
@@ -187,7 +197,6 @@ class SiteController extends AppController
     {
         $model = new SignupForm();
         if ($model->load(Yii::$app->request->post()) && $model->signup()) {
-            Yii::$app->session->setFlash('success', 'Thank you for registration. Please check your inbox for verification email.');
             return $this->goHome();
         }
 
@@ -260,6 +269,8 @@ class SiteController extends AppController
             throw new BadRequestHttpException($e->getMessage());
         }
         if (($user = $model->verifyEmail()) && Yii::$app->user->login($user)) {
+            $userRole = Yii::$app->authManager->getRole('applicant');
+            Yii::$app->authManager->assign($userRole, Yii::$app->user->id);
             Yii::$app->session->setFlash('success', 'Your email has been confirmed!');
             return $this->goHome();
         }
