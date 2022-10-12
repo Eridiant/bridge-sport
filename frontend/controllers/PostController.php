@@ -6,6 +6,8 @@ use Yii;
 use frontend\models\Post;
 use frontend\models\Message;
 use frontend\models\MessageReply;
+use frontend\models\UserInfo;
+use frontend\models\Notifications;
 use frontend\models\PostSearch;
 use frontend\models\Quiz;
 use yii\web\Controller;
@@ -60,7 +62,7 @@ class PostController extends AppController
             if ($parent) {
                 $model = new MessageReply();
                 $model->message_id = $parent;
-                $model->answer_user = Yii::$app->user->id == $answer ? null : $answer;
+                $model->answer_user = $arr['user_id'] = Yii::$app->user->id == $answer ? null : $answer;
                 $model->user_id = Yii::$app->user->id;
                 
                 $model->answer_id = $answer_id;
@@ -69,7 +71,14 @@ class PostController extends AppController
                 if (!$model->validate()) {
                     return ['data' => ['validate' => $model->errors]];
                 }
+                
                 if ($model->save()) {
+                    if (Yii::$app->user->id != $answer) {
+                        $arr['post_id'] = $model->parent->post->id;
+                        $arr['reply_id'] = $model->id;
+                        $arr['respondent_id'] = Yii::$app->user->id;
+                        $this->addNotification($arr);
+                    }
                     $render = $this->renderPartial('_reply', compact('model'));
                     return ['data' => ['reply' => $render]];
                 } else {
@@ -92,6 +101,18 @@ class PostController extends AppController
                 }
             }
         }
+    }
+
+    private function addNotification($arr)
+    {
+        $model = new Notifications();
+        $model->user_id = $arr['user_id'];
+        $model->post_id = $arr['post_id'];
+        $model->reply_id = $arr['reply_id'];
+        $model->respondent_id = $arr['respondent_id'];
+        $model->save();
+        
+        // return ;
     }
 
     public function actionDeleteMessage()

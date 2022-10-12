@@ -117,7 +117,7 @@ class MessageReply extends \yii\db\ActiveRecord
      *
      * @return \yii\db\ActiveQuery
      */
-    public function getMessage()
+    public function getParent()
     {
         return $this->hasOne(Message::class, ['id' => 'message_id']);
     }

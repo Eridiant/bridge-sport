@@ -18,7 +18,10 @@ use frontend\models\ContactForm;
 use frontend\models\Post;
 use frontend\models\Survey;
 use frontend\models\PostSearch;
+use frontend\models\UserInfo;
+use yii\helpers\Url;
 use yii\web\NotFoundHttpException;
+use yii\web\HttpException;
 
 /**
  * Site controller
@@ -185,7 +188,12 @@ class SiteController extends AppController
      */
     public function actionConfirm()
     {
-        return $this->render('confirm');
+        if (Url::toRoute('site/signup', true) === Yii::$app->request->referrer) {
+            return $this->render('confirm');
+        }
+        // Yii::$app->response->redirect('site/forbidden', 403)->send();
+        throw new HttpException(403, 'Доступ запрещен');
+        return $this->goHome();
     }
 
     /**
@@ -197,7 +205,8 @@ class SiteController extends AppController
     {
         $model = new SignupForm();
         if ($model->load(Yii::$app->request->post()) && $model->signup()) {
-            return $this->goHome();
+            return $this->render('confirm');
+            // return $this->goHome();
         }
 
         return $this->render('signup', [
@@ -269,6 +278,11 @@ class SiteController extends AppController
             throw new BadRequestHttpException($e->getMessage());
         }
         if (($user = $model->verifyEmail()) && Yii::$app->user->login($user)) {
+            $UserInfo = new UserInfo();
+            $UserInfo->user_id = Yii::$app->user->id;
+            $UserInfo->viewed_ntf_at = $UserInfo->previos_at = Yii::$app->user->identity->created_at;
+            $UserInfo->save();
+
             $userRole = Yii::$app->authManager->getRole('applicant');
             Yii::$app->authManager->assign($userRole, Yii::$app->user->id);
             Yii::$app->session->setFlash('success', 'Your email has been confirmed!');

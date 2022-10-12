@@ -2,6 +2,34 @@ document.addEventListener('DOMContentLoaded', () => {
     let link = document.querySelector('.link');
     let wrap = document.querySelector('.quiz-wrap');
 
+    let sup = document.querySelector('#notifications sup');
+    document.addEventListener('click', (e) => {
+        if (e.target.closest('.aside-icon')) {
+            document.querySelector('.aside').classList.add('show') ;
+        }
+        if (e.target.closest('.aside-close') || e.target.classList.contains('show')) {
+            document.querySelector('.aside').classList.remove('show') ;
+        }
+        if (e.target.closest('#notifications')) {
+            document.querySelector('.nav-popup').classList.toggle('show');
+            if (sup.innerHTML !== '') {
+                let data = {'post': 1};
+                xhRequest(data, '/user/viewed')
+                    .then(response => {
+                        sup.innerHTML = '';
+                    })
+                    .catch(error => {
+                        console.log(error);
+                    });
+                }
+            return;
+        }
+        if (!e.target.closest('.nav-popup')) {
+            document.querySelector('.nav-popup').classList.remove('show');
+        }
+    })
+
+    
     wrap?.addEventListener('click', (e) => {
         let tg = e.target;
         if (tg.classList.contains('submit')) {

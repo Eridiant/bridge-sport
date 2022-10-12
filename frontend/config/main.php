@@ -78,7 +78,8 @@ return [
                 'post/delete-message' => 'post/delete-message',
                 // 'post/edit-message' => 'post/edit-message',
                 // 'signup' => 'site/signup',
-                // 'login' => 'site/login',
+                // 'login' => 'site/login','/user/viewed'
+                'user/<action:\w+>' => 'user/<action>',
                 'survey' => 'survey/index',
                 'survey/quiz' => 'survey/quiz',
                 'survey/quizz' => 'survey/quizz',

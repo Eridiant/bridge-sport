@@ -13,9 +13,10 @@ class m221001_145150_create_user_info_table extends Migration
     public function safeUp()
     {
         $this->createTable('{{%user_info}}', [
-            'id' => $this->primaryKey(),
-            'user_id' => $this->integer(11)->notNull(),
-            'viewed_ntf_at' => $this->integer(11),
+            'user_id' => $this->primaryKey(),
+            // 'user_id' => $this->integer(11)->notNull(),
+            'viewed_ntf_at' => $this->integer(11)->defaultValue(0),
+            'previos_at' => $this->integer(11)->defaultValue(0),
             'name' => $this->string(255),
             'surname' => $this->string(255),
             'city' => $this->string(255),

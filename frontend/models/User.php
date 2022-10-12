@@ -79,26 +79,6 @@ class User extends \yii\db\ActiveRecord
     }
 
     /**
-     * Gets query for [[SurveyMessageReplies]].
-     *
-     * @return \yii\db\ActiveQuery
-     */
-    public function getSurveyMessageReplies()
-    {
-        return $this->hasMany(SurveyMessageReply::class, ['user_id' => 'id']);
-    }
-
-    /**
-     * Gets query for [[SurveyMessages]].
-     *
-     * @return \yii\db\ActiveQuery
-     */
-    public function getSurveyMessages()
-    {
-        return $this->hasMany(SurveyMessage::class, ['user_id' => 'id']);
-    }
-
-    /**
      * Gets query for [[Surveys]].
      *
      * @return \yii\db\ActiveQuery
@@ -106,5 +86,25 @@ class User extends \yii\db\ActiveRecord
     public function getSurveys()
     {
         return $this->hasMany(Survey::class, ['user_id' => 'id']);
+    }
+
+    /**
+     * Gets query for [[Notifications]].
+     *
+     * @return \yii\db\ActiveQuery
+     */
+    public function getNotifications()
+    {
+        return $this->hasMany(Notifications::class, ['user_id' => 'id']);
+    }
+
+    /**
+     * Gets query for [[UserInfos]].
+     *
+     * @return \yii\db\ActiveQuery
+     */
+    public function getUserInfo()
+    {
+        return $this->hasOne(UserInfo::class, ['user_id' => 'id']);
     }
 }

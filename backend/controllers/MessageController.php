@@ -163,7 +163,11 @@ class MessageController extends AppController
     public function actionShowAll($id)
     {
         $params = [':user_id' => $id];
-        Yii::$app->db->transaction(function($db) {
+
+        $db = Yii::$app->db;
+        $transaction = $db->beginTransaction();
+
+        try {
             $db->createCommand()
                 ->update('{{%message}}', ['show' => 1], 'user_id = :user_id')
                 ->bindValues($params)
@@ -172,7 +176,16 @@ class MessageController extends AppController
                 ->update('{{%message_reply}}', ['show' => 1], 'user_id = :user_id')
                 ->bindValues($params)
                 ->execute();
-        });
+            $transaction->commit();
+        } catch(\Exception $e) {
+            $transaction->rollBack();
+            throw $e;
+        } catch(\Throwable $e) {
+            $transaction->rollBack();
+        }
+        // Yii::$app->db->transaction(function($db) {
+            
+        // });
         
 
         
@@ -181,7 +194,7 @@ class MessageController extends AppController
 
     public function actionDeleteAll($id)
     {
-        $params = [':user_id' => $id];
+        // $params = [':user_id' => $id];
         $id = (int) $id;
 
         $db = Yii::$app->db;
