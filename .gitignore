@@ -51,5 +51,6 @@ phpunit.phar
 
 # ignore my add
 composer.lock
+bridge-sport.de.code-workspace
 
 /storage/web

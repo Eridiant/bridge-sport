@@ -29,7 +29,6 @@ document.addEventListener('DOMContentLoaded', () => {
         }
     })
 
-    
     wrap?.addEventListener('click', (e) => {
         let tg = e.target;
         if (tg.classList.contains('submit')) {

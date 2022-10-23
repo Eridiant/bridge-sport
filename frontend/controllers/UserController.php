@@ -75,7 +75,6 @@ class UserController extends AppController
                     var_dump($model->getErrors());
                     var_dump('</pre>');
                     die;
-                    
                 }
                 return ['data' => ['response' => false]];
             }
