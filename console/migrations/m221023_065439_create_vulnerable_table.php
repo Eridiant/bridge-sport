@@ -15,7 +15,7 @@ class m221023_065439_create_vulnerable_table extends Migration
         $this->createTable('{{%vulnerable}}', [
             'id' => $this->primaryKey(),
             'vulnerable' => $this->tinyInteger(),
-            'description' => $this->text(),
+            'vulnerable_desc' => $this->text(),
         ]);
     }
 

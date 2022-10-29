@@ -14,6 +14,8 @@ class m221023_065440_create_variant_table extends Migration
     {
         $this->createTable('{{%variant}}', [
             'id' => $this->primaryKey(),
+            'variant' => $this->tinyInteger(),
+            'variant_desc' => $this->text(),
         ]);
     }
 
