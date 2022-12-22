@@ -222,3 +222,147 @@ iframe {
 .nav > li > form > button.logout:focus {
     outline: none;
 }
+/* td {
+    transition: 3s;
+    background-color: #4e4e8e;
+} */
+/* ul {
+    padding-left: 20px;
+}
+ul li p {
+    display: inline-block;
+}
+p {
+    margin: 0;
+}
+p a {
+    font-size: 22px;
+}
+a {
+    position: relative;
+}
+a.del {
+    color: red;
+}
+a.edit {
+    color: green;
+}
+a.add {
+    color: green;
+}
+[data-tooltip]:hover::after {
+    position: absolute;
+    top: 30px;
+    left: 10px;
+    content: attr(data-tooltip);
+    padding: 10px;
+    line-height: 1.1;
+    font-size: 14px;
+    background-color: #fff;
+    z-index: 1;
+} */
+
+/* table */
+.bidding table {
+    table-layout: fixed;
+    min-width: 300px;
+    text-align: center;
+}
+
+/* table > * > * {
+} */
+.bidding td, .bidding th {
+    height: 50px;
+    width: 25%;
+}
+
+.bidding table th {
+    background-color: #fff;
+    text-align: inherit;
+    transition: .3s;
+}
+
+.bidding table td {
+    cursor: pointer;
+    transition: .3s;
+}
+
+.bidding .vul {
+    color: #fff;
+    text-shadow: 1px 1px 2px #cb0000, -1px -1px 2px #cb0000, 1px -1px 2px #cb0000, -1px 1px 2px #cb0000;
+    background-color: #cb0000cc;
+}
+
+.bidding .row {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 10px;
+    /* margin-left: 15px; */
+}
+
+.bidding label {
+    /* margin-left: -30px; */
+    margin-bottom: 0;
+    padding: 10px 20px 10px 20px;
+    cursor: pointer;
+    transition: .2s;
+}
+.bidding input[type="checkbox"]:checked + label,
+.bidding input[type="radio"]:checked + label {
+    color: #fff;
+    text-shadow: 1px 1px 2px #33743baa, -1px -1px 2px #33743baa, 1px -1px 2px #33743baa, -1px 1px 2px #33743baa;
+    background-color: #33743b99;
+}
+.bidding label {
+    user-select: none;
+}
+.bidding input[type="checkbox"],
+.bidding input[type="radio"] {
+    width: 0;
+    height: 0;
+    opacity: 0;
+    visibility: hidden;
+}
+
+.bidding label:hover {
+    background-color: #33743b50;
+}
+
+.bidding table td:hover:not(.current) {
+    color: #fff;
+    background-color: #3c8dbc;
+}
+.bidding table .current {
+    background-color: #13873244;
+}
+.bidding .hd {
+    height: 0;
+    opacity: 0;
+    font-size: 0px;
+}
+.bidding-box {
+    max-width: 400px;
+}
+.bidding-box > div {
+    display: flex;
+    flex-wrap: wrap;
+}
+.bidding-box span {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    width: 20%;
+    height: 35px;
+    cursor: pointer;
+    user-select: none;
+    transition: .3s;
+}
+.bidding-box span:hover {
+    color: #fff;
+    text-shadow: 1px 1px 2px #175c84, -1px -1px 2px #175c84, 1px -1px 2px #175c84, -1px 1px 2px #175c84;
+    background-color: #3c8dbc;
+}
+.bidding-competition span {
+    width: 33%;
+    height: 40px;
+}

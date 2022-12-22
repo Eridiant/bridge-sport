@@ -3,77 +3,80 @@
 use yii\db\Migration;
 
 /**
- * Handles the creation of table `{{%system_bid}}`.
+ * Handles the creation of table `{{%bid}}`.
  * Has foreign keys to the tables:
  *
  * - `{{%system}}`
  */
-class m221024_134227_create_system_bid_table extends Migration
+class m221024_134227_create_bid_table extends Migration
 {
     /**
      * {@inheritdoc}
      */
     public function safeUp()
     {
-        $this->createTable('{{%system_bid}}', [
+        $this->createTable('{{%bid}}', [
             'id' => $this->primaryKey(),
             'system_id' => $this->integer()->notNull(),
-            'bid_id' => $this->integer()->notNull(),
+            'bid_tbl_id' => $this->integer()->notNull(),
             'parent_id' => $this->integer(11)->notNull()->defaultValue(0),
-            'answer_id' => $this->integer(11),
+            // 'answer_id' => $this->integer(11),
             'variant_id' => $this->integer(11),
             'vulnerable_id' => $this->integer(11),
+            'pass' => $this->tinyInteger(),
+            'alert' => $this->tinyInteger(),
             'excerpt' => $this->text(),
             'description' => $this->text(),
             'updated_at' => $this->integer(11),
             'created_at' => $this->integer(11)->notNull(),
+            'deprecated_at' => $this->integer(11),
         ]);
 
         // creates index for column `system_id`
         $this->createIndex(
-            '{{%idx-system_bid-system_id}}',
-            '{{%system_bid}}',
+            '{{%idx-bid-system_id}}',
+            '{{%bid}}',
             'system_id'
         );
 
         // add foreign key for table `{{%system}}`
         $this->addForeignKey(
-            '{{%fk-system_bid-system_id}}',
-            '{{%system_bid}}',
+            '{{%fk-bid-system_id}}',
+            '{{%bid}}',
             'system_id',
             '{{%system}}',
             'id',
             'CASCADE'
         );
 
-        // creates index for column `bid_id`
+        // creates index for column `bid_tbl_id`
         $this->createIndex(
-            '{{%idx-system_bid-bid_id}}',
-            '{{%system_bid}}',
-            'bid_id'
+            '{{%idx-bid-bid_tbl_id}}',
+            '{{%bid}}',
+            'bid_tbl_id'
         );
 
-        // add foreign key for table `{{%bid}}`
+        // add foreign key for table `{{%bid_tbl}}`
         $this->addForeignKey(
-            '{{%fk-system_bid-bid_id}}',
-            '{{%system_bid}}',
-            'bid_id',
+            '{{%fk-bid-bid_tbl_id}}',
             '{{%bid}}',
+            'bid_tbl_id',
+            '{{%bid_tbl}}',
             'id',
             'CASCADE'
         );
 
         // creates index for column `variant_id`
         $this->createIndex(
-            '{{%idx-system_bid-variant_id}}',
-            '{{%system_bid}}',
+            '{{%idx-bid-variant_id}}',
+            '{{%bid}}',
             'variant_id'
         );
 
         // add foreign key for table `{{%variant}}`
         $this->addForeignKey(
-            '{{%fk-system_bid-variant_id}}',
-            '{{%system_bid}}',
+            '{{%fk-bid-variant_id}}',
+            '{{%bid}}',
             'variant_id',
             '{{%variant}}',
             'id',
@@ -82,15 +85,15 @@ class m221024_134227_create_system_bid_table extends Migration
 
         // creates index for column `vulnerable_id`
         $this->createIndex(
-            '{{%idx-system_bid-vulnerable_id}}',
-            '{{%system_bid}}',
+            '{{%idx-bid-vulnerable_id}}',
+            '{{%bid}}',
             'vulnerable_id'
         );
 
         // add foreign key for table `{{%vulnerable}}`
         $this->addForeignKey(
-            '{{%fk-system_bid-vulnerable_id}}',
-            '{{%system_bid}}',
+            '{{%fk-bid-vulnerable_id}}',
+            '{{%bid}}',
             'vulnerable_id',
             '{{%vulnerable}}',
             'id',
@@ -105,52 +108,52 @@ class m221024_134227_create_system_bid_table extends Migration
     {
         // drops foreign key for table `{{%vulnerable}}`
         $this->dropForeignKey(
-            '{{%fk-system_bid-vulnerable_id}}',
-            '{{%system_bid}}'
+            '{{%fk-bid-vulnerable_id}}',
+            '{{%bid}}'
         );
 
         // drops index for column `vulnerable_id`
         $this->dropIndex(
-            '{{%idx-system_bid-vulnerable_id}}',
-            '{{%system_bid}}'
+            '{{%idx-bid-vulnerable_id}}',
+            '{{%bid}}'
         );
 
         // drops foreign key for table `{{%variant}}`
         $this->dropForeignKey(
-            '{{%fk-system_bid-variant_id}}',
-            '{{%system_bid}}'
+            '{{%fk-bid-variant_id}}',
+            '{{%bid}}'
         );
 
         // drops index for column `variant_id`
         $this->dropIndex(
-            '{{%idx-system_bid-variant_id}}',
-            '{{%system_bid}}'
+            '{{%idx-bid-variant_id}}',
+            '{{%bid}}'
         );
 
-        // drops foreign key for table `{{%bid}}`
+        // drops foreign key for table `{{%bid_tbl}}`
         $this->dropForeignKey(
-            '{{%fk-system_bid-bid_id}}',
-            '{{%system_bid}}'
+            '{{%fk-bid-bid_tbl_id}}',
+            '{{%bid}}'
         );
 
-        // drops index for column `bid_id`
+        // drops index for column `bid_tbl_id`
         $this->dropIndex(
-            '{{%idx-system_bid-bid_id}}',
-            '{{%system_bid}}'
+            '{{%idx-bid-bid_tbl_id}}',
+            '{{%bid}}'
         );
 
         // drops foreign key for table `{{%system}}`
         $this->dropForeignKey(
-            '{{%fk-system_bid-system_id}}',
-            '{{%system_bid}}'
+            '{{%fk-bid-system_id}}',
+            '{{%bid}}'
         );
 
         // drops index for column `system_id`
         $this->dropIndex(
-            '{{%idx-system_bid-system_id}}',
-            '{{%system_bid}}'
+            '{{%idx-bid-system_id}}',
+            '{{%bid}}'
         );
 
-        $this->dropTable('{{%system_bid}}');
+        $this->dropTable('{{%bid}}');
     }
 }

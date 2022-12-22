@@ -125,11 +125,11 @@ class PostController extends AppController
                 }
 
                 $check = Post::find()->with('category')
-                            ->where([
-                                'slug' => $model->slug,
-                                'category_id' => $model->category_id
-                                ])
-                            ->exists();
+                    ->where([
+                        'slug' => $model->slug,
+                        'category_id' => $model->category_id
+                        ])
+                    ->exists();
 
                 if ($check) {
                     // $model->loadDefaultValues();

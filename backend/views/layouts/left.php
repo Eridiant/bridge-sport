@@ -76,6 +76,7 @@ use yii\helpers\Url;
                         ],
                     ],
                     ['label' => 'Системы tmp', 'icon' => 'dashboard', 'url' => ['/syst/index']],
+                    ['label' => 'Системы', 'icon' => 'dashboard', 'url' => ['/system/index']],
                     ['label' => 'Обновления', 'icon' => 'dashboard', 'url' => ['/migrate/index']],
                     ['label' => 'Login', 'url' => ['site/login'], 'visible' => Yii::$app->user->isGuest],
                     [

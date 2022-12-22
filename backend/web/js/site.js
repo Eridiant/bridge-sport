@@ -175,6 +175,163 @@ window.addEventListener('load', () => {
                 });
         });
     }
+
+    const bidding = document.querySelector('#bidding');
+
+    if (bidding) {
+        const tbody = document.querySelector('#body');
+        const box = document.querySelector('#box');
+        const competition = document.querySelector('#competition');
+        const vulnerable = document.querySelector('#vulnerable');
+        var passCounter = 0;
+
+        vulnerable?.addEventListener('click',(e) => {
+            const thd = document.querySelectorAll('#thead th');
+            const t = e.target;
+            
+            switch (t.id) {
+                case "none":
+                    thead([0,0,0,0]);
+                    break;
+                case "all":
+                    thead([1,1,1,1]);
+                    break;
+                case "nvul":
+                    thead([0,1,0,1]);
+                    break;
+                case "vul":
+                    thead([1,0,1,0]);
+                    break;
+                default:
+                    break;
+            }
+
+            function thead(arr) {
+                console.log(thd);
+                arr.forEach(function(item, i, arr) {
+                    item ? thd[i].classList.add('vul') : thd[i].classList.remove('vul');
+                    // console.log(item, i);
+                    // arr[i] ? item.classList.add('.vul') : item.classList.remove('.vul');
+                });
+            }
+
+        })
+
+        tbody.addEventListener('click',(e) => {
+            // e.preventDefault();
+            const t = e.target;
+            // console.log(t.closest('tr'));
+
+            // let siblings = [...myNextAll(t.closest('tr'))].remove();
+            // myNextAll(t.closest('tr')).remove();
+            // // console.log(siblings);.remove()
+            // console.log(myNextAll(t.closest('tr')));
+            // console.log(t.closest('tr').nextElementSibling === tbody.lastElementChild);
+            passCounter = t.dataset.count - 1;
+            console.log(passCounter);
+            myNextAll();
+
+            function myNextAll() {
+                // curentEl, nextEl
+                // console.log(e.nextElementSibling);
+                while (t.closest('tr') !== tbody.lastElementChild) {
+                    tbody.lastElementChild.remove();
+                }
+                while (t.closest('td') !== t.closest('tr').lastElementChild) {
+                    t.closest('tr').lastElementChild.remove();
+                }
+                document.querySelector("#body tr:last-child td:last-child").innerHTML = "?";
+            }
+        });
+
+        bidding.addEventListener('click',(e) => {
+            // e.preventDefault();
+            const t = e.target;
+            // console.log(t);
+            if (t.closest('#box')) {
+                let current = document.querySelector('#body tr:last-child');
+                let lg = current.querySelectorAll('td').length;
+
+                let td = document.querySelector("#body tr:last-child td:last-child");
+
+                createEl(t.dataset.bid, td);
+
+                // if (t.dataset.num >= 35) return;
+
+                if (!competition.checked && passCounter < 2) createEl("pass");
+
+                createEl("?", 0, 1);
+
+                function hideBid(num) {
+
+                    if (num < 1) return;
+
+                    let style = document.querySelector('style');
+
+                    let st = `
+                        .bidding-wrapper span:nth-child(-n+${num}) {
+                            height: 0;
+                            opacity: 0;
+                            font-size: 0px;
+                        }
+                    `;
+
+                    style.innerHTML = st;
+
+                    document.querySelector('.bidding-competition');
+                }
+
+                function createEl(content, el = 0, trs = 0) {
+                    console.log('content', content, 'dataset.num', t.dataset.num, 'passCounter=', passCounter);
+                    if (passCounter > 2) return;
+
+                    hideBid(t.dataset.num);
+
+                    lg = current.querySelectorAll('td').length;
+                    if (trs && lg == 4) {
+                        addTr();
+                    }
+                    td = el || document.createElement("td");
+
+                    td.innerHTML = content;
+
+                    current.append(td);
+                    checkCompetition(content);
+                    if (lg == 4 && !trs) addTr();
+                }
+
+                function checkCompetition(content) {
+                    // console.log('сравнивать' ,t.dataset.num === 0, '||', content === "pass");
+                    // console.log('----content', content, 'dataset.num', t.dataset.num, 'passCounter=', passCounter);
+                    if (t.dataset.num < 1 ) {
+                        if (t.dataset.num === 0) return passCounter++;
+                    }
+
+                    if (content === "pass") {
+                        passCounter++;
+                        return td.dataset.count = passCounter;
+                    }
+
+                    if (content === "?") return;
+                    td.dataset.count = passCounter;
+                    return passCounter = 0;
+                }
+
+                function addTr() {
+                    let tr = document.createElement("tr");
+                    tbody.append(tr);
+                    // tr = document.createElement("tr");
+                    // tbody.className = "current";
+                    current = document.querySelector('#body tr:last-child');
+                }
+                // current.querySelectorAll('td').length;
+                // console.log();
+            }
+            // if (t.closest('#body') ) {
+                
+            // }
+        })
+    }
 })
 
 function ajaxRequest(cntr, rqst) {
