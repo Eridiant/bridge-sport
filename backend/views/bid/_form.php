@@ -24,6 +24,8 @@ use yii\widgets\ActiveForm;
 
     <?= $form->field($model, 'pass')->passwordInput() ?>
 
+    <?= $form->field($model, 'opponent')->passwordInput() ?>
+
     <?= $form->field($model, 'alert')->textInput() ?>
 
     <?= $form->field($model, 'excerpt')->textarea(['rows' => 6]) ?>

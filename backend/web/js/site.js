@@ -143,7 +143,7 @@ window.addEventListener('load', () => {
     // if (document.querySelector('.migrate-index')) {
         e.preventDefault();
         if (e.target.closest('.btn')) {
-            console.log(e.target.id);
+            // console.log(e.target.id);
             callMigrate(e.target.id)
                 .then(response => {
                     let newElement = document.createElement("p");
@@ -184,6 +184,7 @@ window.addEventListener('load', () => {
         const competition = document.querySelector('#competition');
         const vulnerable = document.querySelector('#vulnerable');
         var passCounter = 0;
+        var firstEl = 0;
 
         vulnerable?.addEventListener('click',(e) => {
             const thd = document.querySelectorAll('#thead th');
@@ -207,7 +208,7 @@ window.addEventListener('load', () => {
             }
 
             function thead(arr) {
-                console.log(thd);
+                // console.log(thd);
                 arr.forEach(function(item, i, arr) {
                     item ? thd[i].classList.add('vul') : thd[i].classList.remove('vul');
                     // console.log(item, i);
@@ -227,34 +228,78 @@ window.addEventListener('load', () => {
             // // console.log(siblings);.remove()
             // console.log(myNextAll(t.closest('tr')));
             // console.log(t.closest('tr').nextElementSibling === tbody.lastElementChild);
-            passCounter = t.dataset.count - 1;
-            console.log(passCounter);
+            passCounter = t.dataset.count;
+            // console.log(passCounter);
+            // let sdfsdffff = foundPreviosBid(t);
+            if (t.closest('span').previousElementSibling === null) firstEl = passCounter = 0;
+            hideBid(foundPreviosBid(t));
+            // hideBid(foundPreviosBid(t));
+            // foundPreviosBid(t.previousElementSibling);
             myNextAll();
+
+            function foundPreviosBid(el) {
+                // console.log(el, el?.previousElementSibling, el?.previousElementSibling?.dataset?.num, "|||", !el?.previousElementSibling?.dataset?.num);
+                // console.log(el?.previousElementSibling?.dataset?.num);
+
+                while (!el?.previousElementSibling?.dataset?.num && el?.previousElementSibling !== null) {
+                    el = el?.previousElementSibling;
+                }
+                // if (!el?.previousElementSibling?.dataset?.num) {
+                //     foundPreviosBid(el.previousElementSibling);
+                //     // return;
+                // }
+                let asdfa = el.previousElementSibling === null ? 0 : el.previousElementSibling.dataset.num;
+                // console.log('previousElementSibling', asdfa);
+                return asdfa;
+                return el.previousElementSibling.dataset.num;
+            }
 
             function myNextAll() {
                 // curentEl, nextEl
                 // console.log(e.nextElementSibling);
-                while (t.closest('tr') !== tbody.lastElementChild) {
+                while (t.closest('span') !== tbody.lastElementChild) {
                     tbody.lastElementChild.remove();
                 }
-                while (t.closest('td') !== t.closest('tr').lastElementChild) {
-                    t.closest('tr').lastElementChild.remove();
-                }
-                document.querySelector("#body tr:last-child td:last-child").innerHTML = "?";
+                // while (t.closest('td') !== t.closest('tr').lastElementChild) {
+                //     t.closest('tr').lastElementChild.remove();
+                // }
+                document.querySelector("#body span:last-child").innerHTML = "?";
             }
         });
+
+
+        function hideBid(num) {
+            // console.log(num);
+
+            if (num < 0) return;
+
+            let style = document.querySelector('style');
+
+            let st = `
+                .bidding-wrapper span:nth-child(-n+${num}) {
+                    height: 0;
+                    opacity: 0;
+                    font-size: 0px;
+                }
+            `;
+
+            style.innerHTML = st;
+
+            document.querySelector('.bidding-competition');
+        }
 
         bidding.addEventListener('click',(e) => {
             // e.preventDefault();
             const t = e.target;
             // console.log(t);
-            if (t.closest('#box')) {
-                let current = document.querySelector('#body tr:last-child');
-                let lg = current.querySelectorAll('td').length;
+            if (t.closest('#box') && t.dataset.num) {
+                let current = document.querySelector('#body');
 
-                let td = document.querySelector("#body tr:last-child td:last-child");
+                let lastBid = document.querySelector("#body span:last-child");
 
-                createEl(t.dataset.bid, td);
+                createEl(t.dataset.bid, lastBid);
+
+                if (Number(t.dataset.num)) firstEl = 1;
 
                 // if (t.dataset.num >= 35) return;
 
@@ -262,68 +307,45 @@ window.addEventListener('load', () => {
 
                 createEl("?", 0, 1);
 
-                function hideBid(num) {
-
-                    if (num < 1) return;
-
-                    let style = document.querySelector('style');
-
-                    let st = `
-                        .bidding-wrapper span:nth-child(-n+${num}) {
-                            height: 0;
-                            opacity: 0;
-                            font-size: 0px;
-                        }
-                    `;
-
-                    style.innerHTML = st;
-
-                    document.querySelector('.bidding-competition');
-                }
-
                 function createEl(content, el = 0, trs = 0) {
-                    console.log('content', content, 'dataset.num', t.dataset.num, 'passCounter=', passCounter);
-                    if (passCounter > 2) return;
+
+                    if ((passCounter > 2 && firstEl) || passCounter > 3) return;
 
                     hideBid(t.dataset.num);
 
-                    lg = current.querySelectorAll('td').length;
-                    if (trs && lg == 4) {
-                        addTr();
-                    }
-                    td = el || document.createElement("td");
+                    lastBid = el || document.createElement("span");
 
-                    td.innerHTML = content;
+                    lastBid.innerHTML = content;
+                    if (content !== "pass") lastBid.dataset.num = t.dataset.num;
 
-                    current.append(td);
+                    current.append(lastBid);
                     checkCompetition(content);
-                    if (lg == 4 && !trs) addTr();
                 }
 
                 function checkCompetition(content) {
-                    // console.log('сравнивать' ,t.dataset.num === 0, '||', content === "pass");
-                    // console.log('----content', content, 'dataset.num', t.dataset.num, 'passCounter=', passCounter);
+
                     if (t.dataset.num < 1 ) {
                         if (t.dataset.num === 0) return passCounter++;
                     }
 
                     if (content === "pass") {
                         passCounter++;
-                        return td.dataset.count = passCounter;
+                        lastBid.dataset.count = passCounter;
+                        return ;
                     }
 
                     if (content === "?") return;
-                    td.dataset.count = passCounter;
+                    lastBid.dataset.count = passCounter;
                     return passCounter = 0;
                 }
 
-                function addTr() {
-                    let tr = document.createElement("tr");
-                    tbody.append(tr);
+                // function addTr() {
+                //     let tr = document.createElement("tr");
+                //     tbody.append(tr);
                     // tr = document.createElement("tr");
                     // tbody.className = "current";
-                    current = document.querySelector('#body tr:last-child');
-                }
+                //     current = document.querySelector('#body tr:last-child');
+                // }
                 // current.querySelectorAll('td').length;
                 // console.log();
             }

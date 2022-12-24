@@ -287,6 +287,10 @@ a.add {
     transition: .3s;
 }
 
+.bidding-form label {
+    border-radius: 2px;
+}
+
 .bidding .vul {
     color: #fff;
     text-shadow: 1px 1px 2px #cb0000, -1px -1px 2px #cb0000, 1px -1px 2px #cb0000, -1px 1px 2px #cb0000;
@@ -328,11 +332,43 @@ a.add {
     background-color: #33743b50;
 }
 
-.bidding table td:hover:not(.current) {
+.bidding-table > div {
+    display: flex;
+    flex-wrap: wrap;
+    max-width: 400px;
+}
+
+.bidding-table span {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    width: 25%;
+    height: 30px;
+    cursor: pointer;
+    user-select: none;
+    transition: .3s;
+    border-radius: 2px;
+    /* del */
+    position: relative;
+}
+.bidding-table-body span::before {
+    position: absolute;
+    bottom: -1px;
+    left: 20px;
+    content: attr(data-num);
+}
+.bidding-table-body span::after {
+    position: absolute;
+    bottom: -1px;
+    right: 20px;
+    content: attr(data-count);
+}
+
+.bidding-table span:hover:not(.current) {
     color: #fff;
     background-color: #3c8dbc;
 }
-.bidding table .current {
+.bidding-table .current {
     background-color: #13873244;
 }
 .bidding .hd {
@@ -356,6 +392,7 @@ a.add {
     cursor: pointer;
     user-select: none;
     transition: .3s;
+    border-radius: 2px;
 }
 .bidding-box span:hover {
     color: #fff;

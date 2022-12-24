@@ -13,23 +13,19 @@ use yii\helpers\Url;
 <a href="<?= Url::to(['bid/check', 'parent_id' => 0, 'system_id' => $id, 'lvl' => 0]) ?>" class="add" data-tooltip="добавить вопрос">добавить пункт &#10010;</a>
 <div id="bidding" class="bidding">
 
-    <table class="bidding-table">
-        <thead>
-            <tr id="thead">
-                <th>N</th>
-                <th>W</th>
-                <th>S</th>
-                <th>E</th>
-            </tr>
-        </thead>
-        <tbody id="body">
-            <tr>
-                <td>?</td>
-            </tr>
-        </tbody>
-    </table>
+    <div class="bidding-table">
+        <div class="bidding-table-head">
+            <span>N</span>
+            <span>W</span>
+            <span>S</span>
+            <span>E</span>
+        </div>
+        <div id="body" class="bidding-table-body">
+            <span>?</span>
+        </div>
+    </div>
 
-    <form action="#" method="post">
+    <form class="bidding-form" action="#" method="post">
         <div class="row">
             <input type="radio" name="radio" id="imps"><label for="imps">импы</label>
             <input type="radio" name="radio" id="max"><label for="max">макс</label>
@@ -52,7 +48,7 @@ use yii\helpers\Url;
         </div>
     </form>
     <div id="box" class="bidding-box">
-        <div class="bidding-wrapper">
+        <div class="bidding-wrapper" data-action="1">
             <span data-num="1" data-bid="1c">1c</span><span data-num="2" data-bid="1d">1d</span><span data-num="3" data-bid="1h">1h</span><span data-num="4" data-bid="1s">1s</span><span data-num="5" data-bid="1nt">1nt</span>
             <span data-num="6" data-bid="2c">2c</span><span data-num="7" data-bid="2d">2d</span><span data-num="8" data-bid="2h">2h</span><span data-num="9" data-bid="2s">2s</span><span data-num="10" data-bid="2nt">2nt</span>
             <span data-num="11" data-bid="3c">3c</span><span data-num="12" data-bid="3d">3d</span><span data-num="13" data-bid="3h">3h</span><span data-num="14" data-bid="3s">3s</span><span data-num="15" data-bid="3nt">3nt</span>
@@ -63,8 +59,8 @@ use yii\helpers\Url;
         </div>
         <div class="bidding-competition">
             <span data-num="0" data-bid="pass">pass</span>
-            <span class="hd" data-num="-1" data-bid="Dbl">Dbl</span>
-            <span class="hd" data-num="-2" data-bid="ReDbl">ReDbl</span>
+            <span class="hd" data-num="0" data-bid="Dbl">Dbl</span>
+            <span class="hd" data-num="0" data-bid="ReDbl">ReDbl</span>
         </div>
     </div>
 </div>
@@ -78,15 +74,3 @@ use yii\helpers\Url;
 <br>
 <br>
 <br> 
-
-'id' => 'ID',
-'system_id' => 'System ID',
-'bid_tbl_id' => 'Bid Tbl ID',
-'parent_id' => 'Parent ID',
-'answer_id' => 'Answer ID',
-'variant_id' => 'Variant ID',
-'vulnerable_id' => 'Vulnerable ID',
-'excerpt' => 'Excerpt',
-'description' => 'Description',
-'updated_at' => 'Updated At',
-'created_at' => 'Created At',

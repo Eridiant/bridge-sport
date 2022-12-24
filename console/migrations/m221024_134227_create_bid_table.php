@@ -25,6 +25,7 @@ class m221024_134227_create_bid_table extends Migration
             'vulnerable_id' => $this->integer(11),
             'pass' => $this->tinyInteger(),
             'alert' => $this->tinyInteger(),
+            'opponent' => $this->tinyInteger(),
             'excerpt' => $this->text(),
             'description' => $this->text(),
             'updated_at' => $this->integer(11),

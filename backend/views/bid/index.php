@@ -31,6 +31,7 @@ $this->params['breadcrumbs'][] = $this->title;
             'parent_id',
             //'vulnerable_id',
             //'pass',
+            //'opponent',
             //'alert',
             //'excerpt:ntext',
             //'description:ntext',

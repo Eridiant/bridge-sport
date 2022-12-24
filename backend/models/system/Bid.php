@@ -14,6 +14,7 @@ use Yii;
  * @property int|null $variant_id
  * @property int|null $vulnerable_id
  * @property int|null $pass
+ * @property int|null $opponent
  * @property int|null $alert
  * @property string|null $excerpt
  * @property string|null $description
@@ -44,7 +45,7 @@ class Bid extends \yii\db\ActiveRecord
     {
         return [
             [['system_id', 'bid_tbl_id', 'created_at'], 'required'],
-            [['system_id', 'bid_tbl_id', 'parent_id', 'variant_id', 'vulnerable_id', 'deprecated_at', 'pass', 'alert', 'updated_at', 'created_at'], 'integer'],
+            [['system_id', 'bid_tbl_id', 'parent_id', 'variant_id', 'vulnerable_id', 'deprecated_at', 'pass', 'alert', 'opponent', 'updated_at', 'created_at'], 'integer'],
             [['excerpt', 'description'], 'string'],
             [['bid_tbl_id'], 'exist', 'skipOnError' => true, 'targetClass' => BidTbl::class, 'targetAttribute' => ['bid_tbl_id' => 'id']],
             [['system_id'], 'exist', 'skipOnError' => true, 'targetClass' => System::class, 'targetAttribute' => ['system_id' => 'id']],
@@ -67,6 +68,7 @@ class Bid extends \yii\db\ActiveRecord
             'vulnerable_id' => 'Vulnerable ID',
             'pass' => 'Pass',
             'alert' => 'Alert',
+            'opponent' => 'Opponent Bid',
             'excerpt' => 'Excerpt',
             'description' => 'Description',
             'updated_at' => 'Updated At',
