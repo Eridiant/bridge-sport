@@ -180,11 +180,339 @@ window.addEventListener('load', () => {
 
     if (bidding) {
         const tbody = document.querySelector('#body');
-        const box = document.querySelector('#box');
+        const box = document.querySelector('#box'); 
+        const contentValues = document.querySelector('#bidding-values');
         const competition = document.querySelector('#competition');
         const vulnerable = document.querySelector('#vulnerable');
-        var passCounter = 0;
-        var firstEl = 0;
+        const fillout = document.querySelector('#fillout');
+        let passCounter = 0;
+        let firstEl = 0;
+        let double = 0;
+        let values;
+
+        requestData(0, null);
+
+        contentValues.addEventListener('click', (e) => {
+            const t = e.target;
+            if (t.closest('.del')) {
+                let el = t.parentElement;
+                console.log(t.parentElement);
+                let data = {
+                    'id':el.dataset.id,
+                }
+                ajaxRequest("bid/del", data)
+                    .then(response => {
+                        let answer = JSON.parse(response);
+                        console.log(answer);
+                        if (!answer.success) return;
+                        el.remove();
+                    })
+                    .catch(error => {
+                        alert(error);
+                        console.log(error);
+                    });
+                return;
+            }
+            if (t.dataset.num) {
+                values = t;
+                addBidListener();
+            }
+        })
+
+
+        function requestData(num, count, parent = tbody.dataset.parent) {
+            console.log(num, count);
+            let data = {
+                'system_id':bidding.dataset.system,
+                'parent_id':parent,
+                'pass_count':count,
+            }
+            ajaxRequest("bid/fill", data)
+                .then(response => {
+                    let answer = JSON.parse(response);
+
+                    let data = answer.data;
+                    contentValues.innerHTML = '';
+                    box.querySelectorAll('.exist').forEach(el => {
+                        el.classList.remove('exist');
+                    })
+                    
+                    data.forEach(el => {
+                        values = document.createElement("div");
+                        contentValues.append(values);
+                        values.dataset.num = el.num;
+                        values.dataset.bid = el.bid;
+                        values.dataset.id = el.id;
+                        let span = document.createElement("span");
+                        span.innerHTML = el.excerpt;
+                        values.append(span);
+                        span = document.createElement("span");
+                        span.classList.add('del');
+                        span.innerHTML = "X";
+                        values.append(span);
+
+                        box.querySelector(`span[data-num="${el.num}"]`).classList.add('exist');
+                        box.querySelector(`span[data-num="${el.num}"]`).dataset.pr = el.id;
+                    });
+                    // values.dataset.id = answer.data.id;
+                    // values.contentEditable = 'false';
+                    // values.classList?.remove('added');
+                    // values.removeEventListener('click', removeBidListener, false);
+                })
+                .catch(error => {
+                    alert(error);
+                    console.log(error);
+                });
+        }
+
+        function addBidListener() {
+            // console.log('blur');
+            values.querySelector('span').contentEditable = 'true';
+            values.querySelector('span').addEventListener('blur', removeBidListener, false);
+        }
+
+        function removeBidListener() {
+            let data = {
+                'system_id':bidding.dataset.system,
+                'bid_id':values.dataset?.id,
+                'parent_id':tbody.dataset?.parent,
+                'bid_num':values.dataset?.num,
+                'pass_count':passCounter,
+                'excerpt':values.querySelector('span').innerHTML,
+            }
+            ajaxRequest("bid/add", data)
+                .then(response => {
+                    let answer = JSON.parse(response);
+                    values.dataset.id = answer.data.id;
+                    values.querySelector('span').contentEditable = 'false';
+                    values.classList?.remove('added');
+                    values.querySelector('span').removeEventListener('click', removeBidListener, false);
+                })
+                .catch(error => {
+                    alert(error);
+                    console.log(error);
+                });
+        }
+
+        tbody.addEventListener('click',(e) => {
+
+            const t = e.target;
+
+            passCounter = t.dataset.count;
+
+            let prev = t.closest('span').previousElementSibling;
+            if (prev === null) firstEl = passCounter = 0;
+            else passCounter = prev.dataset.count;
+            // document.querySelector('.bidding-table h1').innerHTML = passCounter;
+
+            delete t.closest('span').dataset.num;
+            
+            let prNum = foundPreviosBid(t)?.dataset?.num;
+            if (prNum == -1) document.querySelector('#dbl').classList.add('redbl');
+            if (prNum == -2) {
+                document.querySelector('#dbl').classList.add('redbl');
+                double = 1;
+            }
+            else double = 0;
+
+            if (passCounter % 2 === 0) document.querySelector('#competition').checked = true;
+
+            dblRd(passCounter);
+            hideBid(prNum);
+
+            myNextAll();
+
+            requestData(prNum, passCounter, foundPreviosBid(t)?.dataset?.parent ?? 0);
+
+            function foundPreviosBid(el) {
+
+                while (!el?.previousElementSibling?.dataset?.num && el?.previousElementSibling !== null) {
+                    el = el?.previousElementSibling;
+                }
+                console.log("previousElementSibling", el?.previousElementSibling);
+
+                let asdfa = el.previousElementSibling === null ? 0 : el.previousElementSibling;
+
+                return asdfa;
+                return el.previousElementSibling.dataset.num;
+            }
+
+            function myNextAll() {
+                // curentEl, nextEl
+                // console.log(e.nextElementSibling);
+                while (t.closest('span') !== tbody.lastElementChild) {
+                    tbody.lastElementChild.remove();
+                }
+                // while (t.closest('td') !== t.closest('tr').lastElementChild) {
+                //     t.closest('tr').lastElementChild.remove();
+                // }
+                document.querySelector("#body span:last-child").innerHTML = "?";
+            }
+        });
+
+        function foundPrevios(el) {
+            contentValues
+            while (!el?.previousElementSibling?.classList?.contains('exist') && el?.previousElementSibling !== null) {
+                el = el?.previousElementSibling;
+            }
+            return el?.previousElementSibling?.dataset?.num;
+        }
+
+        function dblRd(psc) {
+            console.log(psc % 2 === 0);
+            let dbl = document.querySelector('#dbl');
+            if (psc % 2 === 0) {
+                // console.log('add');
+                if (!dbl.classList.contains('dbl') && !double) dbl.classList.add('dbl');
+                return;
+            }
+            // console.log('remove');
+            dbl.classList.remove('dbl');
+        }
+
+        function hideBid(num) {
+
+            if (num < 0) return;
+
+            let style = document.querySelector('style');
+
+            let st = `
+                .bidding-wrapper span:nth-child(-n+${num}) {
+                    height: 0;
+                    opacity: 0;
+                    font-size: 0px;
+                }
+            `;
+
+            style.innerHTML = st;
+
+        }
+
+        // bidding.addEventListener('contextmenu', (e) => {
+        //     e.preventDefault();
+        //     console.log(e.target);
+            
+        // })
+
+        bidding.addEventListener('click', (e) => {
+            // e.preventDefault();
+            const t = e.target;
+            // console.log(document.querySelector('#fillout').checked);
+            let currentNum = t.dataset.num
+            if (fillout.checked && t.closest('#box') && currentNum) {
+                if (contentValues.querySelector(`div[data-num="${currentNum}"]`)) {
+                    values = contentValues.querySelector(`div[data-num="${currentNum}"]`);
+                } else {
+                    values = document.createElement("div");
+                    values.dataset.num = currentNum;
+                    values.dataset.bid = t.dataset.bid;
+                }
+
+                t.classList.add('exist');
+                values.classList.add('added');
+                let span = document.createElement("span");
+                values.append(span);
+                span = document.createElement("span");
+                span.classList.add('del');
+                span.innerHTML = "X";
+                values.append(span);
+
+                let prevNum = foundPrevios(t);
+                if (prevNum) document.querySelector(`#bidding-values div[data-num="${prevNum}"]`).after(values);
+                else contentValues.prepend(values);
+                addBidListener();
+                values.querySelector('span').focus();
+
+                return;
+
+            }
+
+            if (t.closest('#box') && t.dataset.num && (t.closest('.exist') || !Number(t.dataset.num))) {
+                let current = document.querySelector('#body');
+
+                let lastBid = document.querySelector("#body span:last-child");
+
+                tbody.dataset.parent = t.dataset.pr;
+
+                createEl(t.dataset.bid, lastBid);
+
+                if (Number(t.dataset.num)) firstEl = 1;
+
+                // if (t.dataset.num >= 35) return;
+
+                if (!competition.checked && passCounter < 2) createEl("pass");
+
+                createEl("?", 0, 1);
+                // if (passCounter % 2 === 0) {
+                    
+                // }number % 2 === 0
+                // document.querySelector('.bidding-table h1').innerHTML = passCounter % 2 === 0;
+                dblRd(passCounter);
+                // console.log(t.dataset.count);
+                if (!Number(t.dataset.num)) return;
+                requestData(currentNum, passCounter);
+
+                function createEl(content, el = 0, trs = 0) {
+
+                    if ((passCounter > 2 && firstEl) || passCounter > 3) return;
+
+                    if (t.closest('.bidding-wrapper')) hideBid(t.dataset.num);
+
+                    lastBid = el || document.createElement("span");
+
+                    lastBid.innerHTML = content;
+                    if (content !== "pass" && content !== "?") {
+                        lastBid.dataset.num = t.dataset.num;
+                        lastBid.dataset.parent = t.dataset.pr;
+                    }
+
+                    current.append(lastBid);
+                    checkCompetition(content);
+                }
+
+                function checkCompetition(content) {
+
+                    if (t.dataset.num < 1 ) {
+                        if (t.dataset.num === 0) return passCounter++;
+
+                        if (t.dataset.num == -1) document.querySelector('#dbl').classList.add('redbl');
+
+                        if (t.dataset.num == -2) double = 1;
+                    }
+
+                    if (t.dataset.num > 1 || t.dataset.num == -2) {
+                        document.querySelector('#dbl').classList.remove('redbl');
+                        document.querySelector('#dbl').classList.remove('dbl');
+                    }
+                    if (t.dataset.num > 1) double = 0;
+
+                    if (content === "pass") {
+                        passCounter++;
+                        lastBid.dataset.count = passCounter;
+                        return ;
+                    }
+
+                    if (content === "?") return;
+                    lastBid.dataset.count = passCounter;
+                    return passCounter = 0;
+                }
+
+                // function addTr() {
+                //     let tr = document.createElement("tr");
+                //     tbody.append(tr);
+                    // tr = document.createElement("tr");
+                    // tbody.className = "current";
+                //     current = document.querySelector('#body tr:last-child');
+                // }
+                // current.querySelectorAll('td').length;
+                // console.log();
+            }
+            // if (t.closest('#body') ) {
+                
+            // }
+        })
+
+
 
         vulnerable?.addEventListener('click',(e) => {
             const thd = document.querySelectorAll('#thead th');
@@ -216,142 +544,6 @@ window.addEventListener('load', () => {
                 });
             }
 
-        })
-
-        tbody.addEventListener('click',(e) => {
-            // e.preventDefault();
-            const t = e.target;
-            // console.log(t.closest('tr'));
-
-            // let siblings = [...myNextAll(t.closest('tr'))].remove();
-            // myNextAll(t.closest('tr')).remove();
-            // // console.log(siblings);.remove()
-            // console.log(myNextAll(t.closest('tr')));
-            // console.log(t.closest('tr').nextElementSibling === tbody.lastElementChild);
-            passCounter = t.dataset.count;
-            // console.log(passCounter);
-            // let sdfsdffff = foundPreviosBid(t);
-            if (t.closest('span').previousElementSibling === null) firstEl = passCounter = 0;
-            hideBid(foundPreviosBid(t));
-            // hideBid(foundPreviosBid(t));
-            // foundPreviosBid(t.previousElementSibling);
-            myNextAll();
-
-            function foundPreviosBid(el) {
-                // console.log(el, el?.previousElementSibling, el?.previousElementSibling?.dataset?.num, "|||", !el?.previousElementSibling?.dataset?.num);
-                // console.log(el?.previousElementSibling?.dataset?.num);
-
-                while (!el?.previousElementSibling?.dataset?.num && el?.previousElementSibling !== null) {
-                    el = el?.previousElementSibling;
-                }
-                // if (!el?.previousElementSibling?.dataset?.num) {
-                //     foundPreviosBid(el.previousElementSibling);
-                //     // return;
-                // }
-                let asdfa = el.previousElementSibling === null ? 0 : el.previousElementSibling.dataset.num;
-                // console.log('previousElementSibling', asdfa);
-                return asdfa;
-                return el.previousElementSibling.dataset.num;
-            }
-
-            function myNextAll() {
-                // curentEl, nextEl
-                // console.log(e.nextElementSibling);
-                while (t.closest('span') !== tbody.lastElementChild) {
-                    tbody.lastElementChild.remove();
-                }
-                // while (t.closest('td') !== t.closest('tr').lastElementChild) {
-                //     t.closest('tr').lastElementChild.remove();
-                // }
-                document.querySelector("#body span:last-child").innerHTML = "?";
-            }
-        });
-
-
-        function hideBid(num) {
-            // console.log(num);
-
-            if (num < 0) return;
-
-            let style = document.querySelector('style');
-
-            let st = `
-                .bidding-wrapper span:nth-child(-n+${num}) {
-                    height: 0;
-                    opacity: 0;
-                    font-size: 0px;
-                }
-            `;
-
-            style.innerHTML = st;
-
-            document.querySelector('.bidding-competition');
-        }
-
-        bidding.addEventListener('click',(e) => {
-            // e.preventDefault();
-            const t = e.target;
-            // console.log(t);
-            if (t.closest('#box') && t.dataset.num) {
-                let current = document.querySelector('#body');
-
-                let lastBid = document.querySelector("#body span:last-child");
-
-                createEl(t.dataset.bid, lastBid);
-
-                if (Number(t.dataset.num)) firstEl = 1;
-
-                // if (t.dataset.num >= 35) return;
-
-                if (!competition.checked && passCounter < 2) createEl("pass");
-
-                createEl("?", 0, 1);
-
-                function createEl(content, el = 0, trs = 0) {
-
-                    if ((passCounter > 2 && firstEl) || passCounter > 3) return;
-
-                    hideBid(t.dataset.num);
-
-                    lastBid = el || document.createElement("span");
-
-                    lastBid.innerHTML = content;
-                    if (content !== "pass") lastBid.dataset.num = t.dataset.num;
-
-                    current.append(lastBid);
-                    checkCompetition(content);
-                }
-
-                function checkCompetition(content) {
-
-                    if (t.dataset.num < 1 ) {
-                        if (t.dataset.num === 0) return passCounter++;
-                    }
-
-                    if (content === "pass") {
-                        passCounter++;
-                        lastBid.dataset.count = passCounter;
-                        return ;
-                    }
-
-                    if (content === "?") return;
-                    lastBid.dataset.count = passCounter;
-                    return passCounter = 0;
-                }
-
-                // function addTr() {
-                //     let tr = document.createElement("tr");
-                //     tbody.append(tr);
-                    // tr = document.createElement("tr");
-                    // tbody.className = "current";
-                //     current = document.querySelector('#body tr:last-child');
-                // }
-                // current.querySelectorAll('td').length;
-                // console.log();
-            }
-            // if (t.closest('#body') ) {
-                
-            // }
         })
     }
 })

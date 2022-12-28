@@ -5,16 +5,17 @@ namespace backend\models\system;
 use Yii;
 
 /**
- * This is the model class for table "{{%bid_tbl}}".
- *
- * @property int $id
- * @property int $lvl
- * @property string|null $bid
- * @property string|null $img
- * @property int $type
- *
- * @property Bid[] $bs
- */
+ * This is the model class for table "{{%bid_tbl}}".
+ *
+ * @property int $id
+ * @property int $lvl
+ * @property int $scores
+ * @property int $num
+ * @property string|null $bid
+ * @property string|null $img
+ *
+ * @property Bid[] $bs
+ */
 class BidTbl extends \yii\db\ActiveRecord
 {
     /**
@@ -31,7 +32,7 @@ class BidTbl extends \yii\db\ActiveRecord
     public function rules()
     {
         return [
-            [['lvl', 'type'], 'integer'],
+            [['lvl', 'scores', 'num'], 'integer'],
             [['bid', 'img'], 'string', 'max' => 24],
         ];
     }
@@ -44,9 +45,10 @@ class BidTbl extends \yii\db\ActiveRecord
         return [
             'id' => 'ID',
             'lvl' => 'Lvl',
+            'scores' => 'Scores',
+            'num' => 'Num',
             'bid' => 'Bid',
             'img' => 'Img',
-            'type' => 'Type',
         ];
     }
 

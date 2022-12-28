@@ -15,9 +15,10 @@ class m221024_124729_create_bid_tbl_table extends Migration
         $this->createTable('{{%bid_tbl}}', [
             'id' => $this->primaryKey(),
             'lvl' => $this->tinyInteger()->notNull()->defaultValue(0),
+            'scores' => $this->tinyInteger()->notNull()->defaultValue(0),
+            'num' => $this->tinyInteger()->notNull()->defaultValue(0),
             'bid' => $this->string(24),
             'img' => $this->string(24),
-            'type' => $this->tinyInteger()->notNull()->defaultValue(0),
         ]);
     }
 

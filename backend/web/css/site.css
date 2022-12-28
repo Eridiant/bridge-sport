@@ -389,10 +389,15 @@ a.add {
     align-items: center;
     width: 20%;
     height: 35px;
-    cursor: pointer;
     user-select: none;
     transition: .3s;
     border-radius: 2px;
+}
+.bidding-box span.exist{
+    cursor: pointer;
+}
+.bidding-box.fill span{
+    cursor: pointer;
 }
 .bidding-box span:hover {
     color: #fff;
@@ -402,4 +407,67 @@ a.add {
 .bidding-competition span {
     width: 33%;
     height: 40px;
+}
+.bidding-competition .double,
+.bidding-competition .re-double  {
+    height: 0;
+    opacity: 0;
+    font-size: 0px;
+}
+
+.bidding-competition.dbl:not(.redbl) .double {
+    height: auto;
+    opacity: 1;
+    font-size: inherit;
+}
+
+.bidding-competition.dbl.redbl .re-double {
+    height: auto;
+    opacity: 1;
+    font-size: inherit;
+}
+
+.bidding-values {
+    display: flex;
+    flex-direction: column;
+}
+.bidding-values > div {
+    position: relative;
+    display: flex;
+    justify-content: space-between;
+    max-width: 700px;
+    margin-left: 50px;
+    transition: .5s;
+}
+.bidding-values > div::before {
+    position: absolute;
+    content: attr(data-bid);
+    top: 0;
+    left: -50px;
+}
+.bidding-values .added {
+    position: relative;
+    order: -1;
+    margin-bottom: 10px;
+    background-color: #30854235;
+}
+.bidding-values .added::after {
+    position: absolute;
+    content: '';
+    bottom: 0;
+    left: 0;
+    width: 100%;
+    border-bottom: 1px solid #000;
+}
+.bidding-values .del {
+    font-weight: bold;
+    color: #ec6b08;
+    padding: 5px 10px;
+    cursor: pointer;
+}
+.bidding-values span:not(.del) {
+    min-width: 200px;
+}
+.bidding-box .exist {
+    background-color: #1b52264d;
 }

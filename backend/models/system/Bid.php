@@ -3,6 +3,7 @@
 namespace backend\models\system;
 
 use Yii;
+use yii\behaviors\TimestampBehavior;
 
 /**
  * This is the model class for table "{{%bid}}".
@@ -44,13 +45,27 @@ class Bid extends \yii\db\ActiveRecord
     public function rules()
     {
         return [
-            [['system_id', 'bid_tbl_id', 'created_at'], 'required'],
+            [['system_id', 'bid_tbl_id'], 'required'],
             [['system_id', 'bid_tbl_id', 'parent_id', 'variant_id', 'vulnerable_id', 'deprecated_at', 'pass', 'alert', 'opponent', 'updated_at', 'created_at'], 'integer'],
             [['excerpt', 'description'], 'string'],
             [['bid_tbl_id'], 'exist', 'skipOnError' => true, 'targetClass' => BidTbl::class, 'targetAttribute' => ['bid_tbl_id' => 'id']],
             [['system_id'], 'exist', 'skipOnError' => true, 'targetClass' => System::class, 'targetAttribute' => ['system_id' => 'id']],
             [['variant_id'], 'exist', 'skipOnError' => true, 'targetClass' => Variant::class, 'targetAttribute' => ['variant_id' => 'id']],
             [['vulnerable_id'], 'exist', 'skipOnError' => true, 'targetClass' => Vulnerable::class, 'targetAttribute' => ['vulnerable_id' => 'id']],
+        ];
+    }
+
+    public function behaviors()
+    {
+        return [
+            'timestamp' => [
+                'class' => TimestampBehavior::class,
+                'attributes' => [
+                    \yii\db\BaseActiveRecord::EVENT_BEFORE_INSERT => ['created_at', 'updated_at'],
+                    \yii\db\BaseActiveRecord::EVENT_BEFORE_UPDATE => ['updated_at'],
+                ],
+                // 'value' => new \yii\db\Expression('NOW()'),
+            ],
         ];
     }
 
