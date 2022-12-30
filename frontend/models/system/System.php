@@ -1,10 +1,8 @@
 <?php
 
-namespace backend\models\system;
+namespace frontend\models\system;
 
 use Yii;
-use yii\behaviors\TimestampBehavior;
-use backend\models\User;
 
 /**
  * This is the model class for table "{{%system}}".
@@ -20,8 +18,8 @@ use backend\models\User;
  * @property int|null $updated_at
  * @property int $created_at
  *
+ * @property Bid[] $bs
  * @property System[] $conventions
- * @property SystemBid[] $systemBs
  * @property SystemSystem[] $systemSystems
  * @property SystemSystem[] $systemSystems0
  * @property System[] $systems
@@ -43,7 +41,7 @@ class System extends \yii\db\ActiveRecord
     public function rules()
     {
         return [
-            [['user_id', 'name', 'slug'], 'required'],
+            [['user_id', 'name', 'slug', 'created_at'], 'required'],
             [['user_id', 'type', 'hidden', 'edit', 'updated_at', 'created_at'], 'integer'],
             [['description'], 'string'],
             [['name', 'slug'], 'string', 'max' => 255],
@@ -70,19 +68,14 @@ class System extends \yii\db\ActiveRecord
         ];
     }
 
-    public function behaviors()
+    /**
+     * Gets query for [[Bs]].
+     *
+     * @return \yii\db\ActiveQuery
+     */
+    public function getBids()
     {
-        return [
-            'timestamp' => [
-                'class' => TimestampBehavior::class,
-                'attributes' => [
-                    \yii\db\BaseActiveRecord::EVENT_BEFORE_INSERT => ['created_at'],
-                    \yii\db\BaseActiveRecord::EVENT_BEFORE_UPDATE => ['updated_at'],
-                ],
-                // 'value' => new \yii\db\Expression('NOW()'),
-                'value' => time(),
-            ],
-        ];
+        return $this->hasMany(Bid::class, ['system_id' => 'id']);
     }
 
     /**
@@ -93,16 +86,6 @@ class System extends \yii\db\ActiveRecord
     public function getConventions()
     {
         return $this->hasMany(System::class, ['id' => 'convention_id'])->viaTable('{{%system_system}}', ['system_id' => 'id']);
-    }
-
-    /**
-     * Gets query for [[SystemBids]].
-     *
-     * @return \yii\db\ActiveQuery
-     */
-    public function getBids()
-    {
-        return $this->hasMany(Bid::class, ['system_id' => 'id']);
     }
 
     /**

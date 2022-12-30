@@ -25,6 +25,16 @@ class PageRule implements UrlRuleInterface {
             return false; // return false сообщает UrlManager-у, что мы не смогли построить url и необходимо попробовать применить следующее правило
         }
 
+        // if ($route === 'system') {
+        //     $slug = System::find()
+        //         ->select('url')
+        //         ->where(['id' => $params['id']])
+        //         ->scalar();
+        //     if ($slug !== false) {
+        //         return '/' . $slug;
+        //     }
+        // }
+
         if ($route === 'category') {
             $slug = Category::find()
                 ->select('url')
