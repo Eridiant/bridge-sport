@@ -363,6 +363,15 @@ a.add {
     right: 20px;
     content: attr(data-count);
 }
+.bidding-table-body {
+    position: relative;
+}
+.bidding-table-body::before {
+    position: absolute;
+    content: attr(data-parent);
+    top: 0;
+    right: -20px;
+}
 
 .bidding-table span:hover:not(.current) {
     color: #fff;

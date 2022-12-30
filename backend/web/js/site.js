@@ -196,14 +196,14 @@ window.addEventListener('load', () => {
             const t = e.target;
             if (t.closest('.del')) {
                 let el = t.parentElement;
-                console.log(t.parentElement);
+                // console.log(t.parentElement);
                 let data = {
                     'id':el.dataset.id,
                 }
                 ajaxRequest("bid/del", data)
                     .then(response => {
                         let answer = JSON.parse(response);
-                        console.log(answer);
+                        // console.log(answer);
                         if (!answer.success) return;
                         el.remove();
                     })
@@ -221,7 +221,7 @@ window.addEventListener('load', () => {
 
 
         function requestData(num, count, parent = tbody.dataset.parent) {
-            console.log(num, count);
+            console.log(num, count, parent);
             let data = {
                 'system_id':bidding.dataset.system,
                 'parent_id':parent,
@@ -287,6 +287,7 @@ window.addEventListener('load', () => {
                     values.querySelector('span').contentEditable = 'false';
                     values.classList?.remove('added');
                     values.querySelector('span').removeEventListener('click', removeBidListener, false);
+                    document.querySelector(`#box span[data-num="${values.dataset.num}"]`).dataset.pr = answer.data.id;
                 })
                 .catch(error => {
                     alert(error);
@@ -322,20 +323,10 @@ window.addEventListener('load', () => {
 
             myNextAll();
 
+            let prParent = foundPreviosBid(t)?.dataset?.parent ?? 0;
+            tbody.dataset.parent = prParent;
+
             requestData(prNum, passCounter, foundPreviosBid(t)?.dataset?.parent ?? 0);
-
-            function foundPreviosBid(el) {
-
-                while (!el?.previousElementSibling?.dataset?.num && el?.previousElementSibling !== null) {
-                    el = el?.previousElementSibling;
-                }
-                console.log("previousElementSibling", el?.previousElementSibling);
-
-                let asdfa = el.previousElementSibling === null ? 0 : el.previousElementSibling;
-
-                return asdfa;
-                return el.previousElementSibling.dataset.num;
-            }
 
             function myNextAll() {
                 // curentEl, nextEl
@@ -350,6 +341,19 @@ window.addEventListener('load', () => {
             }
         });
 
+        function foundPreviosBid(el) {
+
+            while (!el?.previousElementSibling?.dataset?.num && el?.previousElementSibling !== null) {
+                el = el?.previousElementSibling;
+            }
+            // console.log("previousElementSibling", el?.previousElementSibling);
+
+            let asdfa = el.previousElementSibling === null ? 0 : el.previousElementSibling;
+
+            return asdfa;
+            return el.previousElementSibling.dataset.num;
+        }
+
         function foundPrevios(el) {
             contentValues
             while (!el?.previousElementSibling?.classList?.contains('exist') && el?.previousElementSibling !== null) {
@@ -359,7 +363,7 @@ window.addEventListener('load', () => {
         }
 
         function dblRd(psc) {
-            console.log(psc % 2 === 0);
+            // console.log(psc % 2 === 0);
             let dbl = document.querySelector('#dbl');
             if (psc % 2 === 0) {
                 // console.log('add');
@@ -400,22 +404,25 @@ window.addEventListener('load', () => {
             // console.log(document.querySelector('#fillout').checked);
             let currentNum = t.dataset.num
             if (fillout.checked && t.closest('#box') && currentNum) {
+
                 if (contentValues.querySelector(`div[data-num="${currentNum}"]`)) {
                     values = contentValues.querySelector(`div[data-num="${currentNum}"]`);
                 } else {
                     values = document.createElement("div");
                     values.dataset.num = currentNum;
                     values.dataset.bid = t.dataset.bid;
+
+                    let span = document.createElement("span");
+                    values.append(span);
+
+                    span = document.createElement("span");
+                    span.classList.add('del');
+                    span.innerHTML = "X";
+                    values.append(span);
                 }
 
                 t.classList.add('exist');
                 values.classList.add('added');
-                let span = document.createElement("span");
-                values.append(span);
-                span = document.createElement("span");
-                span.classList.add('del');
-                span.innerHTML = "X";
-                values.append(span);
 
                 let prevNum = foundPrevios(t);
                 if (prevNum) document.querySelector(`#bidding-values div[data-num="${prevNum}"]`).after(values);
@@ -432,7 +439,8 @@ window.addEventListener('load', () => {
 
                 let lastBid = document.querySelector("#body span:last-child");
 
-                tbody.dataset.parent = t.dataset.pr;
+                // tbody.dataset.parent = foundPreviosBid(t)?.dataset?.parent ?? 0;
+                // tbody.dataset.parent = lastBid?.dataset?.parent ?? 0;
 
                 createEl(t.dataset.bid, lastBid);
 
@@ -449,8 +457,9 @@ window.addEventListener('load', () => {
                 // document.querySelector('.bidding-table h1').innerHTML = passCounter % 2 === 0;
                 dblRd(passCounter);
                 // console.log(t.dataset.count);
-                if (!Number(t.dataset.num)) return;
+                tbody.dataset.parent = foundPreviosBid(document.querySelector("#body span:last-child"))?.dataset?.parent ?? 0;
                 requestData(currentNum, passCounter);
+                if (!Number(t.dataset.num)) return;
 
                 function createEl(content, el = 0, trs = 0) {
 
