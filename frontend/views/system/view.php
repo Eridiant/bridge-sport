@@ -6,6 +6,7 @@ use yii\helpers\Url;
 // p { margin-left: 30px; }");
 
 ?>
+<style></style>
 <div id="bidding" class="bidding" data-system="<?= $id; ?>">
 
     <div class="bidding-table">
