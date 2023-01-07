@@ -149,7 +149,7 @@ class BidController extends AppController
         Yii::$app->response->format = \yii\web\Response::FORMAT_JSON;
 
         if($model->save()){
-            return ['data' => ['id' => $model->id, 'excerpt' => $model->excerpt]];
+            return ['data' => ['id' => $model->id, 'excerpt' => $model->excerpt, 'description' => $model->description]];
         } else {
             return ['data' => ['err' => $model->getErrors()]];
         }

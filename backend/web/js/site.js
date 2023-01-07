@@ -221,7 +221,7 @@ window.addEventListener('load', () => {
 
 
         function requestData(num, count, parent = tbody.dataset.parent) {
-            console.log(num, count, parent);
+            // console.log(num, count, parent);
             let data = {
                 'system_id':bidding.dataset.system,
                 'parent_id':parent,
@@ -241,7 +241,7 @@ window.addEventListener('load', () => {
                         // values = document.createElement("div");
                         // let desc = el.description ? el.description : '';
 
-                        values = `<div data-num="${el.num}" data-bid="${el.bid}" data-id="${el.id}" class=""><span  class="excerpt" contenteditable="false">${el.excerpt}</span><details><summary></summary><span class="details" contenteditable="false">${el.description ?? ''}</span></details><span class="del">X</span></div>`
+                        values = `<div data-num="${el.num}" data-bid="${el.bid}" data-id="${el.id}" class=""><span  class="excerpt" contenteditable="false">${el.excerpt}</span><details><summary></summary><span class="details" contenteditable="false">${el.description ?? ''}</span></details><span class="del">&#10008;</span></div>`
                         contentValues.innerHTML += values;
                         // contentValues.append(values);
                         // values.dataset.num = el.num;
@@ -285,6 +285,12 @@ window.addEventListener('load', () => {
             removeBidListener();
         })
 
+        document.addEventListener('keypress', (event) => {
+            if ((event.keyCode == 10 || event.keyCode == 13) && event.ctrlKey) removeBidListener();
+            // console.log('event.key', event.key);
+            // console.log('event.keyCode', event.keyCode);
+        })
+
         function removeBidListener() {
             let data = {
                 'system_id':bidding.dataset.system,
@@ -299,8 +305,10 @@ window.addEventListener('load', () => {
                 .then(response => {
                     let answer = JSON.parse(response);
                     values.dataset.id = answer.data.id;
-                    values.querySelector('span').contentEditable = 'false';
-                    values.querySelector('span').innerHTML = answer.data.excerpt;
+                    values.querySelector('.excerpt').contentEditable = 'false';
+                    values.querySelector('.details').contentEditable = 'false';
+                    values.querySelector('.excerpt').innerHTML = answer.data.excerpt;
+                    values.querySelector('.details').innerHTML = answer.data.description ?? '';
                     values.classList?.remove('added');
                     values.querySelector('span').removeEventListener('click', removeBidListener, false);
                     document.querySelector(`#box span[data-num="${values.dataset.num}"]`).dataset.pr = answer.data.id;
@@ -428,13 +436,14 @@ window.addEventListener('load', () => {
                     values.dataset.num = currentNum;
                     values.dataset.bid = t.dataset.bid;
 
-                    let span = document.createElement("span");
-                    values.append(span);
+                    // let span = document.createElement("span");
+                    // values.append(span);
 
-                    span = document.createElement("span");
-                    span.classList.add('del');
-                    span.innerHTML = "X";
-                    values.append(span);
+                    // span = document.createElement("span");
+                    // span.classList.add('del');
+                    // span.innerHTML = "X";
+                    // values.append(span);
+                    values.innerHTML = `<span  class="excerpt" contenteditable="false"></span><details><summary></summary><span class="details" contenteditable="false"></span></details><span class="del">&#10008;</span>`;
                 }
 
                 t.classList.add('exist');
