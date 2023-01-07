@@ -81,7 +81,7 @@ class BidController extends AppController
         $pass = $request->post('pass_count') ?? 0;
         $pass = (int)$pass;
 
-        $sql = "SELECT {{%bid}}.id, parent_id, bid_tbl_id, pass, excerpt, num, bid 
+        $sql = "SELECT {{%bid}}.id, parent_id, bid_tbl_id, pass, excerpt, `description`, num, bid 
         FROM {{%bid}}
         LEFT JOIN {{%bid_tbl}} ON {{%bid_tbl}}.id = {{%bid}}.bid_tbl_id
         WHERE system_id = {$system_id} AND parent_id = {$parent_id} AND pass = {$pass}

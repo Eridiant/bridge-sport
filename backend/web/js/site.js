@@ -238,18 +238,22 @@ window.addEventListener('load', () => {
                     })
                     
                     data.forEach(el => {
-                        values = document.createElement("div");
-                        contentValues.append(values);
-                        values.dataset.num = el.num;
-                        values.dataset.bid = el.bid;
-                        values.dataset.id = el.id;
-                        let span = document.createElement("span");
-                        span.innerHTML = el.excerpt;
-                        values.append(span);
-                        span = document.createElement("span");
-                        span.classList.add('del');
-                        span.innerHTML = "X";
-                        values.append(span);
+                        // values = document.createElement("div");
+                        // let desc = el.description ? el.description : '';
+
+                        values = `<div data-num="${el.num}" data-bid="${el.bid}" data-id="${el.id}" class=""><span  class="excerpt" contenteditable="false">${el.excerpt}</span><details><summary></summary><span class="details" contenteditable="false">${el.description ?? ''}</span></details><span class="del">X</span></div>`
+                        contentValues.innerHTML += values;
+                        // contentValues.append(values);
+                        // values.dataset.num = el.num;
+                        // values.dataset.bid = el.bid;
+                        // values.dataset.id = el.id;
+                        // let span = document.createElement("span");
+                        // span.innerHTML = el.excerpt;
+                        // values.append(span);
+                        // span = document.createElement("span");
+                        // span.classList.add('del');
+                        // span.innerHTML = "X";
+                        // values.append(span);
 
                         box.querySelector(`span[data-num="${el.num}"]`).classList.add('exist');
                         box.querySelector(`span[data-num="${el.num}"]`).dataset.pr = el.id;
@@ -267,9 +271,19 @@ window.addEventListener('load', () => {
 
         function addBidListener() {
             // console.log('blur');
-            values.querySelector('span').contentEditable = 'true';
-            values.querySelector('span').addEventListener('blur', removeBidListener, false);
+            values.querySelector('.excerpt').contentEditable = 'true';
+            values.querySelector('.details').contentEditable = 'true';
+            values.querySelector('details').open = 'true';
+            // values.querySelector('span').addEventListener('blur', removeBidListener, false);
         }
+
+        document.addEventListener("click", (e) => {
+            let target = e.target;
+
+            if (target.closest('#bidding-values .added') || target.closest('#box') || !document.querySelector('.added')) return;
+
+            removeBidListener();
+        })
 
         function removeBidListener() {
             let data = {
@@ -278,13 +292,15 @@ window.addEventListener('load', () => {
                 'parent_id':tbody.dataset?.parent,
                 'bid_num':values.dataset?.num,
                 'pass_count':passCounter,
-                'excerpt':values.querySelector('span').innerHTML,
+                'excerpt':values.querySelector('.excerpt').innerHTML,
+                'details':values.querySelector('.details').innerHTML,
             }
             ajaxRequest("bid/add", data)
                 .then(response => {
                     let answer = JSON.parse(response);
                     values.dataset.id = answer.data.id;
                     values.querySelector('span').contentEditable = 'false';
+                    values.querySelector('span').innerHTML = answer.data.excerpt;
                     values.classList?.remove('added');
                     values.querySelector('span').removeEventListener('click', removeBidListener, false);
                     document.querySelector(`#box span[data-num="${values.dataset.num}"]`).dataset.pr = answer.data.id;
@@ -295,7 +311,7 @@ window.addEventListener('load', () => {
                 });
         }
 
-        tbody.addEventListener('click',(e) => {
+        tbody.addEventListener('click', (e) => {
 
             const t = e.target;
 

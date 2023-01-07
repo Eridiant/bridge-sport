@@ -105,7 +105,7 @@ class BidController extends AppController
         // $parent_id = 12;
         // $pass = "pass = 0" ;
         // ${pass} , num, bid  {{%bid}}.
-        $sql = "SELECT {{%bid}}.id, parent_id, bid_tbl_id, pass, excerpt, num, bid 
+        $sql = "SELECT {{%bid}}.id, parent_id, bid_tbl_id, pass, excerpt, num, `description`, bid
         FROM {{%bid}}
         LEFT JOIN {{%bid_tbl}} ON {{%bid_tbl}}.id = {{%bid}}.bid_tbl_id
         WHERE system_id = {$system_id} AND parent_id = {$parent_id} AND pass = {$pass}
@@ -143,18 +143,27 @@ class BidController extends AppController
         $model->bid_tbl_id = $this->findBid($request->post('bid_num'));
         $model->parent_id = $request->post('parent_id');
         $model->pass = $request->post('pass_count');
-        $model->excerpt = $request->post('excerpt');
+        $model->excerpt = $this->clearTag($request->post('excerpt'));
+        $model->description = $this->clearTag($request->post('details'));
 
         Yii::$app->response->format = \yii\web\Response::FORMAT_JSON;
 
         if($model->save()){
-            return ['data' => ['id' => $model->id]];
+            return ['data' => ['id' => $model->id, 'excerpt' => $model->excerpt]];
         } else {
             return ['data' => ['err' => $model->getErrors()]];
         }
         return ['data' => compact('bid_id', 'system_id', 'bid_tbl_id', 'parent_id', 'pass', 'excerpt')];
         return ['data' => ['short' => $short]];
 
+    }
+
+    protected function clearTag($html)
+    {
+        $text = strip_tags($html);
+        $text = trim($text);
+        $text = htmlspecialchars($text);
+        return $text;
     }
 
     public function actionEdit()

@@ -443,6 +443,7 @@ a.add {
 .bidding-values > div {
     position: relative;
     display: flex;
+    flex-wrap: wrap;
     justify-content: space-between;
     max-width: 700px;
     margin-left: 50px;
@@ -469,6 +470,9 @@ a.add {
     border-bottom: 1px solid #000;
 }
 .bidding-values .del {
+    position: absolute;
+    right: 0;
+    top: 0;
     font-weight: bold;
     color: #ec6b08;
     padding: 5px 10px;
@@ -476,6 +480,36 @@ a.add {
 }
 .bidding-values span:not(.del) {
     min-width: 200px;
+    width: 100%;
+}
+.bidding-values details {
+    display: flex;
+    width: 100%;
+}
+.bidding-values details[open] summary::before {
+    transform: scaleY(-1)
+}
+/* .bidding-values details[open] {
+    background-color: #f00;
+} */
+
+/* .bidding-values details[open] span {
+} */
+
+.bidding-values summary {
+    list-style: none;
+}
+.bidding-values summary::-webkit-details-marker {
+    display: none;
+}
+.bidding-values summary::before {
+    content: '\25BC';
+    font-size: 20px;
+    transition: .3s;
+    z-index: 1;
+}
+.bidding-values span:first-child {
+    white-space: pre-wrap
 }
 .bidding-box .exist {
     background-color: #1b52264d;
