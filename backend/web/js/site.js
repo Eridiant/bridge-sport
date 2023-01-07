@@ -209,6 +209,7 @@ window.addEventListener('load', () => {
                         // console.log(answer);
                         if (!answer.success) return;
                         el.remove();
+                        box.querySelector(`span[data-num="${el.dataset.num}"]`).classList.remove('exist');
                     })
                     .catch(error => {
                         alert(error);
