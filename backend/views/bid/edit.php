@@ -80,6 +80,7 @@ use yii\helpers\Url;
             <span class="re-double" data-num="-2" data-bid="ReDbl">ReDbl</span>
         </div> -->
     </div>
+    <p>переносы учитываются, завершение редактирования клик в любом месте или cntrl+enter</p>
     <div id="bidding-values" class="bidding-values"></div>
 </div>
 

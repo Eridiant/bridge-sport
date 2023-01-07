@@ -194,7 +194,9 @@ window.addEventListener('load', () => {
 
         contentValues.addEventListener('click', (e) => {
             const t = e.target;
-            if (t.closest('.del')) {
+            let dl = confirm("удалить?");
+
+            if (t.closest('.del') && dl) {
                 let el = t.parentElement;
                 // console.log(t.parentElement);
                 let data = {
