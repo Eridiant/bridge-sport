@@ -290,10 +290,24 @@ window.addEventListener('load', () => {
         })
 
         document.addEventListener('keypress', (event) => {
-            if ((event.keyCode == 10 || event.keyCode == 13) && event.ctrlKey) removeBidListener();
-            // console.log('event.key', event.key);
             // console.log('event.keyCode', event.keyCode);
+            if ((event.keyCode == 10 || event.keyCode == 13) && event.ctrlKey)  {
+                removeBidListener();
+                return;
+            }
+            // console.log('event.key', event.key);
+            // console.log('keyCode', event.keyCode, event.altKey);
+
+            if ((event.keyCode == 10 || event.keyCode == 13) && event.shiftKey) {
+                event.preventDefault();
+                removeDoubleSpace();
+            }
         })
+
+        function removeDoubleSpace() {
+            values.querySelector('.excerpt').innerHTML = values.querySelector('.excerpt').innerHTML.replace(/\s+/g,' ').replace(/^\s+|\s+$/,'');
+            values.querySelector('.details').innerHTML = values.querySelector('.details').innerHTML.replace(/\s+/g,' ').replace(/^\s+|\s+$/,'');
+        }
 
         function removeBidListener() {
             let data = {

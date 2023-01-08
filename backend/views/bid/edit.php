@@ -10,6 +10,10 @@ use yii\helpers\Url;
 
 <a href="<?= Yii::$app->urlManagerFrontend->createAbsoluteUrl(['/system/' . \backend\models\system\System::findOne($id)->slug]); ?>">ссылка на систему</a>
 <br>
+<br>
+
+<p>переносы учитываются, завершение редактирования клик в любом месте вне блока или cntr+enter</p>
+<p>удалить двойные пробелы alr+enter</p>
 
 <div id="bidding" class="bidding" data-system="<?= $id; ?>">
 
@@ -80,7 +84,6 @@ use yii\helpers\Url;
             <span class="re-double" data-num="-2" data-bid="ReDbl">ReDbl</span>
         </div> -->
     </div>
-    <p>переносы учитываются, завершение редактирования клик в любом месте или cntrl+enter</p>
     <div id="bidding-values" class="bidding-values"></div>
 </div>
 
