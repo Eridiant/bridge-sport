@@ -94,6 +94,19 @@ class BidController extends AppController
         return ['data' => $model];
     }
 
+    public function actionId()
+    {
+        $request = Yii::$app->request;
+
+        $id = (int)$request->post('id');
+
+        $model = $this->findModel($id);
+
+        Yii::$app->response->format = \yii\web\Response::FORMAT_JSON;
+        // return $model;
+        return ['data' => $model];
+    }
+
     public function actionView($slug)
     {
 

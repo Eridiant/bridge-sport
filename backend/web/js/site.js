@@ -245,7 +245,7 @@ window.addEventListener('load', () => {
                         // values = document.createElement("div");
                         // let desc = el.description ? el.description : '';
 
-                        values = `<div data-num="${el.num}" data-bid="${el.bid}" data-id="${el.id}" class=""><span  class="excerpt" contenteditable="false">${el.excerpt}</span><details><summary></summary><span class="details" contenteditable="false">${el.description ?? ''}</span></details><span class="del">&#10008;</span></div>`
+                        values = `<div data-num="${el.num}" data-bid="${el.bid}" data-id="${el.id}" class=""><span  class="excerpt" contenteditable="false">${el.excerpt}</span><details><summary tabindex="-1"></summary><span class="details" contenteditable="false">${el.description ?? ''}</span></details><span class="del">&#10008;</span></div>`
                         contentValues.innerHTML += values;
                         // contentValues.append(values);
                         // values.dataset.num = el.num;
@@ -289,20 +289,51 @@ window.addEventListener('load', () => {
             removeBidListener();
         })
 
+        document.addEventListener('keydown', (event) => {
+            const KEYCODE_ESC = 27;
+            if (event.keyCode == KEYCODE_ESC) {
+                escChange();
+            }
+        })
+
         document.addEventListener('keypress', (event) => {
-            // console.log('event.keyCode', event.keyCode);
-            if ((event.keyCode == 10 || event.keyCode == 13) && event.ctrlKey)  {
+            console.log('event.keyCode', event.keyCode);
+            if ((event.keyCode == 10 || event.keyCode == 13) && event.shiftKey)  {
                 removeBidListener();
                 return;
             }
             // console.log('event.key', event.key);
             // console.log('keyCode', event.keyCode, event.altKey);
 
-            if ((event.keyCode == 10 || event.keyCode == 13) && event.shiftKey) {
+            if ((event.keyCode == 10 || event.keyCode == 13) && event.ctrlKey) {
                 event.preventDefault();
                 removeDoubleSpace();
             }
         })
+
+        function escChange() {
+            if (!values.dataset?.id) {
+                document.querySelector(`#box span[data-num="${values.dataset.num}"]`).classList.remove('exist');
+                values.remove();
+                return;
+            }
+            let data = {
+                'id':values.dataset?.id,
+            }
+            ajaxRequest("bid/id", data)
+                .then(response => {
+                    let answer = JSON.parse(response);
+                    values.querySelector('.excerpt').contentEditable = 'false';
+                    values.querySelector('.details').contentEditable = 'false';
+                    values.classList?.remove('added');
+                    values.querySelector('.excerpt').innerHTML = answer.data.excerpt;
+                    values.querySelector('.details').innerHTML = answer.data.description ?? '';
+                })
+                .catch(error => {
+                    alert(error);
+                    console.log(error);
+                });
+        }
 
         function removeDoubleSpace() {
             values.querySelector('.excerpt').innerHTML = values.querySelector('.excerpt').innerHTML.replace(/\s+/g,' ').replace(/^\s+|\s+$/,'');
@@ -328,7 +359,7 @@ window.addEventListener('load', () => {
                     values.querySelector('.excerpt').innerHTML = answer.data.excerpt;
                     values.querySelector('.details').innerHTML = answer.data.description ?? '';
                     values.classList?.remove('added');
-                    values.querySelector('span').removeEventListener('click', removeBidListener, false);
+                    // values.querySelector('span').removeEventListener('click', removeBidListener, false);
                     document.querySelector(`#box span[data-num="${values.dataset.num}"]`).dataset.pr = answer.data.id;
                 })
                 .catch(error => {
@@ -434,47 +465,43 @@ window.addEventListener('load', () => {
 
         }
 
-        // bidding.addEventListener('contextmenu', (e) => {
-        //     e.preventDefault();
-        //     console.log(e.target);
-            
-        // })
+        box.addEventListener('contextmenu', (e) => {
+            e.preventDefault();
+            addBidValue(e);
+        })
+
+        function addBidValue(e) {
+            const t = e.target;
+            let currentNum = t.dataset.num;
+            if (contentValues.querySelector(`div[data-num="${currentNum}"]`)) {
+                values = contentValues.querySelector(`div[data-num="${currentNum}"]`);
+            } else {
+                values = document.createElement("div");
+                values.dataset.num = currentNum;
+                values.dataset.bid = t.dataset.bid;
+
+                values.innerHTML = `<span  class="excerpt" contenteditable="false"></span><details><summary></summary><span class="details" contenteditable="false"></span></details><span class="del">&#10008;</span>`;
+            }
+
+            t.classList.add('exist');
+            values.classList.add('added');
+
+            let prevNum = foundPrevios(t);
+            if (prevNum) document.querySelector(`#bidding-values div[data-num="${prevNum}"]`).after(values);
+            else contentValues.prepend(values);
+            addBidListener();
+            values.querySelector('span').focus();
+        }
 
         bidding.addEventListener('click', (e) => {
             // e.preventDefault();
             const t = e.target;
             // console.log(document.querySelector('#fillout').checked);
-            let currentNum = t.dataset.num
+            let currentNum = t.dataset.num;
             if (fillout.checked && t.closest('#box') && currentNum) {
 
-                if (contentValues.querySelector(`div[data-num="${currentNum}"]`)) {
-                    values = contentValues.querySelector(`div[data-num="${currentNum}"]`);
-                } else {
-                    values = document.createElement("div");
-                    values.dataset.num = currentNum;
-                    values.dataset.bid = t.dataset.bid;
-
-                    // let span = document.createElement("span");
-                    // values.append(span);
-
-                    // span = document.createElement("span");
-                    // span.classList.add('del');
-                    // span.innerHTML = "X";
-                    // values.append(span);
-                    values.innerHTML = `<span  class="excerpt" contenteditable="false"></span><details><summary></summary><span class="details" contenteditable="false"></span></details><span class="del">&#10008;</span>`;
-                }
-
-                t.classList.add('exist');
-                values.classList.add('added');
-
-                let prevNum = foundPrevios(t);
-                if (prevNum) document.querySelector(`#bidding-values div[data-num="${prevNum}"]`).after(values);
-                else contentValues.prepend(values);
-                addBidListener();
-                values.querySelector('span').focus();
-
+                addBidValue(e);
                 return;
-
             }
 
             if (t.closest('#box') && t.dataset.num && (t.closest('.exist') || !Number(t.dataset.num))) {
