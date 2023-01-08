@@ -297,7 +297,7 @@ window.addEventListener('load', () => {
         })
 
         document.addEventListener('keypress', (event) => {
-            console.log('event.keyCode', event.keyCode);
+            // console.log('event.keyCode', event.keyCode);
             if ((event.keyCode == 10 || event.keyCode == 13) && event.shiftKey)  {
                 removeBidListener();
                 return;
