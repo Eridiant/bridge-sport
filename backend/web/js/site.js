@@ -299,11 +299,10 @@ window.addEventListener('load', () => {
         document.addEventListener('keypress', (event) => {
             // console.log('event.keyCode', event.keyCode);
             if ((event.keyCode == 10 || event.keyCode == 13) && event.shiftKey)  {
+                event.preventDefault();
                 removeBidListener();
                 return;
             }
-            // console.log('event.key', event.key);
-            // console.log('keyCode', event.keyCode, event.altKey);
 
             if ((event.keyCode == 10 || event.keyCode == 13) && event.ctrlKey) {
                 event.preventDefault();

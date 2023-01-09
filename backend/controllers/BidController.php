@@ -160,9 +160,9 @@ class BidController extends AppController
 
     protected function clearTag($html)
     {
-        $text = strip_tags($html);
+        $text = strip_tags($html, '<br>');
         $text = trim($text);
-        $text = htmlspecialchars($text);
+        // $text = htmlspecialchars(nl2br($text));
         return $text;
     }
 
