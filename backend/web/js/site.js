@@ -379,6 +379,8 @@ window.addEventListener('load', () => {
             // document.querySelector('.bidding-table h1').innerHTML = passCounter;
 
             delete t.closest('span').dataset.num;
+            delete t.closest('span').dataset.parent;
+            delete t.closest('span').dataset.count;
             
             let prNum = foundPreviosBid(t)?.dataset?.num;
             if (prNum == -1) document.querySelector('#dbl').classList.add('redbl');
@@ -499,6 +501,12 @@ window.addEventListener('load', () => {
                 return;
             }
 
+            if (t.closest('.bidding-form')) {
+                if (t.closest('#competition')) {
+                    competitionSwitch(competition.checked);
+                }
+            }
+
             if (t.closest('#box') && t.dataset.num && (t.closest('.exist') || !Number(t.dataset.num))) {
                 let current = document.querySelector('#body');
 
@@ -578,7 +586,11 @@ window.addEventListener('load', () => {
             // }
         })
 
-
+        function competitionSwitch(swtch) {
+            if (swtch) {
+                console.log(passCounter);
+            }
+        }
 
         vulnerable?.addEventListener('click',(e) => {
             const thd = document.querySelectorAll('#thead th');
