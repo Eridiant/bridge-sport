@@ -385,10 +385,11 @@ window.addEventListener('load', () => {
             if (prNum == -2) {
                 document.querySelector('#dbl').classList.add('redbl');
                 double = 1;
-            }
-            else double = 0;
+            } else double = 0;
 
-            if (passCounter % 2 === 0) document.querySelector('#competition').checked = true;
+            if (passCounter % 2 === 0 && t.previousElementSibling !== null) {
+                competition.checked = true;
+            }
 
             dblRd(passCounter);
             hideBid(prNum);
@@ -401,14 +402,10 @@ window.addEventListener('load', () => {
             requestData(prNum, passCounter, foundPreviosBid(t)?.dataset?.parent ?? 0);
 
             function myNextAll() {
-                // curentEl, nextEl
-                // console.log(e.nextElementSibling);
                 while (t.closest('span') !== tbody.lastElementChild) {
                     tbody.lastElementChild.remove();
                 }
-                // while (t.closest('td') !== t.closest('tr').lastElementChild) {
-                //     t.closest('tr').lastElementChild.remove();
-                // }
+
                 document.querySelector("#body span:last-child").innerHTML = "?";
             }
         });
@@ -498,7 +495,6 @@ window.addEventListener('load', () => {
             // console.log(document.querySelector('#fillout').checked);
             let currentNum = t.dataset.num;
             if (fillout.checked && t.closest('#box') && currentNum) {
-
                 addBidValue(e);
                 return;
             }
@@ -508,24 +504,16 @@ window.addEventListener('load', () => {
 
                 let lastBid = document.querySelector("#body span:last-child");
 
-                // tbody.dataset.parent = foundPreviosBid(t)?.dataset?.parent ?? 0;
-                // tbody.dataset.parent = lastBid?.dataset?.parent ?? 0;
-
                 createEl(t.dataset.bid, lastBid);
 
                 if (Number(t.dataset.num)) firstEl = 1;
 
-                // if (t.dataset.num >= 35) return;
-
                 if (!competition.checked && passCounter < 2) createEl("pass");
 
                 createEl("?", 0, 1);
-                // if (passCounter % 2 === 0) {
-                    
-                // }number % 2 === 0
-                // document.querySelector('.bidding-table h1').innerHTML = passCounter % 2 === 0;
+
                 dblRd(passCounter);
-                // console.log(t.dataset.count);
+
                 tbody.dataset.parent = foundPreviosBid(document.querySelector("#body span:last-child"))?.dataset?.parent ?? 0;
                 requestData(currentNum, passCounter);
                 if (!Number(t.dataset.num)) return;
