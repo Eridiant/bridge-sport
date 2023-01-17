@@ -371,17 +371,14 @@ window.addEventListener('load', () => {
 
             const t = e.target;
 
-            passCounter = t.dataset.count;
+            // passCounter = t.dataset.count;
 
             let prev = t.closest('span').previousElementSibling;
             if (prev === null) firstEl = passCounter = 0;
+            else if (prev.dataset.num) passCounter = 0;
             else passCounter = prev.dataset.count;
             // document.querySelector('.bidding-table h1').innerHTML = passCounter;
 
-            delete t.closest('span').dataset.num;
-            delete t.closest('span').dataset.parent;
-            delete t.closest('span').dataset.count;
-            
             let prNum = foundPreviosBid(t)?.dataset?.num;
             if (prNum == -1) document.querySelector('#dbl').classList.add('redbl');
             if (prNum == -2) {
@@ -389,9 +386,15 @@ window.addEventListener('load', () => {
                 double = 1;
             } else double = 0;
 
+            // console.log(passCounter % 2 === 0, t.previousElementSibling !== null);
             if (passCounter % 2 === 0 && t.previousElementSibling !== null) {
                 competition.checked = true;
             }
+
+
+            delete t.closest('span').dataset.num;
+            delete t.closest('span').dataset.parent;
+            delete t.closest('span').dataset.count;
 
             dblRd(passCounter);
             hideBid(prNum);
@@ -425,8 +428,17 @@ window.addEventListener('load', () => {
             return el.previousElementSibling.dataset.num;
         }
 
+        function foundPreviosValue(el) {
+
+            while (!el?.dataset?.num && el !== null) {
+                el = el?.previousElementSibling;
+            }
+            console.log(el === null ? 0 : 1);
+            return el === null ? 0 : 1;
+        }
+
         function foundPrevios(el) {
-            contentValues
+            // contentValues
             while (!el?.previousElementSibling?.classList?.contains('exist') && el?.previousElementSibling !== null) {
                 el = el?.previousElementSibling;
             }
@@ -504,6 +516,7 @@ window.addEventListener('load', () => {
             if (t.closest('.bidding-form')) {
                 if (t.closest('#competition')) {
                     competitionSwitch(competition.checked);
+                    return;
                 }
             }
 
@@ -516,7 +529,7 @@ window.addEventListener('load', () => {
 
                 if (Number(t.dataset.num)) firstEl = 1;
 
-                if (!competition.checked && passCounter < 2) createEl("pass");
+                if (!competition.checked && passCounter < 2 && foundPreviosValue(lastBid)) createEl("pass");
 
                 createEl("?", 0, 1);
 
@@ -545,7 +558,7 @@ window.addEventListener('load', () => {
                 }
 
                 function checkCompetition(content) {
-
+                    console.log('checkCompetition', content, passCounter);
                     if (t.dataset.num < 1 ) {
                         if (t.dataset.num === 0) return passCounter++;
 
