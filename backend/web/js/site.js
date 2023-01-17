@@ -433,7 +433,7 @@ window.addEventListener('load', () => {
             while (!el?.dataset?.num && el !== null) {
                 el = el?.previousElementSibling;
             }
-            console.log(el === null ? 0 : 1);
+
             return el === null ? 0 : 1;
         }
 
@@ -513,12 +513,12 @@ window.addEventListener('load', () => {
                 return;
             }
 
-            if (t.closest('.bidding-form')) {
-                if (t.closest('#competition')) {
-                    competitionSwitch(competition.checked);
-                    return;
-                }
-            }
+            // if (t.closest('.bidding-form')) {
+            //     if (t.closest('#competition')) {
+            //         competitionSwitch(competition.checked);
+            //         return;
+            //     }
+            // }
 
             if (t.closest('#box') && t.dataset.num && (t.closest('.exist') || !Number(t.dataset.num))) {
                 let current = document.querySelector('#body');
@@ -529,7 +529,7 @@ window.addEventListener('load', () => {
 
                 if (Number(t.dataset.num)) firstEl = 1;
 
-                if (!competition.checked && passCounter < 2 && foundPreviosValue(lastBid)) createEl("pass");
+                if (!competition.checked && passCounter < 1 && foundPreviosValue(lastBid)) createEl("pass");
 
                 createEl("?", 0, 1);
 
@@ -558,7 +558,7 @@ window.addEventListener('load', () => {
                 }
 
                 function checkCompetition(content) {
-                    console.log('checkCompetition', content, passCounter);
+
                     if (t.dataset.num < 1 ) {
                         if (t.dataset.num === 0) return passCounter++;
 
@@ -599,11 +599,15 @@ window.addEventListener('load', () => {
             // }
         })
 
-        function competitionSwitch(swtch) {
-            if (swtch) {
-                console.log(passCounter);
-            }
-        }
+        // function competitionSwitch(swtch) {
+        //     if (swtch) {
+        //         // createEl()
+        //         createEl("?", 0, 1);
+        //         console.log('true', passCounter, foundPreviosBid(tbody.lastChild));
+        //     } else {
+        //         console.log('false', passCounter, foundPreviosBid(tbody.lastChild));
+        //     }
+        // }
 
         vulnerable?.addEventListener('click',(e) => {
             const thd = document.querySelectorAll('#thead th');
