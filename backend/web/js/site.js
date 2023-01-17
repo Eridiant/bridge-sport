@@ -676,9 +676,7 @@ function ajaxRequest(cntr, rqst) {
 }
 
 function callMigrate(cntr) {
-    // console.log(wrap.dataset.id);
     return new Promise((succeed, fail) => {
-        // console.log(wrap.dataset.id);
         let quizRequest = new XMLHttpRequest();
         quizRequest.open("POST", `/admin/migrate/${cntr}`, true);
         quizRequest.setRequestHeader('Content-Type', 'application/json');
