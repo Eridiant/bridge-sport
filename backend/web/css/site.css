@@ -287,10 +287,6 @@ a.add {
     transition: .3s;
 }
 
-.bidding-form label {
-    border-radius: 2px;
-}
-
 .bidding .vul {
     color: #fff;
     text-shadow: 1px 1px 2px #cb0000, -1px -1px 2px #cb0000, 1px -1px 2px #cb0000, -1px 1px 2px #cb0000;
@@ -328,8 +324,20 @@ a.add {
     visibility: hidden;
 }
 
-.bidding label:hover {
+.bidding input[type="checkbox"] + label:hover {
     background-color: #33743b50;
+}
+
+.bidding-form label {
+    border-radius: 2px;
+}
+.bidding-form #intervention:checked + label {
+    text-shadow: 1px 1px 2px #cd3b27aa, -1px -1px 2px #cd3b27aa, 1px -1px 2px #cd3b27aa, -1px 1px 2px #cd3b27aa;
+    background-color: #cd3b2799;
+}
+
+.bidding-form #intervention + label:hover {
+    background-color: #cd3b2750;
 }
 
 .bidding-table > div {

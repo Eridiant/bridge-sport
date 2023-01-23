@@ -251,6 +251,18 @@ document.addEventListener('DOMContentLoaded', () => {
 
 })
 
+function fetchRequest(data, url) {
+    return fetch(url, {
+        method: "POST",
+        headers: {
+            "Content-Type": "application/json"
+        },
+        body: JSON.stringify({
+            title: "New Todo",
+            completed: false
+        })
+    });
+}
 
 function xhRequest(data, url) {
     return new Promise((succeed, fail) => {
