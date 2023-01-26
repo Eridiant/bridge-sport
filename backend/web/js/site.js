@@ -234,6 +234,7 @@ window.addEventListener('load', () => {
                 opponent = passCounter % 2 === 0 ? !Number(lc.dataset.opponent) : Number(lc.dataset.opponent);
                 // if (intrvSwitch) opponent = !opponent;
             }
+            console.log('opponent', opponent);
             return opponent;
         }
 
@@ -383,7 +384,7 @@ window.addEventListener('load', () => {
                     // values.querySelector('span').removeEventListener('click', removeBidListener, false);
                     let currentSpan = document.querySelector(`#box span[data-num="${values.dataset.num}"]`);
                     currentSpan.dataset.pr = answer.data.id;
-                    currentSpan.dataset.opponent = checkOpponentBid();
+                    currentSpan.dataset.opponent = Number(checkOpponentBid());
                 })
                 .catch(error => {
                     alert(error);
