@@ -183,14 +183,17 @@ window.addEventListener('load', () => {
         const box = document.querySelector('#box'); 
         const contentValues = document.querySelector('#bidding-values');
         const competition = document.querySelector('#competition');
+        const intervention = document.querySelector('#intervention');
         const vulnerable = document.querySelector('#vulnerable');
         const fillout = document.querySelector('#fillout');
+        let intrvSwitch = 0;
+        let opponent = 0;
         let passCounter = 0;
         let firstEl = 0;
         let double = 0;
         let values;
 
-        requestData(0, null);
+        requestData(null);
 
         contentValues.addEventListener('click', (e) => {
             const t = e.target;
@@ -224,12 +227,20 @@ window.addEventListener('load', () => {
         })
 
 
-        function requestData(num, count, parent = tbody.dataset.parent) {
-            // console.log(num, count, parent);
+        function requestData(count, parent = tbody.dataset.parent) {
+            let lc = foundPreviosBid(document.querySelector("#body span:last-child"));
+            if (!lc) {
+                opponent = intrvSwitch;
+            } else {
+                opponent = passCounter % 2 === 0 ? !Number(lc.dataset.opponent) : Number(lc.dataset.opponent);
+                // if (intrvSwitch) opponent = !opponent;
+            }
+            // console.log('opponent=', opponent, ' passCounter=', passCounter, ' intrvSwitch=', intrvSwitch, ' foundPreviosBid_opponent=', lc?.dataset?.opponent);
             let data = {
                 'system_id':bidding.dataset.system,
                 'parent_id':parent,
                 'pass_count':count,
+                'opponent':opponent,
             }
             ajaxRequest("bid/fill", data)
                 .then(response => {
@@ -240,12 +251,12 @@ window.addEventListener('load', () => {
                     box.querySelectorAll('.exist').forEach(el => {
                         el.classList.remove('exist');
                     })
-                    
+
                     data.forEach(el => {
                         // values = document.createElement("div");
                         // let desc = el.description ? el.description : '';
 
-                        values = `<div data-num="${el.num}" data-bid="${el.bid}" data-id="${el.id}" class=""><span  class="excerpt" contenteditable="false">${el.excerpt}</span><details><summary tabindex="-1"></summary><span class="details" contenteditable="false">${el.description ?? ''}</span></details><span class="del">&#10008;</span></div>`
+                        values = `<div data-num="${el.num}" data-bid="${el.bid}" data-id="${el.id}" data-opponent="${el.opponent}" class=""><span  class="excerpt" contenteditable="false">${el.excerpt}</span><details><summary tabindex="-1"></summary><span class="details" contenteditable="false">${el.description ?? ''}</span></details><span class="del">&#10008;</span></div>`
                         contentValues.innerHTML += values;
                         // contentValues.append(values);
                         // values.dataset.num = el.num;
@@ -261,6 +272,7 @@ window.addEventListener('load', () => {
 
                         box.querySelector(`span[data-num="${el.num}"]`).classList.add('exist');
                         box.querySelector(`span[data-num="${el.num}"]`).dataset.pr = el.id;
+                        box.querySelector(`span[data-num="${el.num}"]`).dataset.opponent = el.opponent;
                     });
                     // values.dataset.id = answer.data.id;
                     // values.contentEditable = 'false';
@@ -277,7 +289,7 @@ window.addEventListener('load', () => {
             // console.log('blur');
             values.querySelector('.excerpt').contentEditable = 'true';
             values.querySelector('.details').contentEditable = 'true';
-            values.querySelector('details').open = 'true';
+            values.querySelector('details').open = 'true'; // ????
             // values.querySelector('span').addEventListener('blur', removeBidListener, false);
         }
 
@@ -340,12 +352,22 @@ window.addEventListener('load', () => {
         }
 
         function removeBidListener() {
+            let lc = foundPreviosBid(document.querySelector("#body span:last-child"));
+            if (!lc) {
+                opponent = intrvSwitch;
+            } else {
+                opponent = passCounter % 2 === 0 ? !Number(lc.dataset.opponent) : Number(lc.dataset.opponent);
+                // if (intrvSwitch) opponent = !opponent;
+            }
+            // console.log('opponent=', opponent, ' passCounter=', passCounter, ' intrvSwitch=', intrvSwitch, ' foundPreviosBid_opponent=', lc?.dataset?.opponent);
+
             let data = {
                 'system_id':bidding.dataset.system,
                 'bid_id':values.dataset?.id,
                 'parent_id':tbody.dataset?.parent,
                 'bid_num':values.dataset?.num,
                 'pass_count':passCounter,
+                'opponent':opponent,
                 'excerpt':values.querySelector('.excerpt').innerHTML,
                 'details':values.querySelector('.details').innerHTML,
             }
@@ -391,10 +413,15 @@ window.addEventListener('load', () => {
                 competition.checked = true;
             }
 
+            if (!foundPreviosBid(t)) {
+                intervention.readOnly = false;
+                intervention.classList.remove('dn');
+            }
 
             delete t.closest('span').dataset.num;
             delete t.closest('span').dataset.parent;
             delete t.closest('span').dataset.count;
+            delete t.closest('span').dataset.opponent;
 
             dblRd(passCounter);
             hideBid(prNum);
@@ -404,7 +431,7 @@ window.addEventListener('load', () => {
             let prParent = foundPreviosBid(t)?.dataset?.parent ?? 0;
             tbody.dataset.parent = prParent;
 
-            requestData(prNum, passCounter, foundPreviosBid(t)?.dataset?.parent ?? 0);
+            requestData(passCounter, foundPreviosBid(t)?.dataset?.parent ?? 0);
 
             function myNextAll() {
                 while (t.closest('span') !== tbody.lastElementChild) {
@@ -422,9 +449,9 @@ window.addEventListener('load', () => {
             }
             // console.log("previousElementSibling", el?.previousElementSibling);
 
-            let asdfa = el.previousElementSibling === null ? 0 : el.previousElementSibling;
+            return el.previousElementSibling === null ? 0 : el.previousElementSibling;
 
-            return asdfa;
+            // return asdfa;
             return el.previousElementSibling.dataset.num;
         }
 
@@ -490,7 +517,7 @@ window.addEventListener('load', () => {
                 values.dataset.num = currentNum;
                 values.dataset.bid = t.dataset.bid;
 
-                values.innerHTML = `<span  class="excerpt" contenteditable="false"></span><details><summary></summary><span class="details" contenteditable="false"></span></details><span class="del">&#10008;</span>`;
+                values.innerHTML = `<span class="excerpt" contenteditable="false"></span><details><summary></summary><span class="details" contenteditable="false"></span></details><span class="del">&#10008;</span>`;
             }
 
             t.classList.add('exist');
@@ -513,12 +540,24 @@ window.addEventListener('load', () => {
                 return;
             }
 
-            // if (t.closest('.bidding-form')) {
-            //     if (t.closest('#competition')) {
-            //         competitionSwitch(competition.checked);
-            //         return;
-            //     }
-            // }
+            if (t.closest('.bidding-form')) {
+                if (t.closest('#intervention')) {
+                    // if (false) return;
+                    // console.log('requestData', values.dataset?.num, passCounter, 0);
+                    if (intervention.checked) {
+                        intrvSwitch = 1;
+                        requestData(passCounter, 0);
+                        return;
+                    }
+                    intrvSwitch = 0;
+                    requestData(passCounter, 0);
+                    return;
+                }
+                // if (t.closest('#competition')) {
+                //     competitionSwitch(competition.checked);
+                //     return;
+                // }
+            }
 
             if (t.closest('#box') && t.dataset.num && (t.closest('.exist') || !Number(t.dataset.num))) {
                 let current = document.querySelector('#body');
@@ -536,7 +575,7 @@ window.addEventListener('load', () => {
                 dblRd(passCounter);
 
                 tbody.dataset.parent = foundPreviosBid(document.querySelector("#body span:last-child"))?.dataset?.parent ?? 0;
-                requestData(currentNum, passCounter);
+                requestData(passCounter);
                 if (!Number(t.dataset.num)) return;
 
                 function createEl(content, el = 0, trs = 0) {
@@ -549,8 +588,11 @@ window.addEventListener('load', () => {
 
                     lastBid.innerHTML = content;
                     if (content !== "pass" && content !== "?") {
+                        intervention.readOnly = true;
+                        intervention.classList.add('dn');
                         lastBid.dataset.num = t.dataset.num;
                         lastBid.dataset.parent = t.dataset.pr;
+                        lastBid.dataset.opponent = t.dataset.opponent;
                     }
 
                     current.append(lastBid);
@@ -642,6 +684,19 @@ window.addEventListener('load', () => {
         })
     }
 })
+
+function fetchRequest(data, cntr) {
+    let promise = fetch(`/admin/${cntr}`, {
+        method: "POST",
+        headers: {
+            "Content-Type": "application/json",
+            'X-CSRF-Token': document.querySelector('meta[name="csrf-token"]').content,
+            'X-Requested-With': 'XMLHttpRequest'
+        },
+        body: JSON.stringify(data)
+    });
+    return promise;
+}
 
 function ajaxRequest(cntr, rqst) {
     // console.log(wrap.dataset.id);

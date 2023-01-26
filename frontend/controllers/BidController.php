@@ -78,13 +78,14 @@ class BidController extends AppController
 
         $system_id = (int)$request->post('system_id');
         $parent_id = (int)$request->post('parent_id');
-        $pass = $request->post('pass_count') ?? 0;
+        $pass = (int)$request->post('pass_count') ?? 0;
         $pass = (int)$pass;
+        $opponent = (int)$request->post('opponent');
 
-        $sql = "SELECT {{%bid}}.id, parent_id, bid_tbl_id, pass, excerpt, `description`, num, bid 
+        $sql = "SELECT {{%bid}}.id, parent_id, bid_tbl_id, pass, excerpt, `description`, num, bid, opponent
         FROM {{%bid}}
         LEFT JOIN {{%bid_tbl}} ON {{%bid_tbl}}.id = {{%bid}}.bid_tbl_id
-        WHERE system_id = {$system_id} AND parent_id = {$parent_id} AND pass = {$pass}
+        WHERE system_id = {$system_id} AND parent_id = {$parent_id} AND pass = {$pass} AND opponent = {$opponent}
         ORDER BY {{%bid_tbl}}.id
         ";
         $model = \Yii::$app->db->createCommand($sql)->queryAll();

@@ -251,17 +251,17 @@ document.addEventListener('DOMContentLoaded', () => {
 
 })
 
-function fetchRequest(data, url) {
-    return fetch(url, {
+function fetchRequest(data, cntr) {
+    let promise = fetch(`/admin/${cntr}`, {
         method: "POST",
         headers: {
-            "Content-Type": "application/json"
+            "Content-Type": "application/json",
+            'X-CSRF-Token': document.querySelector('meta[name="csrf-token"]').content,
+            'X-Requested-With': 'XMLHttpRequest'
         },
-        body: JSON.stringify({
-            title: "New Todo",
-            completed: false
-        })
+        body: JSON.stringify(data)
     });
+    return promise;
 }
 
 function xhRequest(data, url) {

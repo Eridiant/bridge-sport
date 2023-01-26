@@ -15,7 +15,7 @@ use yii\behaviors\TimestampBehavior;
  * @property int|null $variant_id
  * @property int|null $vulnerable_id
  * @property int|null $pass
- * @property int|null $opponent
+ * @property int $opponent
  * @property int|null $alert
  * @property string|null $excerpt
  * @property string|null $description

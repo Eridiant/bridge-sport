@@ -101,14 +101,15 @@ class BidController extends AppController
         $system_id = $request->post('system_id');
         $parent_id = $request->post('parent_id');
         $pass = $request->post('pass_count') ?? 0;
+        $opponent = (int)$request->post('opponent');
         // $system_id = 1;
         // $parent_id = 12;
         // $pass = "pass = 0" ;
         // ${pass} , num, bid  {{%bid}}.
-        $sql = "SELECT {{%bid}}.id, parent_id, bid_tbl_id, pass, excerpt, num, `description`, bid
+        $sql = "SELECT {{%bid}}.id, parent_id, bid_tbl_id, pass, excerpt, num, `description`, bid, opponent
         FROM {{%bid}}
         LEFT JOIN {{%bid_tbl}} ON {{%bid_tbl}}.id = {{%bid}}.bid_tbl_id
-        WHERE system_id = {$system_id} AND parent_id = {$parent_id} AND pass = {$pass}
+        WHERE system_id = {$system_id} AND parent_id = {$parent_id} AND pass = {$pass} AND opponent = {$opponent}
         ORDER BY {{%bid_tbl}}.id
         ";
         $model = \Yii::$app->db->createCommand($sql)->queryAll();
@@ -119,10 +120,10 @@ class BidController extends AppController
         //     // ->leftJoin('{{%bid_tbl}}', '{{%bid_tbl}}.id = {{%bid}}.bid_tbl_id')
         //     ->joinWith(['bidTbl'])
         //     ->all();
-// var_dump('<pre>');
-// var_dump($model);
-// var_dump('</pre>');
-// die;
+        // var_dump('<pre>');
+        // var_dump($model);
+        // var_dump('</pre>');
+        // die;
 
         Yii::$app->response->format = \yii\web\Response::FORMAT_JSON;
         // return $model;
@@ -145,6 +146,7 @@ class BidController extends AppController
         $model->pass = $request->post('pass_count');
         $model->excerpt = $this->clearTag($request->post('excerpt'));
         $model->description = $this->clearTag($request->post('details'));
+        $model->opponent = (int)$request->post('opponent');
 
         Yii::$app->response->format = \yii\web\Response::FORMAT_JSON;
 

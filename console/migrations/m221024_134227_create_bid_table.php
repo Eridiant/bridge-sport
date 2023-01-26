@@ -26,7 +26,7 @@ class m221024_134227_create_bid_table extends Migration
             'pass' => $this->tinyInteger()->notNull()->defaultValue(0),
             'hide' => $this->tinyInteger(),
             'alert' => $this->tinyInteger(),
-            'opponent' => $this->tinyInteger(),
+            'opponent' => $this->tinyInteger()->defaultValue(0),
             'excerpt' => $this->text(),
             'description' => $this->text(),
             'updated_at' => $this->integer(11),
