@@ -226,8 +226,7 @@ window.addEventListener('load', () => {
             }
         })
 
-
-        function requestData(count, parent = tbody.dataset.parent) {
+        function checkOpponentBid() {
             let lc = foundPreviosBid(document.querySelector("#body span:last-child"));
             if (!lc) {
                 opponent = intrvSwitch;
@@ -235,6 +234,11 @@ window.addEventListener('load', () => {
                 opponent = passCounter % 2 === 0 ? !Number(lc.dataset.opponent) : Number(lc.dataset.opponent);
                 // if (intrvSwitch) opponent = !opponent;
             }
+            return opponent;
+        }
+
+        function requestData(count, parent = tbody.dataset.parent) {
+            checkOpponentBid();
             // console.log('opponent=', opponent, ' passCounter=', passCounter, ' intrvSwitch=', intrvSwitch, ' foundPreviosBid_opponent=', lc?.dataset?.opponent);
             let data = {
                 'system_id':bidding.dataset.system,
@@ -271,10 +275,10 @@ window.addEventListener('load', () => {
                         // span.classList.add('del');
                         // span.innerHTML = "X";
                         // values.append(span);
-
-                        box.querySelector(`span[data-num="${el.num}"]`).classList.add('exist');
-                        box.querySelector(`span[data-num="${el.num}"]`).dataset.pr = el.id;
-                        box.querySelector(`span[data-num="${el.num}"]`).dataset.opponent = el.opponent;
+                        let currentSpan = box.querySelector(`span[data-num="${el.num}"]`);
+                        currentSpan.classList.add('exist');
+                        currentSpan.dataset.pr = el.id;
+                        currentSpan.dataset.opponent = el.opponent;
                     });
                     // values.dataset.id = answer.data.id;
                     // values.contentEditable = 'false';
@@ -354,13 +358,7 @@ window.addEventListener('load', () => {
         }
 
         function removeBidListener() {
-            let lc = foundPreviosBid(document.querySelector("#body span:last-child"));
-            if (!lc) {
-                opponent = intrvSwitch;
-            } else {
-                opponent = passCounter % 2 === 0 ? !Number(lc.dataset.opponent) : Number(lc.dataset.opponent);
-                // if (intrvSwitch) opponent = !opponent;
-            }
+            checkOpponentBid();
             // console.log('opponent=', opponent, ' passCounter=', passCounter, ' intrvSwitch=', intrvSwitch, ' foundPreviosBid_opponent=', lc?.dataset?.opponent);
 
             let data = {
@@ -383,7 +381,9 @@ window.addEventListener('load', () => {
                     values.querySelector('.details').innerHTML = answer.data.description ?? '';
                     values.classList?.remove('added');
                     // values.querySelector('span').removeEventListener('click', removeBidListener, false);
-                    document.querySelector(`#box span[data-num="${values.dataset.num}"]`).dataset.pr = answer.data.id;
+                    let currentSpan = document.querySelector(`#box span[data-num="${values.dataset.num}"]`);
+                    currentSpan.dataset.pr = answer.data.id;
+                    currentSpan.dataset.opponent = checkOpponentBid();
                 })
                 .catch(error => {
                     alert(error);
