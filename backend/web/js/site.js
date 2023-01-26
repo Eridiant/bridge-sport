@@ -250,6 +250,8 @@ window.addEventListener('load', () => {
                     contentValues.innerHTML = '';
                     box.querySelectorAll('.exist').forEach(el => {
                         el.classList.remove('exist');
+                        el.removeAttribute("data-pr");
+                        el.removeAttribute("data-opponent");
                     })
 
                     data.forEach(el => {
