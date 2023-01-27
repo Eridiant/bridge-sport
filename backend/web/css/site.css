@@ -470,7 +470,8 @@ a.add {
     display: flex;
     flex-direction: column;
 }
-.bidding-values > div {
+.bidding-values > div,
+.bidding-container > div {
     position: relative;
     display: flex;
     flex-wrap: wrap;
@@ -479,11 +480,15 @@ a.add {
     margin-left: 50px;
     transition: .5s;
 }
-.bidding-values > div::before {
+.bidding-values > div::before,
+.bidding-container > div::before {
     position: absolute;
     content: attr(data-bid);
     top: 0;
     left: -50px;
+}
+.bidding-container .del {
+    display: none;
 }
 .bidding-values .added {
     position: relative;

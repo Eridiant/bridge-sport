@@ -180,7 +180,8 @@ window.addEventListener('load', () => {
 
     if (bidding) {
         const tbody = document.querySelector('#body');
-        const box = document.querySelector('#box'); 
+        const box = document.querySelector('#box');
+        const container = document.querySelector('#bidding-container');
         const contentValues = document.querySelector('#bidding-values');
         const competition = document.querySelector('#competition');
         const intervention = document.querySelector('#intervention');
@@ -234,7 +235,6 @@ window.addEventListener('load', () => {
                 opponent = passCounter % 2 === 0 ? !Number(lc.dataset.opponent) : Number(lc.dataset.opponent);
                 // if (intrvSwitch) opponent = !opponent;
             }
-            console.log('opponent', opponent);
             return opponent;
         }
 
@@ -263,8 +263,9 @@ window.addEventListener('load', () => {
                         // values = document.createElement("div");
                         // let desc = el.description ? el.description : '';
 
-                        values = `<div data-num="${el.num}" data-bid="${el.bid}" data-id="${el.id}" data-opponent="${el.opponent}" class=""><span  class="excerpt" contenteditable="false">${el.excerpt}</span><details><summary tabindex="-1"></summary><span class="details" contenteditable="false">${el.description ?? ''}</span></details><span class="del">&#10008;</span></div>`
+                        values = `<div data-num="${el.num}" data-bid="${el.bid}" data-id="${el.id}" data-opponent="${el.opponent}" class=""><span  class="excerpt" contenteditable="false">${el.excerpt}</span><details><summary tabindex="-1"></summary><span class="details" contenteditable="false">${el.description ?? ''}</span></details><span class="del">&#10008;</span></div>`;
                         contentValues.innerHTML += values;
+
                         // contentValues.append(values);
                         // values.dataset.num = el.num;
                         // values.dataset.bid = el.bid;
@@ -420,6 +421,7 @@ window.addEventListener('load', () => {
                 intervention.readOnly = false;
                 intervention.classList.remove('dn');
             }
+            delNextAll();
 
             delete t.closest('span').dataset.num;
             delete t.closest('span').dataset.parent;
@@ -436,8 +438,25 @@ window.addEventListener('load', () => {
 
             requestData(passCounter, foundPreviosBid(t)?.dataset?.parent ?? 0);
 
+            function delNextAll() {
+                let num = t?.closest('span')?.dataset?.num;
+                let delLast = 1;console.log('num', num);
+
+                if (!num) {
+                    delLast = 0;
+                    num = foundPreviosBid(t.closest('span'))?.dataset?.num;
+                };console.log('num', num);
+
+                while ( num !== container.lastElementChild.dataset.num) {
+                    container.lastElementChild.remove();
+                };
+
+                if (delLast) container.lastElementChild.remove();
+            }
+
             function myNextAll() {
-                while (t.closest('span') !== tbody.lastElementChild) {
+                let span = t.closest('span');
+                while (span !== tbody.lastElementChild) {
                     tbody.lastElementChild.remove();
                 }
 
@@ -588,6 +607,13 @@ window.addEventListener('load', () => {
                     if (t.closest('.bidding-wrapper')) hideBid(t.dataset.num);
 
                     lastBid = el || document.createElement("span");
+                    if (t?.dataset?.num !== "undefined" && Number(t?.dataset?.num) !== 0) {
+                        container.appendChild(document.querySelector(`div[data-num="${t.dataset.num}"]`));
+                    }
+                    // else if (content == "pass") {
+                    //     let ddiivv = `<div data-bid="pass"><span>pass</span></div>`;
+                    //     container.innerHTML += ddiivv;
+                    // }
 
                     lastBid.innerHTML = content;
                     if (content !== "pass" && content !== "?") {

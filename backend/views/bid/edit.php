@@ -18,6 +18,7 @@ use yii\helpers\Url;
 
 <div id="bidding" class="bidding" data-system="<?= $id; ?>">
 
+    <div id="bidding-container" class="bidding-container"></div>
     <div class="bidding-table">
         <div class="bidding-table-head">
             <span>N</span>
