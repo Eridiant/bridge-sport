@@ -7,6 +7,7 @@ use yii\helpers\Url;
 
 ?>
 <style></style>
+<h1><?= $model->name; ?></h1>
 <div id="bidding" class="bidding" data-system="<?= $id; ?>">
 
     <div id="bidding-container" class="bidding-container"></div>

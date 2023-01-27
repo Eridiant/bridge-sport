@@ -86,6 +86,7 @@ return [
                 'survey/<slug:[\w-]+>' => 'survey/view',
                 'syst/<slug:[\w-]+>' => 'syst/view',
                 'bid/<action:\w+>' => 'bid/<action>',
+                'system/index' => 'system/index',
                 'system/<slug:[\w-]+>' => 'system/view',
                 // 'survey/<slug:[\w-]+>' => 'survey/view',
                 // '<url:\w+>' => 'page/index',

@@ -38,26 +38,14 @@ class SystemController extends AppController
      *
      * @return string
      */
-    // public function actionIndex()
-    // {
-    //     $dataProvider = new ActiveDataProvider([
-    //         'query' => System::find(),
-    //         /*
-    //         'pagination' => [
-    //             'pageSize' => 50
-    //         ],
-    //         'sort' => [
-    //             'defaultOrder' => [
-    //                 'id' => SORT_DESC,
-    //             ]
-    //         ],
-    //         */
-    //     ]);
+    public function actionIndex()
+    {
+        $model = System::find()
+            ->where(["hidden" => 0])
+            ->all();
 
-    //     return $this->render('index', [
-    //         'dataProvider' => $dataProvider,
-    //     ]);
-    // }
+        return $this->render('index', compact('model'));
+    }
 
     /**
      * Displays a single System model.
@@ -77,7 +65,7 @@ class SystemController extends AppController
         $bids = $this->findBidAll();
         $pass = $this->findBidPass();
 
-        return $this->render('view', compact('id', 'bids', 'pass'));
+        return $this->render('view', compact('model', 'id', 'bids', 'pass'));
     }
 
     /**

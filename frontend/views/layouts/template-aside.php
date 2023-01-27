@@ -16,6 +16,7 @@ use common\components\MenuWidget;
                 </header>
                 <ul>
                     <?= MenuWidget::widget(['tpl' => 'menu']); ?>
+                    <li><a href="/system/index">Системы</a></li>
                 </ul>
             </div>
         </aside>

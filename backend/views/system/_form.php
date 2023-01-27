@@ -22,9 +22,15 @@ use yii\widgets\ActiveForm;
 
     <?= $form->field($model, 'description')->textarea(['rows' => 6]) ?>
 
-    <?= $form->field($model, 'hidden')->textInput() ?>
+    <?= $form->field($model, 'hidden')->dropDownList([
+                '0'=>'Отображать',
+                '1'=>'Скрывать'
+        ]) ?>
 
-    <?= $form->field($model, 'edit')->textInput() ?>
+    <!-- <?//= $form->field($model, 'edit')->dropDownList([
+                // '0'=>'Не индексировать',
+                // '1'=>'Индексировать'
+        // ]) ?> -->
 
     <!-- <?//= $form->field($model, 'updated_at')->textInput() ?> -->
 
