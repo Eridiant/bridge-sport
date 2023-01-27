@@ -355,8 +355,30 @@ window.addEventListener('load', () => {
         }
 
         function removeDoubleSpace() {
-            values.querySelector('.excerpt').innerHTML = values.querySelector('.excerpt').innerHTML.replace(/\s+/g,' ').replace(/^\s+|\s+$/,'');
-            values.querySelector('.details').innerHTML = values.querySelector('.details').innerHTML.replace(/\s+/g,' ').replace(/^\s+|\s+$/,'');
+            let excerpt = values.querySelector('.excerpt');
+            let details = values.querySelector('.details');
+            excerpt.innerHTML = excerpt.innerHTML.replace(/\s+/g,' ').replace(/^\s+|\s+$/,'');
+            details.innerHTML = details.innerHTML.replace(/\s+/g,' ').replace(/^\s+|\s+$/,'');
+
+            excerpt.innerHTML = excerpt.innerHTML.replace(/\s{2,}/g, ' ');
+            details.innerHTML = details.innerHTML.replace(/\s{2,}/g, ' ');
+
+            excerpt.innerHTML = excerpt.innerHTML.replace(/\&nbsp;/g, '');
+            details.innerHTML = details.innerHTML.replace(/\&nbsp;/g, '');
+
+            excerpt.innerHTML = excerpt.innerHTML.replace(/<img src="https:\/\/www\.gambler\.ru\/images\/wp\/c\.gif">/g,'♣');
+            details.innerHTML = details.innerHTML.replace(/<img src="https:\/\/www\.gambler\.ru\/images\/wp\/c\.gif">/g,'♣');
+            excerpt.innerHTML = excerpt.innerHTML.replace(/<img src="https:\/\/www\.gambler\.ru\/images\/wp\/d\.gif">/g,'♦');
+            details.innerHTML = details.innerHTML.replace(/<img src="https:\/\/www\.gambler\.ru\/images\/wp\/d\.gif">/g,'♦');
+            excerpt.innerHTML = excerpt.innerHTML.replace(/<img src="https:\/\/www\.gambler\.ru\/images\/wp\/h\.gif">/g,'♥');
+            details.innerHTML = details.innerHTML.replace(/<img src="https:\/\/www\.gambler\.ru\/images\/wp\/h\.gif">/g,'♥');
+            excerpt.innerHTML = excerpt.innerHTML.replace(/<img src="https:\/\/www\.gambler\.ru\/images\/wp\/s\.gif">/g,'♠');
+            details.innerHTML = details.innerHTML.replace(/<img src="https:\/\/www\.gambler\.ru\/images\/wp\/s\.gif">/g,'♠');
+
+            // <img src="/images/wp/c.gif"></img>
+            // <img src="/images/wp/d.gif"></img>
+            // <img src="/images/wp/h.gif"></img>
+            // <img src="/images/wp/s.gif"></img>
         }
 
         function removeBidListener() {
