@@ -25,7 +25,7 @@ use yii\helpers\Url;
     <form class="bidding-form" action="#" method="post">
         <div class="row">
             <input type="checkbox" name="checkbox" id="competition"><label for="competition">конкуренция</label>
-            <!-- <input type="checkbox" name="checkbox" id="intervention"><label for="intervention">интервенция</label> -->
+            <input type="checkbox" name="checkbox" id="intervention"><label for="intervention">интервенция</label>
         </div>
     </form>
     <div id="box" class="bidding-box">
