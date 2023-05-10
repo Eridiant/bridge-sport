@@ -1,0 +1,127 @@
+<?php
+
+use yii\db\Migration;
+
+/**
+ * Class m230330_131525_create_stm_bid_tables
+ */
+class m230330_131525_create_stm_bid_tables extends Migration
+{
+    /**
+     * {@inheritdoc}
+     */
+    public function safeUp()
+    {
+        $this->createTable('{{%stm_bid}}', [
+            'id' => $this->primaryKey(),
+            'system_id' => $this->integer()->notNull(),
+            'parent_id' => $this->integer(11)->notNull()->defaultValue(0),
+            'variant_id' => $this->integer(11),
+            'vulnerable_id' => $this->integer(11),
+            'pass' => $this->tinyInteger()->notNull()->defaultValue(0),
+            'hide' => $this->tinyInteger(),
+            'alert' => $this->tinyInteger(),
+            'opponent' => $this->tinyInteger()->defaultValue(0),
+            'excerpt' => $this->text(),
+            'description' => $this->text(),
+            'updated_at' => $this->integer(11),
+            'created_at' => $this->integer(11)->notNull(),
+            'deprecated_at' => $this->integer(11),
+        ]);
+
+        // creates index for column `system_id`
+        $this->createIndex(
+            '{{%idx-stm_bid-system_id}}',
+            '{{%stm_bid}}',
+            'system_id'
+        );
+
+        // add foreign key for table `{{%stm_system}}`
+        $this->addForeignKey(
+            '{{%fk-stm_bid-system_id}}',
+            '{{%stm_bid}}',
+            'system_id',
+            '{{%stm_system}}',
+            'id',
+            'CASCADE'
+        );
+
+        // creates index for column `variant_id`
+        $this->createIndex(
+            '{{%idx-stm_bid-variant_id}}',
+            '{{%stm_bid}}',
+            'variant_id'
+        );
+
+        // add foreign key for table `{{%stm_variant}}`
+        $this->addForeignKey(
+            '{{%fk-stm_bid-variant_id}}',
+            '{{%stm_bid}}',
+            'variant_id',
+            '{{%stm_variant}}',
+            'id',
+            'CASCADE'
+        );
+
+        // creates index for column `vulnerable_id`
+        $this->createIndex(
+            '{{%idx-stm_bid-vulnerable_id}}',
+            '{{%stm_bid}}',
+            'vulnerable_id'
+        );
+
+        // add foreign key for table `{{%stm_vulnerable}}`
+        $this->addForeignKey(
+            '{{%fk-stm_bid-vulnerable_id}}',
+            '{{%stm_bid}}',
+            'vulnerable_id',
+            '{{%stm_vulnerable}}',
+            'id',
+            'CASCADE'
+        );
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function safeDown()
+    {
+        // drops foreign key for table `{{%stm_vulnerable}}`
+        $this->dropForeignKey(
+            '{{%fk-stm_bid-vulnerable_id}}',
+            '{{%stm_bid}}'
+        );
+
+        // drops index for column `vulnerable_id`
+        $this->dropIndex(
+            '{{%idx-stm_bid-vulnerable_id}}',
+            '{{%stm_bid}}'
+        );
+
+        // drops foreign key for table `{{%stm_variant}}`
+        $this->dropForeignKey(
+            '{{%fk-stm_bid-variant_id}}',
+            '{{%stm_bid}}'
+        );
+
+        // drops index for column `variant_id`
+        $this->dropIndex(
+            '{{%idx-stm_bid-variant_id}}',
+            '{{%stm_bid}}'
+        );
+
+        // drops foreign key for table `{{%stm_system}}`
+        $this->dropForeignKey(
+            '{{%fk-stm_bid-system_id}}',
+            '{{%stm_bid}}'
+        );
+
+        // drops index for column `system_id`
+        $this->dropIndex(
+            '{{%idx-stm_bid-system_id}}',
+            '{{%stm_bid}}'
+        );
+
+        $this->dropTable('{{%stm_bid}}');
+    }
+}
