@@ -1,0 +1,92 @@
+<?php
+
+use yii\db\Migration;
+
+/**
+ * Handles the creation of table `{{%poll_result}}`.
+ * Has foreign keys to the tables:
+ *
+ * - `{{%poll_answer}}`
+ * - `{{%user}}`
+ */
+class m230513_152805_create_poll_result_table extends Migration
+{
+    /**
+     * {@inheritdoc}
+     */
+    public function safeUp()
+    {
+        $this->createTable('{{%poll_result}}', [
+            'id' => $this->primaryKey(),
+            'answer_id' => $this->integer()->notNull(),
+            'user_id' => $this->integer()->notNull(),
+            'date' => $this->integer(11),
+        ]);
+
+        // creates index for column `answer_id`
+        $this->createIndex(
+            '{{%idx-poll_result-answer_id}}',
+            '{{%poll_result}}',
+            'answer_id'
+        );
+
+        // add foreign key for table `{{%poll_answer}}`
+        $this->addForeignKey(
+            '{{%fk-poll_result-answer_id}}',
+            '{{%poll_result}}',
+            'answer_id',
+            '{{%poll_answer}}',
+            'id',
+            'CASCADE'
+        );
+
+        // creates index for column `user_id`
+        $this->createIndex(
+            '{{%idx-poll_result-user_id}}',
+            '{{%poll_result}}',
+            'user_id'
+        );
+
+        // add foreign key for table `{{%user}}`
+        $this->addForeignKey(
+            '{{%fk-poll_result-user_id}}',
+            '{{%poll_result}}',
+            'user_id',
+            '{{%user}}',
+            'id',
+            'CASCADE'
+        );
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function safeDown()
+    {
+        // drops foreign key for table `{{%poll_answer}}`
+        $this->dropForeignKey(
+            '{{%fk-poll_result-answer_id}}',
+            '{{%poll_result}}'
+        );
+
+        // drops index for column `answer_id`
+        $this->dropIndex(
+            '{{%idx-poll_result-answer_id}}',
+            '{{%poll_result}}'
+        );
+
+        // drops foreign key for table `{{%user}}`
+        $this->dropForeignKey(
+            '{{%fk-poll_result-user_id}}',
+            '{{%poll_result}}'
+        );
+
+        // drops index for column `user_id`
+        $this->dropIndex(
+            '{{%idx-poll_result-user_id}}',
+            '{{%poll_result}}'
+        );
+
+        $this->dropTable('{{%poll_result}}');
+    }
+}

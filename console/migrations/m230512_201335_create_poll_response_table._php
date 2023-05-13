@@ -1,0 +1,123 @@
+<?php
+
+use yii\db\Migration;
+
+/**
+ * Handles the creation of table `{{%poll_response}}`.
+ * Has foreign keys to the tables:
+ *
+ * - `{{%poll}}`
+ * - `{{%poll_answer}}`
+ * - `{{%poll_question}}`
+ */
+class m230512_201335_create_poll_response_table extends Migration
+{
+    /**
+     * {@inheritdoc}
+     */
+    public function safeUp()
+    {
+        $this->createTable('{{%poll_response}}', [
+            'id' => $this->primaryKey(),
+            'poll_id' => $this->integer()->notNull(),
+            'answer_id' => $this->integer()->notNull(),
+            'question_id' => $this->integer()->notNull(),
+            'date' => $this->integer(11),
+        ]);
+
+        // creates index for column `poll_id`
+        $this->createIndex(
+            '{{%idx-poll_response-poll_id}}',
+            '{{%poll_response}}',
+            'poll_id'
+        );
+
+        // add foreign key for table `{{%poll}}`
+        $this->addForeignKey(
+            '{{%fk-poll_response-poll_id}}',
+            '{{%poll_response}}',
+            'poll_id',
+            '{{%poll}}',
+            'id',
+            'CASCADE'
+        );
+
+        // creates index for column `answer_id`
+        $this->createIndex(
+            '{{%idx-poll_response-answer_id}}',
+            '{{%poll_response}}',
+            'answer_id'
+        );
+
+        // add foreign key for table `{{%poll_answer}}`
+        $this->addForeignKey(
+            '{{%fk-poll_response-answer_id}}',
+            '{{%poll_response}}',
+            'answer_id',
+            '{{%poll_answer}}',
+            'id',
+            'CASCADE'
+        );
+
+        // creates index for column `question_id`
+        $this->createIndex(
+            '{{%idx-poll_response-question_id}}',
+            '{{%poll_response}}',
+            'question_id'
+        );
+
+        // add foreign key for table `{{%poll_question}}`
+        $this->addForeignKey(
+            '{{%fk-poll_response-question_id}}',
+            '{{%poll_response}}',
+            'question_id',
+            '{{%poll_question}}',
+            'id',
+            'CASCADE'
+        );
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function safeDown()
+    {
+        // drops foreign key for table `{{%poll}}`
+        $this->dropForeignKey(
+            '{{%fk-poll_response-poll_id}}',
+            '{{%poll_response}}'
+        );
+
+        // drops index for column `poll_id`
+        $this->dropIndex(
+            '{{%idx-poll_response-poll_id}}',
+            '{{%poll_response}}'
+        );
+
+        // drops foreign key for table `{{%poll_answer}}`
+        $this->dropForeignKey(
+            '{{%fk-poll_response-answer_id}}',
+            '{{%poll_response}}'
+        );
+
+        // drops index for column `answer_id`
+        $this->dropIndex(
+            '{{%idx-poll_response-answer_id}}',
+            '{{%poll_response}}'
+        );
+
+        // drops foreign key for table `{{%poll_question}}`
+        $this->dropForeignKey(
+            '{{%fk-poll_response-question_id}}',
+            '{{%poll_response}}'
+        );
+
+        // drops index for column `question_id`
+        $this->dropIndex(
+            '{{%idx-poll_response-question_id}}',
+            '{{%poll_response}}'
+        );
+
+        $this->dropTable('{{%poll_response}}');
+    }
+}
