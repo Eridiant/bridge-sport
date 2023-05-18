@@ -11,10 +11,10 @@ use Yii;
  * @property int $poll_id
  * @property int|null $type
  * @property string|null $text
+ * @property string|null $comment
  *
  * @property Poll $poll
  * @property PollAnswer[] $pollAnswers
- * @property PollResponse[] $pollResponses
  */
 class PollQuestion extends \yii\db\ActiveRecord
 {
@@ -34,7 +34,7 @@ class PollQuestion extends \yii\db\ActiveRecord
         return [
             [['poll_id'], 'required'],
             [['poll_id', 'type'], 'integer'],
-            [['text'], 'string'],
+            [['text', 'comment'], 'string'],
             [['poll_id'], 'exist', 'skipOnError' => true, 'targetClass' => Poll::class, 'targetAttribute' => ['poll_id' => 'id']],
         ];
     }
@@ -49,6 +49,7 @@ class PollQuestion extends \yii\db\ActiveRecord
             'poll_id' => 'Poll ID',
             'type' => 'Type',
             'text' => 'Text',
+            'comment' => 'Comment',
         ];
     }
 

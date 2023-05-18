@@ -147,6 +147,16 @@ class Post extends \yii\db\ActiveRecord
     }
 
     /**
+     * Gets query for [[Polls]].
+     *
+     * @return \yii\db\ActiveQuery
+     */
+    public function getPoll()
+    {
+        return $this->hasOne(Poll::class, ['post_id' => 'id']);
+    }
+
+    /**
      * Gets query for [[Iframe]].
      *
      * @return \yii\db\ActiveQuery

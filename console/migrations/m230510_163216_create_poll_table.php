@@ -19,6 +19,8 @@ class m230510_163216_create_poll_table extends Migration
             'id' => $this->primaryKey(),
             'post_id' => $this->integer()->notNull(),
             'type' => $this->tinyInteger(),
+            'show_result' => $this->tinyInteger(),
+            'grade' => $this->tinyInteger(),
             'description' => $this->text(),
             'active' => $this->tinyInteger(),
             'created_at' => $this->integer(11)->notNull(),

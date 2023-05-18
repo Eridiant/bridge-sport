@@ -10,7 +10,6 @@ use Yii;
  * @property int $id
  * @property int $question_id
  * @property string|null $text
- * @property int|null $is_correct
  *
  * @property PollResponse[] $pollResponses
  * @property PollResult[] $pollResults
@@ -33,7 +32,7 @@ class PollAnswer extends \yii\db\ActiveRecord
     {
         return [
             [['question_id'], 'required'],
-            [['question_id', 'is_correct'], 'integer'],
+            [['question_id'], 'integer'],
             [['text'], 'string'],
             [['question_id'], 'exist', 'skipOnError' => true, 'targetClass' => PollQuestion::class, 'targetAttribute' => ['question_id' => 'id']],
         ];
@@ -48,28 +47,27 @@ class PollAnswer extends \yii\db\ActiveRecord
             'id' => 'ID',
             'question_id' => 'Question ID',
             'text' => 'Text',
-            'is_correct' => 'Is Correct',
         ];
     }
 
     /**
-     * Gets query for [[PollResponses]].
+     * Gets query for [[PollResponse]].
      *
      * @return \yii\db\ActiveQuery
      */
-    public function getResponses()
+    public function getResponse()
     {
-        return $this->hasMany(PollResponse::class, ['answer_id' => 'id']);
+        return $this->hasOne(PollResponse::class, ['answer_id' => 'id']);
     }
 
     /**
-     * Gets query for [[PollResults]].
+     * Gets query for [[PollResult]].
      *
      * @return \yii\db\ActiveQuery
      */
-    public function getResults()
+    public function getResult()
     {
-        return $this->hasMany(PollResult::class, ['answer_id' => 'id']);
+        return $this->hasOne(PollResult::class, ['answer_id' => 'id']);
     }
 
     /**

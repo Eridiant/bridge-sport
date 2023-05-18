@@ -3,6 +3,7 @@
 namespace backend\models\poll;
 
 use Yii;
+use backend\models\Post;
 use yii\behaviors\TimestampBehavior;
 
 /**
@@ -11,12 +12,13 @@ use yii\behaviors\TimestampBehavior;
  * @property int $id
  * @property int $post_id
  * @property int|null $type
+ * @property int|null $show_result
+ * @property int|null $grade
  * @property string|null $description
  * @property int|null $active
  * @property int $created_at
  *
  * @property PollQuestion[] $pollQuestions
- * @property PollResponse[] $pollResponses
  * @property Post $post
  */
 class Poll extends \yii\db\ActiveRecord
@@ -34,9 +36,10 @@ class Poll extends \yii\db\ActiveRecord
      */
     public function rules()
     {
+
         return [
             [['post_id'], 'required'],
-            [['post_id', 'type', 'active', 'created_at'], 'integer'],
+            [['post_id', 'type', 'show_result', 'grade', 'active', 'created_at'], 'integer'],
             [['description'], 'string'],
             [['post_id'], 'exist', 'skipOnError' => true, 'targetClass' => Post::class, 'targetAttribute' => ['post_id' => 'id']],
         ];
@@ -63,6 +66,8 @@ class Poll extends \yii\db\ActiveRecord
             'id' => 'ID',
             'post_id' => 'Post ID',
             'type' => 'Type',
+            'show_result' => 'Show Result',
+            'grade' => 'Grade',
             'description' => 'Description',
             'active' => 'Active',
             'created_at' => 'Created At',

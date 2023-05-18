@@ -19,7 +19,6 @@ class m230510_175539_create_poll_answer_table extends Migration
             'id' => $this->primaryKey(),
             'question_id' => $this->integer()->notNull(),
             'text' => $this->text(),
-            'is_correct' => $this->tinyInteger(),
         ]);
 
         // creates index for column `question_id`

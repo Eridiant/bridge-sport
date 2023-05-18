@@ -11,7 +11,8 @@ use yii\behaviors\TimestampBehavior;
  * @property int $id
  * @property int $answer_id
  * @property int|null $result_count
- * @property int|null $date
+ * @property string|null $text
+ * @property int|null $is_correct
  *
  * @property PollAnswer $answer
  */
@@ -32,20 +33,9 @@ class PollResult extends \yii\db\ActiveRecord
     {
         return [
             [['answer_id'], 'required'],
-            [['answer_id', 'result_count', 'date'], 'integer'],
+            [['answer_id', 'result_count', 'is_correct'], 'integer'],
+            [['text'], 'string'],
             [['answer_id'], 'exist', 'skipOnError' => true, 'targetClass' => PollAnswer::class, 'targetAttribute' => ['answer_id' => 'id']],
-        ];
-    }
-
-    public function behaviors()
-    {
-        return [
-            'timestamp' => [
-                'class' => TimestampBehavior::class,
-                'attributes' => [
-                    \yii\db\BaseActiveRecord::EVENT_BEFORE_INSERT => ['date'],
-                ],
-            ],
         ];
     }
 
@@ -58,7 +48,8 @@ class PollResult extends \yii\db\ActiveRecord
             'id' => 'ID',
             'answer_id' => 'Answer ID',
             'result_count' => 'Result Count',
-            'date' => 'Date',
+            'text' => 'Text',
+            'is_correct' => 'Is Correct',
         ];
     }
 

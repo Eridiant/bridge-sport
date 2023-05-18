@@ -6,7 +6,6 @@ use Yii;
 use backend\models\system\Bid;
 use backend\models\system\BidTbl;
 use yii\data\ActiveDataProvider;
-use yii\web\Controller;
 use yii\web\NotFoundHttpException;
 use yii\filters\VerbFilter;
 

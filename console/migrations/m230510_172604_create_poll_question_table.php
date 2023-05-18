@@ -20,6 +20,7 @@ class m230510_172604_create_poll_question_table extends Migration
             'poll_id' => $this->integer()->notNull(),
             'type' => $this->tinyInteger(),
             'text' => $this->text(),
+            'comment' => $this->text(),
         ]);
 
         // creates index for column `poll_id`

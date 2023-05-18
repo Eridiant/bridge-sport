@@ -4,14 +4,14 @@ namespace backend\controllers;
 
 use backend\models\poll\Poll;
 use yii\data\ActiveDataProvider;
-use yii\web\Controller;
 use yii\web\NotFoundHttpException;
 use yii\filters\VerbFilter;
+// use backend\models\Post;
 
 /**
  * PollController implements the CRUD actions for Poll model.
  */
-class PollController extends Controller
+class PollController extends AppController
 {
     /**
      * @inheritDoc
@@ -81,7 +81,7 @@ class PollController extends Controller
 
         if ($this->request->isPost) {
             if ($model->load($this->request->post()) && $model->save()) {
-                return $this->redirect(['view', 'id' => $model->id]);
+                return $this->redirect(['poll-question/create', 'id' => $model->id]);
             }
         } else {
             $model->loadDefaultValues();
@@ -104,7 +104,7 @@ class PollController extends Controller
         $model = $this->findModel($id);
 
         if ($this->request->isPost && $model->load($this->request->post()) && $model->save()) {
-            return $this->redirect(['view', 'id' => $model->id]);
+            return $this->redirect(['poll-question/create', 'id' => $model->id]);
         }
 
         return $this->render('update', [

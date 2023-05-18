@@ -734,6 +734,189 @@ window.addEventListener('load', () => {
 
         })
     }
+
+    let question = document.querySelector('#question');
+    if (question) {
+        let addQuestion = document.querySelector('.add-question');
+        let addAnswer = document.querySelector('.add-answer');
+
+        let cntr = '';
+        let data, t;
+
+        question.addEventListener('click', (e) => {
+            if (!e.target.closest('.poll-question-type')) {
+                e.preventDefault();
+            }
+            t = e.target;
+            data = null;
+            if (question.querySelector('.active')) return;
+
+            // t.classList.contains('.add-question')
+
+            if (t.closest('.add-result')) {
+                cntr = 'poll-question/create-result';
+                fr();
+            }
+
+            if (t.closest('.add-answer')) {
+                cntr = 'poll-question/create-answer';
+                fr();
+            }
+
+
+            if (t.closest('.add-question')) {
+                cntr = 'poll-question/create-question';
+                fr();
+            }
+
+            if (t.closest('.delete-result')) {
+                cntr = 'poll-question/delete-result';
+                data = {'result_id':t.closest('.poll-result').dataset.resultId};
+                deleteItem();
+            }
+
+            if (t.closest('.delete-answer')) {
+                cntr = 'poll-question/delete-answer';
+                data = {'answer_id':t.closest('.poll-answer').dataset.answerId};
+                deleteItem();
+            }
+
+            if (t.closest('.delete-question')) {
+                cntr = 'poll-question/delete-question';
+                data = {'question_id':t.closest('.poll-question').dataset.questionId};
+                deleteItem();
+            }
+
+
+            if (t.closest('.poll-content')) {
+                // t.closest('.poll-content').innerHTML = '';
+                t.closest('.poll-content').contentEditable = 'true';
+                t.closest('.poll-content').classList.add('active');
+                t.closest('.poll-content').focus();
+                return;
+            }
+
+        })
+
+        document.addEventListener('click', (e) => {
+            t = e.target;
+            // console.log('act', t.closest('.active'));
+            
+            if (t.closest('.active')) return;
+
+            let active = question.querySelector('.active');
+            if (active != null) {
+                active.contentEditable = 'false';
+                if (active.closest('.poll-result') != null) {
+                    cntr = 'poll-question/create-result';
+                    data = {'poll_id':document.querySelector('#poll').dataset.pollId,'answer_id':active.closest('.poll-answer').dataset.answerId,'is_correct':active.closest('.poll-result').querySelector('#poll-correct').value,'text':active.innerHTML};
+                } else if (active.closest('.poll-answer') != null) {
+                    if (active.closest('.poll-question').dataset.questionId == null) return;
+                    cntr = 'poll-question/create-answer';
+                    data = {'poll_id':document.querySelector('#poll').dataset.pollId,'question_id':active.closest('.poll-question').dataset.questionId,'answer_id':active.closest('.poll-answer').dataset.answerId,'text':active.innerHTML};
+                } else {
+                    cntr = 'poll-question/create-question';
+                    console.log('classList', active.classList);
+                    console.log('comment', active.classList.contains('poll-comment'));
+                    // console.log('text', );
+                    // console.log('question_id', active.closest('.poll-question').dataset.questionId);
+                    // poll_id	"1"
+                    // question_id	"1"
+                    // type	false
+
+                    data = {
+                        poll_id: document.querySelector('#poll').dataset.pollId,
+                        type: Number(document.querySelector('.poll-question-type').checked),
+                        question_id: active.closest('.poll-question').dataset.questionId,
+                    }
+                    if (active.classList.contains('poll-comment')) {
+                        // data.set('comment',active.innerHTML);
+                        data.comment = active.innerHTML;
+                    } else {
+                        // data.set('text',active.innerHTML);
+                        data.text = active.innerHTML;
+                    }
+
+                }
+                // console.log('poll', t.closest('.poll-question').dataset.pollId);
+                // t.closest('.poll-question').dataset.pollId;
+
+                savePoll();
+            }
+
+        })
+
+        function deleteItem() {
+            fetchRequest(data, cntr)
+                .then(res => res.json())
+                .then(data => {
+                    console.log(data);
+                    if (data.success) {
+                        t.closest('.dlt').innerHTML = '';
+                    }
+                })
+                .catch(err => console.log(err));
+        }
+
+        function savePoll() {
+            fetchRequest(data, cntr)
+                .then(res => res.json())
+                .then(data => {
+                    console.log(data);
+                    addDataSet();
+                    // let inner = t.closest('.poll-wrap').querySelector('.poll-inner');
+                    // inner.innerHTML += data.response;
+
+                    // let inner = t.closest('.poll-wrap').querySelector('.poll-inner');
+
+                    // inner.innerHTML += data.response;
+                })
+                .catch(err => console.log(err));
+        }
+
+        function addDataSet() {
+            let active = question.querySelector('.active');
+
+            if (active.closest('.poll-answer') == null) {
+                active.closest('.poll-question').dataset.questionId = 1;
+                // active.closest('.poll-question').dataset.questionId = data.id;
+            } else {
+                active.closest('.poll-answer').dataset.answerId = data.answer_id;
+            }
+
+            active.classList.remove('active');
+        }
+
+        function fr() {
+            fetchRequest(data, cntr)
+                .then(res => res.json())
+                .then(data => {
+                    let inner = t.closest('.poll-wrap').querySelector('.poll-inner');
+                    // let inn = t.closest('.poll-wrap').querySelectorAll('.poll-inner');
+                    // console.log('inner', inner[inner.length-1]);
+                    
+                    inner.innerHTML += data.response;
+                    // inn[inn.length-1].contentEditable = 'true';
+                    // inn[inn.length-1].focus();
+                    // console.log('last', t.closest('.poll-wrap').querySelector('.poll-inner:last-child'));
+                    // document.querySelector('.poll-question-wrapper').innerHTML += data.response;
+                })
+                .catch(err => console.log(err));
+        }
+
+        // let answer = document.querySelector('#answer');
+        // let submit = document.querySelector('#submit');
+        // let wrap = document.querySelector('#wrap');
+        // question.addEventListener('input', (e) => {
+        //     let t = e.target;
+        //     if (t.value.length > 0) {
+        //         t.classList.add('active');
+        //     } else {
+        //         t.classList.remove('active');
+        //     }
+        // })
+    }
+
 })
 
 function fetchRequest(data, cntr) {

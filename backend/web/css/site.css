@@ -549,3 +549,20 @@ a.add {
 .bidding-box .exist {
     background-color: #1b52264d;
 }
+
+.poll-answers-wrapper, .poll-result-wrapper {
+    margin-left: 20px;
+}
+
+.poll-content {
+    display: inline-flex;
+    min-width: 20px;
+    min-height: 20px;
+}
+
+.delete {
+    color: #a81a1a;
+}
+.delete:hover {
+    color: #cb0000;
+}
