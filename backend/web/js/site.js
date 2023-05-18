@@ -737,8 +737,6 @@ window.addEventListener('load', () => {
 
     let question = document.querySelector('#question');
     if (question) {
-        let addQuestion = document.querySelector('.add-question');
-        let addAnswer = document.querySelector('.add-answer');
 
         let cntr = '';
         let data, t;

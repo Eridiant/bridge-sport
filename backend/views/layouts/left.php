@@ -64,6 +64,7 @@ use yii\helpers\Url;
                             ['label' => 'Новости', 'icon' => 'home', 'url' => ['/post/index']],
                         ],
                     ],
+                    ['label' => 'Простые опросы', 'icon' => 'dashboard', 'url' => ['/poll']],
                     [
                         'label' => 'Опросы',
                         'icon' => 'share',
