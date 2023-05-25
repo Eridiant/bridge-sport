@@ -117,11 +117,11 @@ class PollQuestionController extends AppController
         if ($request->post('text') || $request->post('comment')) {
             $model->poll_id = $request->post('poll_id');
             if ($request->post('text')) {
-                $model->text = $request->post('text');
+                $model->text = trim($request->post('text'));
             }
             $model->type = $request->post('type') ?? 0;
             if ($request->post('comment')) {
-                $model->comment = $request->post('comment');
+                $model->comment = trim($request->post('comment'));
             }
             if ($model->save()) {
                 // return ['data' => ['id' => 1, 'type' => 2]];
@@ -170,7 +170,7 @@ class PollQuestionController extends AppController
 
         if ($request->post('text')) {
             $answer->question_id = $request->post('question_id');
-            $answer->text = $request->post('text');
+            $answer->text = trim($request->post('text'));
             if ($answer->save()) {
                 // return ['data' => ['id' => 1, 'type' => 2]];
                 return ['data' => ['id' => $answer->id, 'question_id' => $answer->question_id]];
@@ -221,7 +221,7 @@ class PollQuestionController extends AppController
 
         if ($request->post('text')) {
             $result->answer_id = $request->post('answer_id');
-            $result->text = $request->post('text');
+            $result->text = trim($request->post('text'));
             $result->is_correct = $request->post('is_correct');
             if ($result->save()) {
                 // return ['data' => ['id' => 1, 'type' => 2]];

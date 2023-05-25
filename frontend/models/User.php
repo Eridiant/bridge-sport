@@ -3,6 +3,7 @@
 namespace frontend\models;
 
 use Yii;
+use frontend\models\poll\Poll;
 
 /**
  * This is the model class for table "{{%user}}".
@@ -89,6 +90,16 @@ class User extends \yii\db\ActiveRecord
     }
 
     /**
+     * Gets query for [[PollResponses]].
+     *
+     * @return \yii\db\ActiveQuery
+     */
+    public function getPollResponses()
+    {
+        return $this->hasMany(PollResponse::class, ['user_id' => 'id']);
+    }
+
+    /**
      * Gets query for [[Notifications]].
      *
      * @return \yii\db\ActiveQuery
@@ -106,5 +117,25 @@ class User extends \yii\db\ActiveRecord
     public function getUserInfo()
     {
         return $this->hasOne(UserInfo::class, ['user_id' => 'id']);
+    }
+
+    /**
+     * Gets query for [[PollUsers]].
+     *
+     * @return \yii\db\ActiveQuery
+     */
+    public function getPollUsers()
+    {
+        return $this->hasMany(PollUser::class, ['user_id' => 'id']);
+    }
+
+    /**
+     * Gets query for [[Polls]].
+     *
+     * @return \yii\db\ActiveQuery
+     */
+    public function getPolls()
+    {
+        return $this->hasMany(Poll::class, ['id' => 'poll_id'])->viaTable('{{%poll_user}}', ['user_id' => 'id']);
     }
 }

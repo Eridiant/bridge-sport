@@ -1,9 +1,8 @@
 <?php
 
-namespace backend\models\poll;
+namespace frontend\models\poll;
 
 use Yii;
-use yii\behaviors\TimestampBehavior;
 
 /**
  * This is the model class for table "{{%poll_result}}".

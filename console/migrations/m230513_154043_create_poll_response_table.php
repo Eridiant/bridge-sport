@@ -20,7 +20,7 @@ class m230513_154043_create_poll_response_table extends Migration
             'id' => $this->primaryKey(),
             'answer_id' => $this->integer()->notNull(),
             'user_id' => $this->integer()->notNull(),
-            'date' => $this->integer(11),
+            'text' => $this->text(),
         ]);
 
         // creates index for column `answer_id`

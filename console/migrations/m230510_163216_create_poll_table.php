@@ -18,11 +18,15 @@ class m230510_163216_create_poll_table extends Migration
         $this->createTable('{{%poll}}', [
             'id' => $this->primaryKey(),
             'post_id' => $this->integer()->notNull(),
-            'type' => $this->tinyInteger(),
-            'show_result' => $this->tinyInteger(),
-            'grade' => $this->tinyInteger(),
             'description' => $this->text(),
-            'active' => $this->tinyInteger(),
+            'show_result' => $this->tinyInteger()->notNull()->defaultValue(0),
+            'save_result' => $this->tinyInteger()->notNull()->defaultValue(0),
+            'show_only_user_result' => $this->tinyInteger()->notNull()->defaultValue(1),
+            'show_grade' => $this->tinyInteger()->notNull()->defaultValue(0),
+            'poll_close' => $this->tinyInteger()->notNull()->defaultValue(0),
+            'allow_guest' => $this->tinyInteger()->notNull()->defaultValue(0),
+            'save_guest_result' => $this->tinyInteger()->notNull()->defaultValue(0),
+            'active' => $this->tinyInteger()->notNull()->defaultValue(1),
             'created_at' => $this->integer(11)->notNull(),
         ]);
 

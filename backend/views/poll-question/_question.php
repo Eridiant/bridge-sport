@@ -2,9 +2,8 @@
 use yii\helpers\Html;
 
 ?>
-
 <div class="poll-question dlt" data-poll-id="<?= $model->poll->id ?? ''; ?>" data-question-id="<?= $model->id ?? ''; ?>">
-    <input type="checkbox" name="asdf" class="poll-question-type" <?= $model->type ? 'checked' : ''; ?>>
+    <?= Html::dropDownList('asd' , $model->type, ['0' => 'радио', '1' => 'чекбокс', '2' => 'цифры', '3' => 'текст'], (['class' => 'poll-question-type'])); ?>
     <span class="poll-content" contenteditable="false">
         <?= $model->text ?? ''; ?>
     </span>

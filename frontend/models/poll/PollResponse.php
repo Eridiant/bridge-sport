@@ -1,30 +1,29 @@
 <?php
 
-namespace backend\models\poll;
+namespace frontend\models\poll;
 
 use Yii;
-use yii\behaviors\TimestampBehavior;
+use frontend\models\User;
 
 /**
- * This is the model class for table "{{%poll_result}}".
+ * This is the model class for table "{{%poll_response}}".
  *
  * @property int $id
  * @property int $answer_id
- * @property int $result_count
- * @property int $result_guest_count
+ * @property int $user_id
  * @property string|null $text
- * @property int|null $is_correct
  *
  * @property PollAnswer $answer
+ * @property User $user
  */
-class PollResult extends \yii\db\ActiveRecord
+class PollResponse extends \yii\db\ActiveRecord
 {
     /**
      * {@inheritdoc}
      */
     public static function tableName()
     {
-        return '{{%poll_result}}';
+        return '{{%poll_response}}';
     }
 
     /**
@@ -33,10 +32,11 @@ class PollResult extends \yii\db\ActiveRecord
     public function rules()
     {
         return [
-            [['answer_id'], 'required'],
-            [['answer_id', 'result_count', 'result_guest_count', 'is_correct'], 'integer'],
+            [['answer_id', 'user_id'], 'required'],
+            [['answer_id', 'user_id'], 'integer'],
             [['text'], 'string'],
             [['answer_id'], 'exist', 'skipOnError' => true, 'targetClass' => PollAnswer::class, 'targetAttribute' => ['answer_id' => 'id']],
+            [['user_id'], 'exist', 'skipOnError' => true, 'targetClass' => User::class, 'targetAttribute' => ['user_id' => 'id']],
         ];
     }
 
@@ -48,10 +48,8 @@ class PollResult extends \yii\db\ActiveRecord
         return [
             'id' => 'ID',
             'answer_id' => 'Answer ID',
-            'result_count' => 'Result Count',
-            'result_guest_count' => 'Result Guest Count',
+            'user_id' => 'User ID',
             'text' => 'Text',
-            'is_correct' => 'Is Correct',
         ];
     }
 
@@ -63,5 +61,15 @@ class PollResult extends \yii\db\ActiveRecord
     public function getAnswer()
     {
         return $this->hasOne(PollAnswer::class, ['id' => 'answer_id']);
+    }
+
+    /**
+     * Gets query for [[User]].
+     *
+     * @return \yii\db\ActiveQuery
+     */
+    public function getUser()
+    {
+        return $this->hasOne(User::class, ['id' => 'user_id']);
     }
 }

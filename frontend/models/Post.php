@@ -3,7 +3,7 @@
 namespace frontend\models;
 
 use Yii;
-
+use frontend\models\poll\Poll;
 
 /**
  * This is the model class for table "{{%post}}".
@@ -143,6 +143,16 @@ class Post extends \yii\db\ActiveRecord
     }
 
     /**
+     * Gets query for [[Polls]].
+     *
+     * @return \yii\db\ActiveQuery
+     */
+    public function getPoll()
+    {
+        return $this->hasOne(Poll::class, ['post_id' => 'id'])->andWhere(['active' => 1]);
+    }
+
+    /**
      * Gets query for [[Iframe]].
      *
      * @return \yii\db\ActiveQuery
@@ -150,6 +160,16 @@ class Post extends \yii\db\ActiveRecord
     public function getIframe()
     {
         return $this->hasOne(Iframe::class, ['id' => 'iframe_id']);
+    }
+
+    /**
+     * Gets query for [[PollUsers]].
+     *
+     * @return \yii\db\ActiveQuery
+     */
+    public function getPollUsers()
+    {
+        return $this->hasMany(PollUser::class, ['poll_id' => 'id']);
     }
 
     /**

@@ -1,11 +1,12 @@
 <?php
 
 use yii\helpers\Html;
+use yii\helpers\ArrayHelper;
 
 /* @var $this yii\web\View */
 /* @var $model frontend\models\Post */
 // var_dump('<pre>');
-// var_dump($model);
+// var_dump(isset($model->poll));
 // var_dump('</pre>');
 // die;
 
@@ -66,6 +67,41 @@ use yii\helpers\Html;
             <div id="aski" class="post-survey"></div>
             <button id="survey" class="custom-btn btn-8" type="button"><span>пройти квиз</span></button>
         </form>
+    <?php endif; ?>
+
+    <?php if (is_null($model->poll)): ?>
+    <?php elseif (isset($model->poll->pollUsers) && $model->poll->poll_close): ?>
+        <?= $this->render('/poll/results', [
+            'model' => $model->poll,
+        ]) ?>
+    <?php elseif ((!Yii::$app->user->isGuest || $model->poll->allow_guest == 1)): ?>
+        <div class="poll" data-id=<?= $model->poll->id; ?>>
+            <div class="poll-header">
+                <?= $model->poll->description; ?>
+            </div>
+            <?php foreach ($model->poll->pollQuestions as $question): ?>
+                <?php if ($question->type == 1): ?>
+                    <div class="poll-question" data-id=<?= $question->id; ?>>
+                        <p><?= $question->text; ?></p>
+                        <?= Html::checkboxList("question-{$question->id}", null, ArrayHelper::map($question->answers, 'id', 'text'), (['class' => 'poll-answer'])) ?>
+                    </div>
+                <?php elseif ($question->type == 0): ?>
+                    <div class="poll-question" data-id=<?= $question->id; ?>>
+                        <p><?= $question->text; ?></p>
+                        <?= Html::radioList("question-{$question->id}", null, ArrayHelper::map($question->answers, 'id', 'text'), (['class' => 'poll-answer'])) ?>
+                    </div>
+                <?php else: ?>
+                    <div class="poll-question" data-id=<?= $question->id; ?>>
+                        <p><?= $question->text; ?></p>
+                        <div class="poll-answer">
+                            <input type="text" name="" id="" checked>
+                        </div>
+                    </div>
+                <?php endif; ?>
+            <?php endforeach; ?>
+            <button id="poll-submit" class="custom-btn btn-8" type="button"><span>продолжить</span></button>
+        </div>
+    <?php else: ?>
     <?php endif; ?>
 
     <div class="post-link">

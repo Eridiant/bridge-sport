@@ -1,10 +1,9 @@
 <?php
 
-namespace backend\models\poll;
+namespace frontend\models\poll;
 
 use Yii;
-use backend\models\Post;
-use yii\behaviors\TimestampBehavior;
+use frontend\models\Post;
 
 /**
  * This is the model class for table "{{%poll}}".
@@ -50,18 +49,6 @@ class Poll extends \yii\db\ActiveRecord
         ];
     }
 
-    public function behaviors()
-    {
-        return [
-            'timestamp' => [
-                'class' => TimestampBehavior::class,
-                'attributes' => [
-                    \yii\db\BaseActiveRecord::EVENT_BEFORE_INSERT => ['created_at'],
-                ],
-            ],
-        ];
-    }
-
     /**
      * {@inheritdoc}
      */
@@ -71,13 +58,13 @@ class Poll extends \yii\db\ActiveRecord
             'id' => 'ID',
             'post_id' => 'Post ID',
             'description' => 'Description',
-            'show_result' => 'Вывести результат в виде графика',
-            'save_result' => 'Сохранить результат голосования',
-            'show_only_user_result' => 'Вывести результаты только зарегистрированных пользователей',
-            'show_grade' => 'Вывести оценку',
-            'poll_close' => 'Завершить опрос',
-            'allow_guest' => 'Разрешить для гостей',
-            'save_guest_result' => 'Сохранить результат для гостей',
+            'show_result' => 'Show Result',
+            'show_only_user_result' => 'Show Only User Result',
+            'save_result' => 'Save Result',
+            'show_grade' => 'Show Grade',
+            'poll_close' => 'Show Grade',
+            'allow_guest' => 'Allow Guest',
+            'save_guest_result' => 'Save Guest Result',
             'active' => 'Active',
             'created_at' => 'Created At',
         ];
@@ -88,7 +75,7 @@ class Poll extends \yii\db\ActiveRecord
      *
      * @return \yii\db\ActiveQuery
      */
-    public function getQuestions()
+    public function getPollQuestions()
     {
         return $this->hasMany(PollQuestion::class, ['poll_id' => 'id']);
     }
@@ -100,7 +87,7 @@ class Poll extends \yii\db\ActiveRecord
      */
     public function getPollUsers()
     {
-        return $this->hasMany(PollUser::class, ['poll_id' => 'id']);
+        return $this->hasOne(PollUser::class, ['poll_id' => 'id'])->andWhere(['user_id' => Yii::$app->user->id]);
     }
 
     /**

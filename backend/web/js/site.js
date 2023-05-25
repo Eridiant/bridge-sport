@@ -807,7 +807,13 @@ window.addEventListener('load', () => {
                 active.contentEditable = 'false';
                 if (active.closest('.poll-result') != null) {
                     cntr = 'poll-question/create-result';
-                    data = {'poll_id':document.querySelector('#poll').dataset.pollId,'answer_id':active.closest('.poll-answer').dataset.answerId,'is_correct':active.closest('.poll-result').querySelector('#poll-correct').value,'text':active.innerHTML};
+                    data = {
+                        'poll_id':document.querySelector('#poll').dataset.pollId,
+                        'result_id':active.closest('.poll-result').dataset.resultId,
+                        'answer_id':active.closest('.poll-answer').dataset.answerId,
+                        'is_correct':active.closest('.poll-result').querySelector('#poll-correct').value,
+                        'text':active.innerHTML
+                    };
                 } else if (active.closest('.poll-answer') != null) {
                     if (active.closest('.poll-question').dataset.questionId == null) return;
                     cntr = 'poll-question/create-answer';
@@ -824,7 +830,7 @@ window.addEventListener('load', () => {
 
                     data = {
                         poll_id: document.querySelector('#poll').dataset.pollId,
-                        type: Number(document.querySelector('.poll-question-type').checked),
+                        type: Number(active.closest('.poll-question').querySelector('.poll-question-type').value),
                         question_id: active.closest('.poll-question').dataset.questionId,
                     }
                     if (active.classList.contains('poll-comment')) {

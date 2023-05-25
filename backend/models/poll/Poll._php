@@ -11,21 +11,15 @@ use yii\behaviors\TimestampBehavior;
  *
  * @property int $id
  * @property int $post_id
+ * @property int|null $type
+ * @property int|null $show_result
+ * @property int|null $grade
  * @property string|null $description
- * @property int $show_result
- * @property int $save_result
- * @property int $show_only_user_result
- * @property int $show_grade
- * @property int $poll_close
- * @property int $allow_guest
- * @property int $save_guest_result
- * @property int $active
+ * @property int|null $active
  * @property int $created_at
  *
  * @property PollQuestion[] $pollQuestions
- * @property PollUser[] $pollUsers
  * @property Post $post
- * @property User[] $users
  */
 class Poll extends \yii\db\ActiveRecord
 {
@@ -42,9 +36,10 @@ class Poll extends \yii\db\ActiveRecord
      */
     public function rules()
     {
+
         return [
             [['post_id'], 'required'],
-            [['post_id', 'show_result', 'save_result', 'show_only_user_result', 'show_grade', 'poll_close', 'allow_guest', 'save_guest_result', 'active', 'created_at'], 'integer'],
+            [['post_id', 'type', 'show_result', 'grade', 'active', 'created_at'], 'integer'],
             [['description'], 'string'],
             [['post_id'], 'exist', 'skipOnError' => true, 'targetClass' => Post::class, 'targetAttribute' => ['post_id' => 'id']],
         ];
@@ -70,14 +65,10 @@ class Poll extends \yii\db\ActiveRecord
         return [
             'id' => 'ID',
             'post_id' => 'Post ID',
+            'type' => 'Type',
+            'show_result' => 'Show Result',
+            'grade' => 'Grade',
             'description' => 'Description',
-            'show_result' => 'Вывести результат в виде графика',
-            'save_result' => 'Сохранить результат голосования',
-            'show_only_user_result' => 'Вывести результаты только зарегистрированных пользователей',
-            'show_grade' => 'Вывести оценку',
-            'poll_close' => 'Завершить опрос',
-            'allow_guest' => 'Разрешить для гостей',
-            'save_guest_result' => 'Сохранить результат для гостей',
             'active' => 'Active',
             'created_at' => 'Created At',
         ];
@@ -94,13 +85,13 @@ class Poll extends \yii\db\ActiveRecord
     }
 
     /**
-     * Gets query for [[PollUsers]].
+     * Gets query for [[PollResponses]].
      *
      * @return \yii\db\ActiveQuery
      */
-    public function getPollUsers()
+    public function getResponses()
     {
-        return $this->hasMany(PollUser::class, ['poll_id' => 'id']);
+        return $this->hasMany(PollResponse::class, ['poll_id' => 'id']);
     }
 
     /**
@@ -111,15 +102,5 @@ class Poll extends \yii\db\ActiveRecord
     public function getPost()
     {
         return $this->hasOne(Post::class, ['id' => 'post_id']);
-    }
-
-    /**
-     * Gets query for [[Users]].
-     *
-     * @return \yii\db\ActiveQuery
-     */
-    public function getUsers()
-    {
-        return $this->hasMany(User::class, ['id' => 'user_id'])->viaTable('{{%poll_user}}', ['poll_id' => 'id']);
     }
 }

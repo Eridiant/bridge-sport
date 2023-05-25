@@ -1,17 +1,15 @@
 <?php
 
-namespace backend\models\poll;
+namespace frontend\models\poll;
 
 use Yii;
-use yii\behaviors\TimestampBehavior;
 
 /**
- * This is the model class for table "{{%poll_result}}".
+ * This is the model class for table "bsip_poll_result".
  *
  * @property int $id
  * @property int $answer_id
- * @property int $result_count
- * @property int $result_guest_count
+ * @property int|null $result_count
  * @property string|null $text
  * @property int|null $is_correct
  *
@@ -34,7 +32,7 @@ class PollResult extends \yii\db\ActiveRecord
     {
         return [
             [['answer_id'], 'required'],
-            [['answer_id', 'result_count', 'result_guest_count', 'is_correct'], 'integer'],
+            [['answer_id', 'result_count', 'is_correct'], 'integer'],
             [['text'], 'string'],
             [['answer_id'], 'exist', 'skipOnError' => true, 'targetClass' => PollAnswer::class, 'targetAttribute' => ['answer_id' => 'id']],
         ];
@@ -49,7 +47,6 @@ class PollResult extends \yii\db\ActiveRecord
             'id' => 'ID',
             'answer_id' => 'Answer ID',
             'result_count' => 'Result Count',
-            'result_guest_count' => 'Result Guest Count',
             'text' => 'Text',
             'is_correct' => 'Is Correct',
         ];
