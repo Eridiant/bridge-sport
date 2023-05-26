@@ -70,7 +70,7 @@ use yii\helpers\ArrayHelper;
     <?php endif; ?>
 
     <?php if (is_null($model->poll)): ?>
-    <?php elseif (isset($model->poll->pollUsers) && $model->poll->poll_close): ?>
+    <?php elseif (isset($model->poll->pollUsers) || $model->poll->poll_close): ?>
         <?= $this->render('/poll/results', [
             'model' => $model->poll,
         ]) ?>
