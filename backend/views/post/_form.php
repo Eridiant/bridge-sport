@@ -98,7 +98,7 @@ use backend\models\Taxonomy;
             <?= $form->field($model, 'status')->dropDownList([
                     '0'=>'Скрыта',
                     '1'=>'Доступна',
-                    // '2'=>'Доступ ограничен',
+                    '2'=>'Не отображать в ленте новостей',
             ]) ?>
 
             <?= $form->field($model, 'comments_hide')->dropDownList([

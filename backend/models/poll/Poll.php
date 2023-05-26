@@ -14,6 +14,7 @@ use yii\behaviors\TimestampBehavior;
  * @property string|null $description
  * @property int $show_result
  * @property int $save_result
+ * @property int $save_response
  * @property int $show_only_user_result
  * @property int $show_grade
  * @property int $poll_close
@@ -44,7 +45,7 @@ class Poll extends \yii\db\ActiveRecord
     {
         return [
             [['post_id'], 'required'],
-            [['post_id', 'show_result', 'save_result', 'show_only_user_result', 'show_grade', 'poll_close', 'allow_guest', 'save_guest_result', 'active', 'created_at'], 'integer'],
+            [['post_id', 'show_result', 'save_response', 'save_result', 'show_only_user_result', 'show_grade', 'poll_close', 'allow_guest', 'save_guest_result', 'active', 'created_at'], 'integer'],
             [['description'], 'string'],
             [['post_id'], 'exist', 'skipOnError' => true, 'targetClass' => Post::class, 'targetAttribute' => ['post_id' => 'id']],
         ];
@@ -72,7 +73,8 @@ class Poll extends \yii\db\ActiveRecord
             'post_id' => 'Post ID',
             'description' => 'Description',
             'show_result' => 'Вывести результат в виде графика',
-            'save_result' => 'Сохранить результат голосования',
+            'save_result' => 'Сохранять результат голосования',
+            'save_response' => 'Сохранять ответы пользователей',
             'show_only_user_result' => 'Вывести результаты только зарегистрированных пользователей',
             'show_grade' => 'Вывести оценку',
             'poll_close' => 'Завершить опрос',

@@ -21,6 +21,7 @@ class m230510_163216_create_poll_table extends Migration
             'description' => $this->text(),
             'show_result' => $this->tinyInteger()->notNull()->defaultValue(0),
             'save_result' => $this->tinyInteger()->notNull()->defaultValue(0),
+            'save_response' => $this->tinyInteger()->notNull()->defaultValue(0),
             'show_only_user_result' => $this->tinyInteger()->notNull()->defaultValue(1),
             'show_grade' => $this->tinyInteger()->notNull()->defaultValue(0),
             'poll_close' => $this->tinyInteger()->notNull()->defaultValue(0),

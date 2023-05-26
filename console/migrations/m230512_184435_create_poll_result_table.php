@@ -18,8 +18,8 @@ class m230512_184435_create_poll_result_table extends Migration
         $this->createTable('{{%poll_result}}', [
             'id' => $this->primaryKey(),
             'answer_id' => $this->integer()->notNull(),
-            'result_count' => $this->smallInteger()->notNull()->defaultValue(0),
-            'result_guest_count' => $this->smallInteger()->notNull()->defaultValue(0),
+            'result_count' => $this->tinyInteger()->notNull()->defaultValue(0),
+            'result_guest_count' => $this->tinyInteger()->notNull()->defaultValue(0),
             'text' => $this->text(),
             'is_correct' => $this->tinyInteger(),
         ]);

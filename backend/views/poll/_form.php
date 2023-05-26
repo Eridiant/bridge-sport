@@ -18,6 +18,8 @@ use yii\widgets\ActiveForm;
 
     <?= $form->field($model, 'save_result')->checkbox() ?>
 
+    <?= $form->field($model, 'save_response')->checkbox() ?>
+
     <?= $form->field($model, 'show_result')->checkbox() ?>
 
     <?= $form->field($model, 'show_only_user_result')->checkbox() ?>
