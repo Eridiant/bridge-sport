@@ -270,7 +270,7 @@ document.addEventListener('DOMContentLoaded', () => {
             let checked = document.querySelectorAll('.poll input:checked');
             let data = new Object();
             data['poll'] = poll.dataset.id;
-            console.log('data', data);
+
             checkAnswer.forEach(element => {
                 let currentAnswers = element.querySelectorAll('input');
                 let currentAnswersChecked = element.querySelectorAll('input:checked');
@@ -319,6 +319,7 @@ document.addEventListener('DOMContentLoaded', () => {
                             el.answers.forEach(answer => {
                                 sum += answer.result.result_count + obj.show_only_user_result * answer.result.result_guest_count;
                             });
+                            console.log('sum', sum);
 
                             el.answers.forEach(answer => {
                                 let answr = question.querySelector(`.poll-answer input[value="${answer.id}"]`).closest('label');
@@ -332,6 +333,7 @@ document.addEventListener('DOMContentLoaded', () => {
                                     // Вычисление процента ширины строки
                                     let percent = Math.round(((answer.result.result_count + obj.show_only_user_result * answer.result.result_guest_count) / sum) * 100);
                                     // Установка стилей для заполнителя
+                                    console.log('percent', percent);
                                     fillerElement.style.width = percent + "%";
                                     answr.insertAdjacentElement("afterend", fillerElement);
                                 }

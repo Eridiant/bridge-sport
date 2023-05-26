@@ -22,7 +22,8 @@ use yii\helpers\Html;
                         <p><?= $answer->text; ?></p>
                         <?php if ($model->show_result): ?>
                             <?php
-                                $percent = ($answer->result->result_count + $model->show_only_user_result * $answer->result->result_guest_count) / $sum * 100;
+                                $percent = ($sum != 0) ? (($answer->result->result_count + $model->show_only_user_result * $answer->result->result_guest_count) / $sum * 100) : 0;
+
                             ?>
                             <div class="answer-<?= $answer->result->is_correct; ?>"
                                 style="width: <?= $percent; ?>%;"></div>
