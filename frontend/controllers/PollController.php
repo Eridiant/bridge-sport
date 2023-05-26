@@ -223,7 +223,7 @@ class PollController extends Controller
         $poll_user = PollUser::findOne(['poll_id' => $id, 'user_id' => $user->id]);
         if (isset($poll_user)) {
             Yii::$app->response->format = \yii\web\Response::FORMAT_JSON;
-            return ['error' => 'в бобруйск'];
+            return ['error' => 'в бабровск'];
         }
         $poll_user = new PollUser();
 
