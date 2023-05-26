@@ -321,7 +321,6 @@ document.addEventListener('DOMContentLoaded', () => {
                                 sum += Number(answer.result.result_count) + (Number(obj.show_only_user_result) * Number(answer.result.result_guest_count));
 
                             });
-                            console.log('sum', sum);
 
                             el.answers.forEach(answer => {
                                 let answr = question.querySelector(`.poll-answer input[value="${answer.id}"]`).closest('label');
@@ -337,7 +336,6 @@ document.addEventListener('DOMContentLoaded', () => {
                                     let percent = Math.round(((Number(answer.result.result_count) + Number(obj.show_only_user_result) * Number(answer.result.result_guest_count)) / sum) * 100);
 
                                     // Установка стилей для заполнителя
-                                    console.log('percent', percent);
                                     fillerElement.style.width = percent + "%";
                                     answr.insertAdjacentElement("afterend", fillerElement);
                                 }
