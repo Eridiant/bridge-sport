@@ -234,7 +234,7 @@ class PostController extends AppController
             // ->with('image', 'messages')
             // ->with(['image'])
             // ->joinWith(['messages'])
-            ->where(['{{%post}}.id' => $id])
+            ->where('{{%post}}.id:id', [':id' => $id])
             ->andWhere(['status' => 1])
             // ->andWhere(['show' => 1])
             ->one();
