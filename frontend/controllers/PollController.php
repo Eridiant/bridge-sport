@@ -316,7 +316,7 @@ class PollController extends Controller
 
         Yii::$app->response->format = \yii\web\Response::FORMAT_JSON;
 
-        $render = $this->renderPartial('results', compact('result'));
+        // $render = $this->renderPartial('results', compact('result'));
         return ['show_result' => $show_result, 'rslt' => $rslt, 'show_only_user_result' => $show_only_user_result];
     }
 
