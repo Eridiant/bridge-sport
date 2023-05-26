@@ -317,7 +317,9 @@ document.addEventListener('DOMContentLoaded', () => {
                         if (el.type < 2) {
                             let sum = 0;
                             el.answers.forEach(answer => {
-                                sum += answer.result.result_count + obj.show_only_user_result * answer.result.result_guest_count;
+                                // sum += answer.result.result_count + obj.show_only_user_result * answer.result.result_guest_count;
+                                sum += Number(answer.result.result_count) + (Number(obj.show_only_user_result) * Number(answer.result.result_guest_count));
+
                             });
                             console.log('sum', sum);
 
@@ -331,7 +333,9 @@ document.addEventListener('DOMContentLoaded', () => {
     
                                     fillerElement.classList.add(`answer-${answer.result.is_correct}`);
                                     // Вычисление процента ширины строки
-                                    let percent = Math.round(((answer.result.result_count + obj.show_only_user_result * answer.result.result_guest_count) / sum) * 100);
+                                    // let percent = Math.round(((answer.result.result_count + obj.show_only_user_result * answer.result.result_guest_count) / sum) * 100);
+                                    let percent = Math.round(((Number(answer.result.result_count) + Number(obj.show_only_user_result) * Number(answer.result.result_guest_count)) / sum) * 100);
+
                                     // Установка стилей для заполнителя
                                     console.log('percent', percent);
                                     fillerElement.style.width = percent + "%";
