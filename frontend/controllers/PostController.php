@@ -229,13 +229,18 @@ class PostController extends AppController
      */
     protected function findModel($id)
     {
+        $id = (int)$id;
         $model = Post::find()
             // ->with('image', 'messages', 'messageReply', 'replies')
             // ->with('image', 'messages')
             // ->with(['image'])
             // ->joinWith(['messages'])
-            ->where('{{%post}}.id:id', [':id' => $id])
-            ->andWhere(['status' => 1])
+            // ->where('{{%post}}.id:id', [':id' => $id])
+            // ->where('id:id', [':id' => $id])
+            ->where(['{{%post}}.id' => $id])
+            // ->andWhere(['status' => 1])
+            // ->andWhere(['status' => 1])
+            ->andWhere(['>', 'status', 4])
             // ->andWhere(['show' => 1])
             ->one();
         if ($model !== null) {
