@@ -21,6 +21,7 @@ class m230512_184435_create_poll_result_table extends Migration
             'result_count' => $this->tinyInteger()->notNull()->defaultValue(0),
             'result_guest_count' => $this->tinyInteger()->notNull()->defaultValue(0),
             'text' => $this->text(),
+            'grade' => $this->tinyInteger(),
             'is_correct' => $this->tinyInteger(),
         ]);
 

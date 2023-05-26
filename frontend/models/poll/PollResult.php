@@ -12,6 +12,7 @@ use Yii;
  * @property int $result_count
  * @property int $result_guest_count
  * @property string|null $text
+ * @property int|null $grade
  * @property int|null $is_correct
  *
  * @property PollAnswer $answer
@@ -33,7 +34,7 @@ class PollResult extends \yii\db\ActiveRecord
     {
         return [
             [['answer_id'], 'required'],
-            [['answer_id', 'result_count', 'result_guest_count', 'is_correct'], 'integer'],
+            [['answer_id', 'result_count', 'result_guest_count', 'grade', 'is_correct'], 'integer'],
             [['text'], 'string'],
             [['answer_id'], 'exist', 'skipOnError' => true, 'targetClass' => PollAnswer::class, 'targetAttribute' => ['answer_id' => 'id']],
         ];
@@ -50,6 +51,7 @@ class PollResult extends \yii\db\ActiveRecord
             'result_count' => 'Result Count',
             'result_guest_count' => 'Result Guest Count',
             'text' => 'Text',
+            'grade' => 'Grade',
             'is_correct' => 'Is Correct',
         ];
     }
