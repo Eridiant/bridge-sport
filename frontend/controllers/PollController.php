@@ -209,6 +209,7 @@ class PollController extends Controller
         $id = (int) $request->post('poll');
 
         if (($poll = Poll::findOne($id)) === null || $poll->active == 0) {
+            Yii::$app->response->format = \yii\web\Response::FORMAT_JSON;
             return ['error' => 'в бобруйск'];
         }
 
@@ -221,6 +222,7 @@ class PollController extends Controller
 
         $poll_user = PollUser::findOne(['poll_id' => $id, 'user_id' => $user->id]);
         if (isset($poll_user)) {
+            Yii::$app->response->format = \yii\web\Response::FORMAT_JSON;
             return ['error' => 'в бобруйск'];
         }
         $poll_user = new PollUser();
