@@ -19,7 +19,7 @@ class SeoController extends Controller
     {
         $host = Yii::$app->request->hostInfo;
 
-        $indexing = 0;
+        $indexing = 4;
 
         $posts = Post::find()
                 ->where(['>', 'indexing', $indexing])
