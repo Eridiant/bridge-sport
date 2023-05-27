@@ -27,6 +27,8 @@ use frontend\models\poll\Poll;
  * @property string|null $description
  * @property string|null $keywords
  * @property int $status
+ * @property int $priority
+ * @property string $changefreq
  * @property int|null $author_id
  * @property int|null $published_at
  * @property int $created_at
@@ -47,6 +49,7 @@ use frontend\models\poll\Poll;
  */
 class Post extends \yii\db\ActiveRecord
 {
+    const STATUS_PUBLISHED = 1;
     /**
      * {@inheritdoc}
      */
@@ -62,8 +65,8 @@ class Post extends \yii\db\ActiveRecord
     {
         return [
             [['category_id', 'name', 'slug', 'created_at'], 'required'],
-            [['category_id', 'parent_id', 'thread_id', 'image_id', 'image_header', 'iframe_id', 'youtube_id', 'indexing', 'status', 'author_id', 'published_at', 'created_at', 'updated_at', 'deleted_at', 'comments_status', 'comments_hide', 'survey_id'], 'integer'],
-            [['url', 'preview', 'text', 'description'], 'string'],
+            [['category_id', 'parent_id', 'thread_id', 'image_id', 'image_header', 'iframe_id', 'youtube_id', 'indexing', 'status', 'priority', 'author_id', 'published_at', 'created_at', 'updated_at', 'deleted_at', 'comments_status', 'comments_hide', 'survey_id'], 'integer'],
+            [['url', 'preview', 'text', 'description', 'changefreq'], 'string'],
             [['name', 'slug', 'dial', 'title', 'keywords'], 'string', 'max' => 255],
             [['category_id'], 'exist', 'skipOnError' => true, 'targetClass' => Category::class, 'targetAttribute' => ['category_id' => 'id']],
             [['iframe_id'], 'exist', 'skipOnError' => true, 'targetClass' => Iframe::class, 'targetAttribute' => ['iframe_id' => 'id']],
@@ -98,6 +101,8 @@ class Post extends \yii\db\ActiveRecord
             'description' => 'Description',
             'keywords' => 'Keywords',
             'status' => 'Status',
+            'priority' => 'Priority',
+            'changefreq' => 'Changefreq',
             'author_id' => 'Author ID',
             'published_at' => 'Published At',
             'created_at' => 'Created At',

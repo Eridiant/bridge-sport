@@ -65,7 +65,7 @@ return [
             'showScriptName' => false,
             // 'caseSensitive' => false,
             // 'enableStrictParsing' => false,
-            // 'suffix' => '/',
+            'suffix' => '',
             // 'normalizer' => [
             //     'class' => 'yii\web\UrlNormalizer',
             //     'action' => \yii\web\UrlNormalizer::ACTION_REDIRECT_TEMPORARY,
@@ -74,6 +74,8 @@ return [
                 '' => 'site/index',
                 'index' => 'site/index',
                 'post' => 'post/index',
+                'sitemap.xml' => 'seo/index',
+                'robots.txt' => 'seo/robots',
                 'post/message' => 'post/message',
                 'post/delete-message' => 'post/delete-message',
                 // 'post/edit-message' => 'post/edit-message',
@@ -90,6 +92,11 @@ return [
                 'system/<slug:[\w-]+>' => 'system/view',
                 // 'survey/<slug:[\w-]+>' => 'survey/view',
                 // '<url:\w+>' => 'page/index',
+                // [
+                //     'seo/index',
+                //     'pattern' => 'sitemap.xml',
+                //     'urlSuffix'=>''
+                // ],
                 [
                     'class' => 'common\components\PageRule',
                 ],

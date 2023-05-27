@@ -4,7 +4,7 @@
 </IfModule>
 <IfModule mod_rewrite.c>
    # если /admin, то в backend
-   RewriteRule ^sitemap.xml sitemap.xml [L]
+   # RewriteRule ^sitemap.xml sitemap.xml [L]
    RewriteCond %{REQUEST_URI} ^/(admin)
    RewriteRule ^admin/assets/(.*)$ backend/web/assets/$1 [L]
    RewriteRule ^admin/css/(.*)$ backend/web/css/$1 [L]
