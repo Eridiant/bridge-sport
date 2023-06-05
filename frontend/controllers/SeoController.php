@@ -66,14 +66,14 @@ class SeoController extends Controller
     {
         foreach ($rangesData["prefixes"] as $rangeData) {
             if (isset($rangeData['ipv4Prefix'])) {
-                $range = Factory::rangeFromString($rangeData['ipv4Prefix']);
+                $range = Factory::parseRangeString($rangeData['ipv4Prefix']);
             } elseif (isset($rangeData['ipv6Prefix'])) {
-                $range = Factory::rangeFromString($rangeData['ipv6Prefix']);
+                $range = Factory::parseRangeString($rangeData['ipv6Prefix']);
             } else {
                 continue;
             }
+            $address = Factory::parseAddressString($ipAddress);
 
-            $address = Factory::addressFromString($ipAddress);
             if ($address !== null && $range !== null && $range->contains($address)) {
                 return true;
             }
