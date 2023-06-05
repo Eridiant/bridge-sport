@@ -3,12 +3,13 @@
 use yii\helpers\Html;
 use yii\helpers\Url;
 
-?>
+$this->registerLinkTag(['rel' => 'canonical', 'href' => Url::to(['/site/index'], true)]);
 
-<div class="main-wrapper">
+?>
+<main class="main-wrapper">
     <h1><?= Html::encode($this->title) ?></h1>
     <?php foreach ($model as $post): ?>
-        <div class="news-wrapper">
+        <article class="news-wrapper">
             <div class="news-img <?= is_null($post->taxonomies) ? $post->taxonomies[0]->label : ''; ?>">
                 <picture>
                     <?php if (empty($post->image->url)): ?>
@@ -37,6 +38,6 @@ use yii\helpers\Url;
                     </a>
                 </div>
             </div>
-        </div>
+        </article>
     <?php endforeach; ?>
-</div>
+</main>

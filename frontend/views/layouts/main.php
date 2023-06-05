@@ -41,9 +41,9 @@ AppAsset::register($this);
 <div class="main">
     <div class="container main-container" style="max-width: 1600px; margin-left: auto; margin-right: auto">
         <?php require_once('template-aside.php'); ?>
-        <main role="main">
+        <div>
             <?= $content ?>
-        </main>
+        </div>
     </div>
 </div>
 

@@ -19,7 +19,6 @@ use yii\helpers\ArrayHelper;
 </script>
 
 <div class="post-view">
-
     <div class="post-img">
         <picture>
             <?php if (!empty($model->image->path) && $model->image_header): ?>
@@ -27,15 +26,17 @@ use yii\helpers\ArrayHelper;
             <?php endif; ?>
         </picture>
     </div>
+    <main>
 
-    <h1><?= $model->name ?></h1>
+        <h1><?= $model->name ?></h1>
 
-    <?php if (!empty($model->img)): ?>
-        <img src="<?= $model->img; ?>" alt="">
-    <?php endif; ?>
+        <?php if (!empty($model->img)): ?>
+            <img src="<?= $model->img; ?>" alt="">
+        <?php endif; ?>
 
-    <p><?= $model->text; ?></p>
+        <p><?= $model->text; ?></p>
 
+    </main>
     <?php if (!empty($model->youtube) && !$model->youtube->hide): ?>
         <div id="post-youtube" class="post-youtube active" data-youtube="<?= $model->youtube->key; ?>">
             <picture>

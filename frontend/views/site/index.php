@@ -13,9 +13,9 @@ $this->title = 'Bridge sport';
 // die;
 
 ?>
-<div class="main-wrapper">
+<main class="main-wrapper">
     <?php foreach ($model as $key => $m): ?>
-        <div class="news-wrapper">
+        <article class="news-wrapper">
             <div class="news-img <?= is_null($m->taxonomies) ? $m->taxonomies[0]->label : ''; ?>">
                 <a href="<?= Url::to(['/post', 'id' => $m->id]) ?>">
                     <picture>
@@ -50,6 +50,6 @@ $this->title = 'Bridge sport';
                     </a>
                 </div>
             </div>
-        </div>
+        </article>
     <?php endforeach; ?>
-</div>
+</main>
