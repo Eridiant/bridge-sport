@@ -65,7 +65,8 @@ return [
             'showScriptName' => false,
             // 'caseSensitive' => false,
             // 'enableStrictParsing' => false,
-            // 'suffix' => '/',
+            // 'enableStrictParsing' => true,
+            'suffix' => '',
             // 'normalizer' => [
             //     'class' => 'yii\web\UrlNormalizer',
             //     'action' => \yii\web\UrlNormalizer::ACTION_REDIRECT_TEMPORARY,
