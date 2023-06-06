@@ -20,10 +20,11 @@ class SeoController extends Controller
     {
         $host = Yii::$app->request->hostInfo;
 
-        $indexing = IsBot::isGoogle() ? 4 : 5;
+        $indexing = IsBot::isGoogle() ? 3 : 4;
 
         $posts = Post::find()
                 ->where(['>', 'indexing', $indexing])
+                ->andWhere(['>', 'status', 8])
                 ->select(['url', 'priority', 'changefreq', 'updated_at'])
                 ->all();
 
