@@ -10,7 +10,7 @@ class IsBot
     {
         $ipRangesData = IsBot::loadIpRanges('data/googlebot_ips.json');
         $ipAddress = IsBot::getIpAddress();
-        $ipAddress = '192.178.5.0';
+        // $ipAddress = '192.178.5.0';
         // $ipAddress = '2001:4860:4801:10::';
 
         return IsBot::isIpInRange($ipAddress, $ipRangesData);
