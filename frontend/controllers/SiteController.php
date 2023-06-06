@@ -90,7 +90,7 @@ class SiteController extends AppController
         // $dataProvider = $dataProvider->;
         $model = Post::find()
             ->with(['image', 'taxonomies', 'category', 'iframe'])
-            ->where(['status' => 5])
+            ->where(['status' => 10])
             ->orderBy(['id' => SORT_DESC]);
 
         // $model = $model->union($survey);

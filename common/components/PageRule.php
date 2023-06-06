@@ -102,7 +102,7 @@ class PageRule implements UrlRuleInterface {
 
         $post = Post::find()
             ->select(['id', 'url'])
-            ->where(['>', 'status', 4])
+            ->where(['>', 'status', 8])
             ->andWhere('binary url=:url')
             ->addParams([':url' => $url])
             ->one();

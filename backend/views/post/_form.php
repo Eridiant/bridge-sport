@@ -93,8 +93,8 @@ use backend\models\Taxonomy;
             <?= $form->field($model, 'indexing')->dropDownList([
                     '0'=>'Не индексировать',
                     '1'=>'Исключить из индексации',
-                    '5'=>'Подготовка индексации',
-                    '6'=>'Индексировать'
+                    '4'=>'Подготовка индексации',
+                    '5'=>'Индексировать'
             ]) ?>
 
             <?= $form->field($model, 'priority')->dropDownList([
@@ -111,8 +111,9 @@ use backend\models\Taxonomy;
 
             <?= $form->field($model, 'status')->dropDownList([
                     '0'=>'Скрыта',
-                    '5'=>'Доступна',
                     '6'=>'Не отображать в ленте новостей',
+                    '9'=>'Временно не отображать',
+                    '10'=>'Доступна',
             ]) ?>
 
             <?= $form->field($model, 'comments_hide')->dropDownList([

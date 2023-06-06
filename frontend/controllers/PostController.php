@@ -171,8 +171,9 @@ class PostController extends AppController
     {
         $model = $this->findModel($id);
 
-        if ($model->status == 4 && IsBot::isGoogle()) {
-            $model->status = 5;
+        if ($model->status == 9 && $model->indexing == 4 && IsBot::isGoogle()) {
+            $model->status = 10;
+            $model->indexing = 5;
             try {
                 $model->save();
             } catch (\Throwable $th) {
@@ -248,7 +249,7 @@ class PostController extends AppController
             ->where(['{{%post}}.id' => $id])
             // ->andWhere(['status' => 1])
             // ->andWhere(['status' => 1])
-            ->andWhere(['>', 'status', 4])
+            ->andWhere(['>', 'status', 8])
             // ->andWhere(['show' => 1])
             ->one();
         if ($model !== null) {

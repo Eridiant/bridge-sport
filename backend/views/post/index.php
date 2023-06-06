@@ -66,22 +66,25 @@ $this->params['breadcrumbs'][] = $this->title;
                 'label' => 'Доступно',
                 'attribute' => 'status',
                 'format' => 'raw',
-                'filter' => [0 => 'Не доступно', 5 => 'Доступна', 6 => 'Не отображать'],
+                'filter' => [0 => 'Не доступно', 5 => 'Не отображать', 9 => 'Не отображать', 10 => 'Доступна'],
                 // 'filter' => Post::find()->select(['active', 'id'])->indexBy('id')->column(),
                 'value' => function($model) {
                     $answer = '';
                     switch ($model->status) {
                         case 5:
-                            $answer = 'Доступна';
-                            break;
-                        case 6:
                             $answer = 'Не отображать';
+                            break;
+                        case 9:
+                            $answer = 'Временно не отображать';
+                            break;
+                        case 10:
+                            $answer = 'Доступна';
                             break;
                         default:
                             $answer = 'Не доступно';
                             break;
                     }
-                    $color = $model->status === 5 ? 'green' : 'red';
+                    $color = $model->status === 10 ? 'green' : 'red';
                     return "<span class={$color}>{$answer}</span>";
                 }
             ],
@@ -89,25 +92,25 @@ $this->params['breadcrumbs'][] = $this->title;
                 'label' => 'Идексация',
                 'attribute' => 'indexing',
                 'format' => 'raw',
-                'filter' => [0 => 'Не инд', 1 => 'Исключить', 5 => 'Подготовка', 6 => 'Инд'],
+                'filter' => [0 => 'Не инд', 1 => 'Исключить', 4 => 'Подготовка', 5 => 'Инд'],
                 // 'filter' => Post::find()->select(['active', 'id'])->indexBy('id')->column(),
                 'value' => function($model) {
                     $answer = '';
-                    switch ($model->status) {
+                    switch ($model->indexing) {
                         case 1:
                             $answer = 'Исключить';
                             break;
-                        case 5:
+                        case 4:
                             $answer = 'Подготовка';
                             break;
-                        case 6:
+                        case 5:
                             $answer = 'Индексировать';
                             break;
                         default:
                             $answer = 'Не инд';
                             break;
                     }
-                    $color = $model->status === 5 ? 'green' : 'red';
+                    $color = $model->indexing === 5 ? 'green' : 'red';
                     return "<span class={$color}>{$answer}</span>";
                 }
             ],
