@@ -10,9 +10,8 @@ use frontend\models\UserInfo;
 use frontend\models\Notifications;
 use frontend\models\PostSearch;
 use frontend\models\Quiz;
-use yii\web\Controller;
+use frontend\class\IsBot;
 use yii\web\NotFoundHttpException;
-use yii\filters\VerbFilter;
 
 /**
  * PostController implements the CRUD actions for Post model.
@@ -171,6 +170,15 @@ class PostController extends AppController
     public function actionShow($id)
     {
         $model = $this->findModel($id);
+
+        if ($model->status == 4 && IsBot::isGoogle()) {
+            $model->status = 5;
+            try {
+                $model->save();
+            } catch (\Throwable $th) {
+                throw $th;
+            }
+        }
 
         $socialImage = null;
         if (!empty($model->image) || !empty($model->iframe)) {
