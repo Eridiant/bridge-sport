@@ -109,6 +109,16 @@ use backend\models\Taxonomy;
                     '9'=>'9'
             ]) ?>
 
+            <?= $form->field($model, 'changefreq')->dropDownList([
+                    'always'=>'always',
+                    'hourly'=>'hourly',
+                    'daily'=>'daily',
+                    'weekly'=>'weekly',
+                    'monthly'=>'monthly',
+                    'yearly'=>'yearly',
+                    'never'=>'never'
+            ]) ?>
+
             <?= $form->field($model, 'status')->dropDownList([
                     '0'=>'Скрыта',
                     '6'=>'Не отображать в ленте новостей',
