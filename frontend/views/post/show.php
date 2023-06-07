@@ -24,23 +24,18 @@ use yii\helpers\ArrayHelper;
 </script>
 
 <div class="post-view">
-    <div class="post-img">
-        <picture>
-            <?php if (!empty($model->image->path) && $model->image_header): ?>
-                <?= Yii::$app->imageComponent->image($model->image); ?>
-            <?php endif; ?>
-        </picture>
-    </div>
     <main>
-
-        <h1><?= $model->name ?></h1>
-
-        <?php if (!empty($model->img)): ?>
-            <img src="<?= $model->img; ?>" alt="">
-        <?php endif; ?>
-
-        <p><?= $model->text; ?></p>
-
+        <header class="post-img">
+            <picture>
+                <?php if (!empty($model->image->path) && $model->image_header): ?>
+                    <?= Yii::$app->imageComponent->image($model->image); ?>
+                <?php endif; ?>
+            </picture>
+            <h1><?= $model->name ?></h1>
+        </header>
+        <article>
+            <?= $model->text; ?>
+        </article>
     </main>
     <?php if (!empty($model->youtube) && !$model->youtube->hide): ?>
         <div id="post-youtube" class="post-youtube active" data-youtube="<?= $model->youtube->key; ?>">
@@ -111,16 +106,17 @@ use yii\helpers\ArrayHelper;
     <?php endif; ?>
 
     <div class="post-link">
+        <p>Другие стати по теме:</p>
         <div class="post-row">
-            <?php if (isset($model->thread_id)): ?>
-                <?= Html::a(\backend\models\Post::find()->where(['id' => $model->thread_id])->one()->name, ['/post', 'id' => $model->thread_id], ['class' => 'success']) ?>
+            <?php if (isset($model->thread_id) && $model->thread_id !== $model->parent_id): ?>
+                <?= Html::a(\backend\models\Post::find()->where(['id' => $model->thread_id, 'status' => 10])->one()->name, ['/post', 'id' => $model->thread_id], ['class' => 'success']) ?>
             <?php endif; ?>
         </div>
         <div class="post-row">
             <?php if (isset($model->parent_id)): ?>
-                <?= Html::a("&xlarr;" . \backend\models\Post::find()->where(['id' => $model->parent_id])->one()->name, ['/post', 'id' => $model->parent_id], ['class' => 'successs']) ?> |
+                <?= Html::a("&xlarr;" . \backend\models\Post::find()->where(['id' => $model->parent_id, 'status' => 10])->one()->name, ['/post', 'id' => $model->parent_id], ['class' => 'successs']) ?> |
             <?php endif; ?>
-            <?php if (\backend\models\Post::find()->where(['parent_id' => $model->id])->exists()): ?>
+            <?php if (\backend\models\Post::find()->where(['parent_id' => $model->id, 'status' => 10])->exists()): ?>
                 <?= Html::a(\backend\models\Post::find()->where(['parent_id' => $model->id])->one()->name . "&xrarr;", ['/post', 'id' => \backend\models\Post::find()->where(['parent_id' => $model->id])->one()->id], ['class' => 'success']) ?>
             <?php endif; ?>
         </div>
