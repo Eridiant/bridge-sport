@@ -102,21 +102,26 @@ use yii\helpers\ArrayHelper;
             <?php endforeach; ?>
             <button id="poll-submit" class="custom-btn btn-8" type="button"><span>продолжить</span></button>
         </div>
-    <?php else: ?>
     <?php endif; ?>
-
+<?php
+$exist_thread = \backend\models\Post::find()->where(['id' => $model->thread_id, 'status' => 10])->exists();
+$exist_parent = \backend\models\Post::find()->where(['id' => $model->parent_id, 'status' => 10])->exists();
+$exist_next = \backend\models\Post::find()->where(['parent_id' => $model->id, 'status' => 10])->exists();
+?>
     <div class="post-link">
-        <p>Другие стати по теме:</p>
+        <?php if ($exist_thread || $exist_parent || $exist_next): ?>
+            <p>Другие стати по теме:</p>
+        <?php endif; ?>
         <div class="post-row">
-            <?php if (isset($model->thread_id) && $model->thread_id !== $model->parent_id): ?>
-                <?= Html::a(\backend\models\Post::find()->where(['id' => $model->thread_id, 'status' => 10])->one()->name, ['/post', 'id' => $model->thread_id], ['class' => 'success']) ?>
+            <?php if (isset($model->thread_id) && $exist_thread && $model->thread_id !== $model->parent_id): ?>
+                <?= Html::a(\backend\models\Post::find()->where(['id' => $model->thread_id])->one()->name, ['/post', 'id' => $model->thread_id], ['class' => 'success']) ?>
             <?php endif; ?>
         </div>
         <div class="post-row">
-            <?php if (isset($model->parent_id) && \backend\models\Post::find()->where(['id' => $model->parent_id, 'status' => 10])->exists()): ?>
+            <?php if (isset($model->parent_id) && $exist_parent): ?>
                 <?= Html::a("&xlarr;" . \backend\models\Post::find()->where(['id' => $model->parent_id])->one()->name, ['/post', 'id' => $model->parent_id], ['class' => 'successs']) ?> |
             <?php endif; ?>
-            <?php if (\backend\models\Post::find()->where(['parent_id' => $model->id, 'status' => 10])->exists()): ?>
+            <?php if ($exist_next): ?>
                 <?= Html::a(\backend\models\Post::find()->where(['parent_id' => $model->id])->one()->name . "&xrarr;", ['/post', 'id' => \backend\models\Post::find()->where(['parent_id' => $model->id])->one()->id], ['class' => 'success']) ?>
             <?php endif; ?>
         </div>
