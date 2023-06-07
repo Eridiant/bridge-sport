@@ -4,7 +4,6 @@ use yii\helpers\Html;
 use yii\helpers\Url;
 
 $this->registerLinkTag(['rel' => 'canonical', 'href' => Url::to(['/site/index'], true)]);
-
 ?>
 <main class="main-wrapper">
     <h1><?= Html::encode($this->title) ?></h1>

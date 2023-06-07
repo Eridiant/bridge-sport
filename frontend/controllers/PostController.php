@@ -226,6 +226,10 @@ class PostController extends AppController
         }
         $this->setMeta(empty($model->title) ? $model->name : $model->title, empty($model->description) ? $model->preview : $model->description, $model->keywords, $socialImage);
 
+        if (!$model->indexing) {
+            Yii::$app->view->registerMetaTag(['name' => 'robots', 'content' => 'noindex']);
+        }
+
         return $this->render('show', compact('model', 'survey', 'parent', 'answer'));
     }
 

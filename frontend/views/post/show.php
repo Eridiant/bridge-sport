@@ -10,6 +10,11 @@ use yii\helpers\ArrayHelper;
 // var_dump('</pre>');
 // die;
 
+// $this->registerMetaTag([
+//     'name' => 'robots',
+//     'content' => 'noindex'
+// ]);
+
 ?>
 
 <script>
