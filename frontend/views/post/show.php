@@ -113,8 +113,8 @@ use yii\helpers\ArrayHelper;
             <?php endif; ?>
         </div>
         <div class="post-row">
-            <?php if (isset($model->parent_id)): ?>
-                <?= Html::a("&xlarr;" . \backend\models\Post::find()->where(['id' => $model->parent_id, 'status' => 10])->one()->name, ['/post', 'id' => $model->parent_id], ['class' => 'successs']) ?> |
+            <?php if (isset($model->parent_id) && \backend\models\Post::find()->where(['id' => $model->parent_id, 'status' => 10])->exists()): ?>
+                <?= Html::a("&xlarr;" . \backend\models\Post::find()->where(['id' => $model->parent_id])->one()->name, ['/post', 'id' => $model->parent_id], ['class' => 'successs']) ?> |
             <?php endif; ?>
             <?php if (\backend\models\Post::find()->where(['parent_id' => $model->id, 'status' => 10])->exists()): ?>
                 <?= Html::a(\backend\models\Post::find()->where(['parent_id' => $model->id])->one()->name . "&xrarr;", ['/post', 'id' => \backend\models\Post::find()->where(['parent_id' => $model->id])->one()->id], ['class' => 'success']) ?>
