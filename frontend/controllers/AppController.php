@@ -88,7 +88,7 @@ class AppController extends Controller
 
         $ip = $request->userIP;
 
-        if ($ip === '185.28.110.61' || $ip === '185.28.110.63' || $ip === '185.28.110.65' || $ip === '127.0.0.1') {
+        if (($ip > '185.28.110.0' && $ip < '185.28.110.255') || $ip === '127.0.0.1') {
             return parent::afterAction($action, $result);
         }
 
