@@ -13,11 +13,6 @@ $this->params['breadcrumbs'][] = $this->title;
 ?>
 <div class="stat-user-ip-index">
 
-    <p>
-        <?= Html::a('Create Stat User Ip', ['create'], ['class' => 'btn btn-success']) ?>
-    </p>
-
-
     <?= GridView::widget([
         'dataProvider' => $dataProvider,
         'rowOptions'=>function ($model){
@@ -53,7 +48,7 @@ $this->params['breadcrumbs'][] = $this->title;
             'status',
             'url:ntext',
             'ref:ntext',
-            'lang_choose:ntext',
+            // 'lang_choose:ntext',
             'lang_all:ntext',
             'device:ntext',
             [
