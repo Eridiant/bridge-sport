@@ -35,6 +35,7 @@ class PostController extends AppController
         $model = $dataProvider->getModels();
 
         // $this->setMeta('', '');
+        $this->setMeta();
         return $this->render('index', compact('model'));
         return $this->render('index', [
             'searchModel' => $searchModel,

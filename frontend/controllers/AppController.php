@@ -55,7 +55,7 @@ class AppController extends Controller
         } else {
             $image = "images/{$image}-1200x630.jpg";
             $secure_url = Url::to("@web/{$image}", true);
-            $image = "//{$image}";
+            $image = "/{$image}";
         }
 
         $this->view->title = $title ?: Yii::$app->params['defaultTitle'];
@@ -76,9 +76,16 @@ class AppController extends Controller
     public function beforeAction($action)
     {
         Yii::$app->view->params['aside'] = true;
+        // $this->setMeta();
         return parent::beforeAction($action);
     }
 
+    // public function afterAction($action, $result)
+    // {
+    //     $result = parent::afterAction($action, $result);
+        // your custom code here
+    //     return $result;
+    // }
 
     public function init()
     {

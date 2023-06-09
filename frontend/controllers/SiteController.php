@@ -108,6 +108,8 @@ class SiteController extends AppController
         
         // $model = $dataProvider->getModels();
 
+        $this->setMeta();
+
         return $this->render('index', compact('model'));
     }
 
