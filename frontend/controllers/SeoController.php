@@ -7,6 +7,7 @@ use yii\web\Controller;
 use frontend\models\Post;
 use frontend\class\IsBot;
 use frontend\models\StatUserIp;
+use frontend\models\ErrorLog;
 use yii\filters\VerbFilter;
 use yii\filters\AccessControl;
 use yii\base\InvalidArgumentException;
@@ -17,17 +18,23 @@ use yii\web\BadRequestHttpException;
 class SeoController extends Controller
 {
 
-    public function afterAction($action, $result)
+    public function init()
     {
+        parent::init();
+        
+        // Attach the event handler to the afterAction event
+        $this->on(Controller::EVENT_AFTER_ACTION, [$this, 'saveIp']);
+    }
 
-        // Yii::$app->view->params['aside'] = true;
-
+    protected function saveIp()
+    {
+        
         $request = Yii::$app->request;
 
         $ip = $request->userIP;
 
         if (($ip > '185.28.110.0' && $ip < '185.28.110.255') || $ip === '127.0.0.1') {
-            return parent::afterAction($action, $result);
+            return;
         }
 
         $ip = ip2long($request->userIP);
@@ -63,8 +70,27 @@ class SeoController extends Controller
             
             $this->errLog('except_error', $exception->getMessage());
         }
+    }
 
-        return parent::afterAction($action, $result);
+    private function errLog($err, $data)
+    {
+        $error = new ErrorLog();
+
+        try {
+            $error->name = $err;
+            $error->error = serialize($data);
+
+            if (!$error->save()) {
+                echo 'error';
+                // var_dump($error->getErrors());
+            }
+
+        }
+        catch (\yii\db\Exception $exception) {
+            echo 'error';
+            // var_dump($exception->getMessage());
+            
+        }
     }
 
     public function actionIndex()

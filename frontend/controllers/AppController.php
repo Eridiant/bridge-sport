@@ -78,18 +78,25 @@ class AppController extends Controller
         Yii::$app->view->params['aside'] = true;
         return parent::beforeAction($action);
     }
-    // public function beforeAction($action)
-    public function afterAction($action, $result)
+
+
+    public function init()
     {
+        parent::init();
+        
+        // Attach the event handler to the afterAction event
+        $this->on(Controller::EVENT_AFTER_ACTION, [$this, 'saveIp']);
+    }
 
-        // Yii::$app->view->params['aside'] = true;
-
+    protected function saveIp()
+    {
+        
         $request = Yii::$app->request;
 
         $ip = $request->userIP;
 
         if (($ip > '185.28.110.0' && $ip < '185.28.110.255') || $ip === '127.0.0.1') {
-            return parent::afterAction($action, $result);
+            return;
         }
 
         $ip = ip2long($request->userIP);
@@ -125,8 +132,6 @@ class AppController extends Controller
             
             $this->errLog('except_error', $exception->getMessage());
         }
-
-        return parent::afterAction($action, $result);
     }
 
     private function errLog($err, $data)
