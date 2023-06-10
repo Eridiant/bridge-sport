@@ -67,8 +67,6 @@ class SeoController extends Controller
 
         }
         catch (\yii\db\Exception $exception) {
-            var_dump('ex');
-            
             $this->errLog('except_error', $exception->getMessage());
         }
     }
