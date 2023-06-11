@@ -1,8 +1,3 @@
-SetEnvIfNoCase User-Agent "BlackWidow|AhrefsBot|BLEXBot|MBCrawler|YaK|niraiya\.com|megaindex\.ru|megaindex\.com|Megaindex|MJ12bot|SemrushBot|cloudfind|CriteoBot|GetIntent Crawler|SafeDNSBot|SeopultContentAnalyzer|serpstatbot|LinkpadBot|DataForSeoBot|Rome Client|Scrapy|FlipboardRSS|FlipboardProxy|ZoominfoBot|SeznamBot|Seekport Crawler" blocked_bot
-Order Allow,Deny
-Allow from all
-Deny from env=blocked_bot
-
 <IfModule mod_rewrite.c>
    Options +FollowSymlinks
    RewriteEngine On
