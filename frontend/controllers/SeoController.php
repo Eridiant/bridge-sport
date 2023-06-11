@@ -47,17 +47,12 @@ class SeoController extends Controller
             $userSt->ip6 = $ip6 ?? 0;
             $userSt->status = Yii::$app->response->statusCode;
 
-            if (isset($_SERVER['HTTP_ACCEPT_LANGUAGE'])) {
-                $userSt->lang_all = substr(htmlspecialchars(strtolower($_SERVER['HTTP_ACCEPT_LANGUAGE'])), 0, 125);
+            $userSt->lang_all = substr(htmlspecialchars(strtolower($_SERVER['HTTP_ACCEPT_LANGUAGE'] ?? '')), 0, 125);
 
-            }
-
-            if (isset($_SERVER['HTTP_REFERER'])) {
-                $userSt->ref = substr(htmlspecialchars(strtolower($_SERVER['HTTP_REFERER'])), 0, 255);
-            }
+            $userSt->ref = substr(htmlspecialchars(strtolower($_SERVER['HTTP_REFERER'] ?? '')), 0, 255);
 
             $userSt->url = $request->pathInfo;
-            $userSt->device = substr(htmlspecialchars(strtolower($_SERVER['HTTP_USER_AGENT'])), 0, 255);
+            $userSt->device = substr(htmlspecialchars(strtolower($_SERVER['HTTP_USER_AGENT'] ?? '')), 0, 255);
             // $userSt->lang_choose = Yii::$app->language;
 
             if (!$userSt->save()) {
