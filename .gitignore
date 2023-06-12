@@ -54,5 +54,6 @@ composer.lock
 bridge-sport.de.code-workspace
 
 .htaccess
+error_log
 
 /storage/web
