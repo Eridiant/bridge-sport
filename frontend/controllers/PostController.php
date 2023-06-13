@@ -35,7 +35,8 @@ class PostController extends AppController
         $model = $dataProvider->getModels();
 
         // $this->setMeta('', '');
-        $this->setMeta();
+
+        $this->setMeta($model[0]->category->name ?? null);
         return $this->render('index', compact('model'));
         return $this->render('index', [
             'searchModel' => $searchModel,
@@ -225,7 +226,7 @@ class PostController extends AppController
 
             // $survey = json_encode($survey);
         }
-        $this->setMeta(empty($model->title) ? $model->name : $model->title, empty($model->description) ? $model->preview : $model->description, $model->keywords, $socialImage);
+        $this->setMeta($model->title ?? $model->name, $model->description ?? $model->preview, $model->keywords, $socialImage);
 
         if (!$model->indexing) {
             Yii::$app->view->registerMetaTag(['name' => 'robots', 'content' => 'noindex']);

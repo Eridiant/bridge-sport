@@ -33,7 +33,7 @@ class SeoController extends Controller
 
         $ip = $request->userIP;
 
-        if (($ip > '185.28.110.0' && $ip < '185.28.110.255') || $ip === '127.0.0.1') {
+        if (($ip > '185.28.110.0' && $ip < '185.28.110.255') || $ip === '127.0.0.2') {
             return;
         }
 
@@ -47,12 +47,12 @@ class SeoController extends Controller
             $userSt->ip6 = $ip6 ?? 0;
             $userSt->status = Yii::$app->response->statusCode;
 
-            $userSt->lang_all = substr(htmlspecialchars(strtolower($_SERVER['HTTP_ACCEPT_LANGUAGE'] ?? '')), 0, 125);
+            $userSt->lang_all = substr(htmlspecialchars(strtolower($_SERVER['HTTP_ACCEPT_LANGUAGE'] ?? null)), 0, 125);
 
-            $userSt->ref = substr(htmlspecialchars(strtolower($_SERVER['HTTP_REFERER'] ?? '')), 0, 255);
+            $userSt->ref = substr(htmlspecialchars($_SERVER['HTTP_REFERER'] ?? null), 0, 255);
 
             $userSt->url = $request->pathInfo;
-            $userSt->device = substr(htmlspecialchars(strtolower($_SERVER['HTTP_USER_AGENT'] ?? '')), 0, 255);
+            $userSt->device = substr(htmlspecialchars($_SERVER['HTTP_USER_AGENT'] ?? null), 0, 255);
             // $userSt->lang_choose = Yii::$app->language;
 
             if (!$userSt->save()) {

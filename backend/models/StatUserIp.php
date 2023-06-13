@@ -15,6 +15,11 @@ use Yii;
  * @property string|null $lang_choose
  * @property string|null $lang_all
  * @property string|null $device
+ * @property int|null $bot
+ * @property string|null $country_code
+ * @property string|null $country_name
+ * @property string|null $region
+ * @property string|null $city
  * @property int $created_at
  */
 class StatUserIp extends \yii\db\ActiveRecord
@@ -34,10 +39,10 @@ class StatUserIp extends \yii\db\ActiveRecord
     {
         return [
             [['ip', 'ip4'], 'required'],
-            [['ip4', 'created_at'], 'integer'],
+            [['ip4', 'created_at', 'bot'], 'integer'],
             [['ip'], 'string', 'max' => 39],
-            [['url', 'ref', 'device'], 'string', 'max' => 255],
-            [['lang_choose'], 'string', 'max' => 12],
+            [['url', 'ref', 'device', 'country_name', 'region', 'city'], 'string', 'max' => 255],
+            [['lang_choose', 'country_code'], 'string', 'max' => 12],
             [['lang_all'], 'string', 'max' => 128],
         ];
     }
@@ -56,6 +61,11 @@ class StatUserIp extends \yii\db\ActiveRecord
             'lang_choose' => 'Lang Choose',
             'lang_all' => 'Lang All',
             'device' => 'Device',
+            'bot' => 'Bot',
+            'country_code' => 'Country Code',
+            'country_name' => 'Country',
+            'region' => 'Region',
+            'city' => 'City',
             'created_at' => 'Created At',
         ];
     }

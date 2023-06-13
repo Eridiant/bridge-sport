@@ -33,12 +33,12 @@ $this->params['breadcrumbs'][] = $this->title;
             ];
         },
         'columns' => [
-            [
-                'attribute' => 'ip6',
-                'value' => function ($model) {
-                    return inet_ntop($model->ip6);
-                },
-            ],
+            // [
+            //     'attribute' => 'ip6',
+            //     'value' => function ($model) {
+            //         return inet_ntop($model->ip6);
+            //     },
+            // ],
             [
                 'attribute' => 'ip',
                 'value' => function ($model) {
@@ -50,15 +50,18 @@ $this->params['breadcrumbs'][] = $this->title;
             'ref:ntext',
             // 'lang_choose:ntext',
             'lang_all:ntext',
+            'bot',
+            'country_name:ntext',
+            'region:ntext',
+            'city:ntext',
             'device:ntext',
             [
                 'attribute' => 'created_at',
                 'value' => function ($model) {
+                    return date("m-d H:i", $model->created_at);
                     return date("Y-m-d H:i:s", $model->created_at);
                 },
             ],
         ],
     ]); ?>
-
-
 </div>

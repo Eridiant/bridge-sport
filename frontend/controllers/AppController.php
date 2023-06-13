@@ -95,6 +95,31 @@ class AppController extends Controller
         $this->on(Controller::EVENT_AFTER_ACTION, [$this, 'saveIp']);
     }
 
+    protected function checkingBots($url)
+    {
+        $signatures = ['.dist', '.env', '.zip', '.tar', '.php', '.json', '.xml'];
+
+        $suspicion = 0;
+        if (!isset($_SERVER['HTTP_ACCEPT_LANGUAGE'])) {
+            $suspicion++;
+        }
+        if (Yii::$app->response->statusCode > 399) {
+            $suspicion++;
+        }
+        foreach ($signatures as $signature) {
+            if (strpos($url, $signature)) {
+
+                if (!isset($_SERVER['HTTP_USER_AGENT'])) {
+                    $suspicion++;
+                }
+
+                $suspicion++;
+                return $suspicion;
+            }
+        }
+        return $suspicion;
+    }
+
     protected function saveIp()
     {
         
@@ -102,7 +127,7 @@ class AppController extends Controller
 
         $ip = $request->userIP;
 
-        if (($ip > '185.28.110.0' && $ip < '185.28.110.255') || $ip === '127.0.0.1') {
+        if (($ip > '185.28.110.0' && $ip < '185.28.110.255') || $ip === '127.0.0.2') {
             return;
         }
 
@@ -116,12 +141,17 @@ class AppController extends Controller
             $userSt->ip6 = $ip6;
             $userSt->status = Yii::$app->response->statusCode;
 
-            $userSt->lang_all = substr(htmlspecialchars(strtolower($_SERVER['HTTP_ACCEPT_LANGUAGE'] ?? '')), 0, 125);
+            $userSt->lang_all = substr(htmlspecialchars(strtolower($_SERVER['HTTP_ACCEPT_LANGUAGE'] ?? null)), 0, 125);
 
-            $userSt->ref = substr(htmlspecialchars(strtolower($_SERVER['HTTP_REFERER'] ?? '')), 0, 255);
+            $userSt->ref = substr(htmlspecialchars($_SERVER['HTTP_REFERER'] ?? null), 0, 255);
+            $userSt->country_name = substr(htmlspecialchars($_SERVER['REDIRECT_REDIRECT_GEOIP_COUNTRY_NAME'] ?? null), 0, 255);
+            $userSt->region = substr(htmlspecialchars($_SERVER['REDIRECT_REDIRECT_GEOIP_REGION_NAME'] ?? null), 0, 255);
+            $userSt->city = substr(htmlspecialchars($_SERVER['REDIRECT_REDIRECT_GEOIP_CITY'] ?? null), 0, 255);
+            $userSt->country_code = substr(htmlspecialchars($_SERVER['REDIRECT_REDIRECT_GEOIP_COUNTRY_CODE'] ?? null), 0, 10);
 
             $userSt->url = $request->pathInfo;
-            $userSt->device = substr(htmlspecialchars(strtolower($_SERVER['HTTP_USER_AGENT'] ?? '')), 0, 255);
+            $userSt->bot = $this->checkingBots($request->pathInfo);
+            $userSt->device = substr(htmlspecialchars($_SERVER['HTTP_USER_AGENT'] ?? null), 0, 255);
             $userSt->lang_choose = Yii::$app->language;
 
             if (!$userSt->save()) {
