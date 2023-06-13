@@ -54,7 +54,7 @@ $this->params['breadcrumbs'][] = $this->title;
                 'attribute' => 'Langs',
                 'format' => 'ntext',
                 'value' => 'lang_all',
-                'contentOptions' =>function ($model){
+                'contentOptions' => function (){
                     return ['style' => 'word-break: break-all;'];
                 },
             ],
@@ -68,7 +68,15 @@ $this->params['breadcrumbs'][] = $this->title;
                     return "$model->country_name $model->region $model->city ";
                 }
             ],
-            'device:ntext',
+            // 'device:ntext',
+            [
+                'attribute' => 'device',
+                'format' => 'ntext',
+                'value' => 'device',
+                'contentOptions' => function (){
+                    return ['style' => 'max-width: 450px;'];
+                },
+            ],
             [
                 'attribute' => 'created_at',
                 'value' => function ($model) {
