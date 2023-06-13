@@ -51,9 +51,15 @@ $this->params['breadcrumbs'][] = $this->title;
             // 'lang_choose:ntext',
             'lang_all:ntext',
             'bot',
-            'country_name:ntext',
-            'region:ntext',
-            'city:ntext',
+            // 'country_name:ntext',
+            // 'region:ntext',
+            // 'city:ntext',
+            [
+                'attribute' => 'гео',
+                'value' => function($model) {
+                    return "$model->country_name $model->region $model->city ";
+                }
+            ],
             'device:ntext',
             [
                 'attribute' => 'created_at',

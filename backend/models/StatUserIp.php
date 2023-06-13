@@ -10,6 +10,7 @@ use Yii;
  * @property int $id
  * @property string $ip
  * @property int $ip4
+ * @property int $status
  * @property string|null $url
  * @property string|null $ref
  * @property string|null $lang_choose
@@ -39,7 +40,7 @@ class StatUserIp extends \yii\db\ActiveRecord
     {
         return [
             [['ip', 'ip4'], 'required'],
-            [['ip4', 'created_at', 'bot'], 'integer'],
+            [['ip4', 'created_at', 'bot', 'status'], 'integer'],
             [['ip'], 'string', 'max' => 39],
             [['url', 'ref', 'device', 'country_name', 'region', 'city'], 'string', 'max' => 255],
             [['lang_choose', 'country_code'], 'string', 'max' => 12],
@@ -57,6 +58,7 @@ class StatUserIp extends \yii\db\ActiveRecord
             'ip' => 'Ip',
             'ip4' => 'Ip4',
             'url' => 'Url',
+            'status' => 'St',
             'ref' => 'Ref',
             'lang_choose' => 'Lang Choose',
             'lang_all' => 'Lang All',
