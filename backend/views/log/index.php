@@ -52,10 +52,10 @@ $this->params['breadcrumbs'][] = $this->title;
             // 'lang_all:ntext',
             [
                 'attribute' => 'Langs',
-                'format' => 'text',
+                'format' => 'ntext',
                 'value' => 'lang_all',
                 'contentOptions' =>function ($model){
-                    return ['style' => 'word-wrap: break-word;'];
+                    return ['style' => 'word-wrap: break-all;'];
                 },
             ],
             'bot',
