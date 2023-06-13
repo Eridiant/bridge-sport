@@ -55,7 +55,7 @@ $this->params['breadcrumbs'][] = $this->title;
                 'format' => 'ntext',
                 'value' => 'lang_all',
                 'contentOptions' =>function ($model){
-                    return ['style' => 'word-wrap: break-all;'];
+                    return ['style' => 'word-break: break-all;'];
                 },
             ],
             'bot',

@@ -97,27 +97,38 @@ class AppController extends Controller
 
     protected function checkingBots($url)
     {
-        $signatures = ['.dist', '.env', '.zip', '.tar', '.php', '.json', '.xml'];
-
         $suspicion = 0;
-        if (!isset($_SERVER['HTTP_ACCEPT_LANGUAGE'])) {
-            $suspicion++;
-        }
+        $multiplier = 1;
+
         if (Yii::$app->response->statusCode > 399) {
+            $multiplier++;
+        }
+
+        if (!isset($_SERVER['HTTP_ACCEPT_LANGUAGE'])) {
+            $suspicion += 2;
+        }
+        if (!isset($_SERVER['REDIRECT_REDIRECT_GEOIP_COUNTRY_CODE'])) {
             $suspicion++;
         }
+        if (!isset($_SERVER['REDIRECT_REDIRECT_GEOIP_REGION_NAME'])) {
+            $suspicion++;
+        }
+        if (!isset($_SERVER['REDIRECT_REDIRECT_GEOIP_CITY'])) {
+            $suspicion++;
+        }
+        if (!isset($_SERVER['HTTP_USER_AGENT'])) {
+            $suspicion += 2;
+        }
+
+        $signatures = ['.dist', '.env', '.zip', '.tar', '.php', '.json', '.xml'];
         foreach ($signatures as $signature) {
             if (strpos($url, $signature)) {
 
-                if (!isset($_SERVER['HTTP_USER_AGENT'])) {
-                    $suspicion++;
-                }
-
                 $suspicion++;
-                return $suspicion;
+                return $suspicion * $multiplier;
             }
         }
-        return $suspicion;
+        return $suspicion * $multiplier;
     }
 
     protected function saveIp()
