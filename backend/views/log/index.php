@@ -49,7 +49,15 @@ $this->params['breadcrumbs'][] = $this->title;
             'url:ntext',
             'ref:ntext',
             // 'lang_choose:ntext',
-            'lang_all:ntext',
+            // 'lang_all:ntext',
+            [
+                'attribute' => 'Langs',
+                'format' => 'text',
+                'value' => 'lang_all',
+                'contentOptions' =>function ($model){
+                    return ['style' => 'word-wrap: break-word;'];
+                },
+            ],
             'bot',
             // 'country_name:ntext',
             // 'region:ntext',
