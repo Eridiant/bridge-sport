@@ -97,46 +97,40 @@ class AppController extends Controller
 
     protected function checkingBots($url)
     {
-        try {
+        
+        $suspicion = 0;
+        $multiplier = 1;
 
-            $suspicion = 0;
-            $multiplier = 1;
-
-            if (Yii::$app->response->statusCode > 399) {
-                $multiplier++;
-            }
-
-            if (!isset($_SERVER['HTTP_ACCEPT_LANGUAGE'])) {
-                $suspicion += 2;
-            }
-            if (!isset($_SERVER['REDIRECT_REDIRECT_GEOIP_COUNTRY_CODE'])) {
-                $suspicion++;
-            }
-            if (!isset($_SERVER['REDIRECT_REDIRECT_GEOIP_REGION_NAME'])) {
-                $suspicion++;
-            }
-            if (!isset($_SERVER['REDIRECT_REDIRECT_GEOIP_CITY'])) {
-                $suspicion++;
-            }
-            if (!isset($_SERVER['HTTP_USER_AGENT'])) {
-                $suspicion += 2;
-            }
-
-            $signatures = ['.dist', '.env', '.zip', '.tar', '.php', '.json', '.xml', '.xsd', '.txt'];
-            foreach ($signatures as $signature) {
-                if (strpos($url, $signature)) {
-
-                    $suspicion++;
-                    $multiplier++;
-                    return $suspicion * $multiplier;
-                }
-            }
-            return $suspicion * $multiplier;
-        } catch (\yii\db\Exception $exception) {
-            return 55;
-            $this->errLog('except_error', $exception->getMessage());
+        if (Yii::$app->response->statusCode > 399) {
+            $multiplier++;
         }
-        return 77;
+
+        if (!isset($_SERVER['HTTP_ACCEPT_LANGUAGE'])) {
+            $suspicion += 2;
+        }
+        if (!isset($_SERVER['REDIRECT_REDIRECT_GEOIP_COUNTRY_CODE'])) {
+            $suspicion++;
+        }
+        if (!isset($_SERVER['REDIRECT_REDIRECT_GEOIP_REGION_NAME'])) {
+            $suspicion++;
+        }
+        if (!isset($_SERVER['REDIRECT_REDIRECT_GEOIP_CITY'])) {
+            $suspicion++;
+        }
+        if (!isset($_SERVER['HTTP_USER_AGENT'])) {
+            $suspicion += 2;
+        }
+
+        $signatures = ['.dist', '.env', '.zip', '.tar', '.php', '.json', '.xml', '.xsd', '.txt'];
+        foreach ($signatures as $signature) {
+            if (strpos($url, $signature)) {
+
+                $suspicion++;
+                $multiplier++;
+                return $suspicion * $multiplier;
+            }
+        }
+        return $suspicion * $multiplier;
     }
 
     protected function saveIp()
