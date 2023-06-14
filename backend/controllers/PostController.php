@@ -88,22 +88,22 @@ class PostController extends AppController
         ]);
     }
 
-    public function actionCont()
-    {
+    // public function actionCont()
+    // {
 
-        $request = Yii::$app->request;
+    //     $request = Yii::$app->request;
 
-        if ($request->isPost) {
+    //     if ($request->isPost) {
 
-            include_once(Yii::getAlias('@app/models/parser/simple_html_dom.php'));
-            $url = $request->post('url');
+    //         include_once(Yii::getAlias('@app/models/parser/simple_html_dom.php'));
+    //         $url = $request->post('url');
 
-            $html = file_get_html(trim($url));
+    //         $html = file_get_html(trim($url));
 
-            // return $html;
-            return $html->find('body')[0];
-        }
-    }
+    //         // return $html;
+    //         return $html->find('body')[0];
+    //     }
+    // }
 
     /**
      * Creates a new Post model.
