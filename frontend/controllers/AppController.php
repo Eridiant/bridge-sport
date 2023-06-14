@@ -121,7 +121,7 @@ class AppController extends Controller
             $suspicion += 2;
         }
 
-        $signatures = ['.dist', '.env', '.zip', '.tar', '.php', '.json', '.xml', '.xsd', '.txt'];
+        $signatures = ['.dist', '.env', '.zip', '.tar', '.php', '.json', '.xml', '.xsd', '.txt', '.js'];
         foreach ($signatures as $signature) {
             if (strpos($url, $signature)) {
 
