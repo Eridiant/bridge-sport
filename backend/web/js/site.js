@@ -866,8 +866,8 @@ window.addEventListener('load', () => {
             fetchRequest(data, cntr)
                 .then(res => res.json())
                 .then(data => {
-                    console.log(data);
-                    addDataSet();
+                    // console.log(data);
+                    addDataSet(data.data);
                     // let inner = t.closest('.poll-wrap').querySelector('.poll-inner');
                     // inner.innerHTML += data.response;
 
@@ -878,12 +878,13 @@ window.addEventListener('load', () => {
                 .catch(err => console.log(err));
         }
 
-        function addDataSet() {
+        function addDataSet(data) {
             let active = question.querySelector('.active');
 
             if (active.closest('.poll-answer') == null) {
-                active.closest('.poll-question').dataset.questionId = 1;
-                // active.closest('.poll-question').dataset.questionId = data.id;
+                // active.closest('.poll-question').dataset.questionId = 1;
+                active.closest('.poll-question').dataset.questionId = data.id;
+                active.closest('.poll-question').dataset.pollId = data.poll_id;
             } else {
                 active.closest('.poll-answer').dataset.answerId = data.answer_id;
             }

@@ -24,7 +24,7 @@ class PollQuestionController extends AppController
             parent::behaviors(),
             [
                 'verbs' => [
-                    'class' => VerbFilter::className(),
+                    'class' => VerbFilter::class,
                     'actions' => [
                         'delete' => ['POST'],
                     ],
@@ -125,7 +125,7 @@ class PollQuestionController extends AppController
             }
             if ($model->save()) {
                 // return ['data' => ['id' => 1, 'type' => 2]];
-                return ['data' => ['id' => $model->id, 'type' => $model->type]];
+                return ['data' => ['id' => $model->id, 'poll_id' => $model->poll_id, 'type' => $model->type]];
             } else {
                 return ['error' => $model->errors];
             }
