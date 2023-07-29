@@ -48,6 +48,7 @@ phpunit.phar
 /frontend/web/images/post
 /frontend/web/images/quiz
 /frontend/web/images/temp
+/frontend/web/pdf
 
 # ignore my add
 composer.lock

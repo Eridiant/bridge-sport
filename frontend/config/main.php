@@ -77,6 +77,8 @@ return [
                 'post' => 'post/index',
                 'sitemap.xml' => 'seo/index',
                 'robots.txt' => 'seo/robots',
+                'pdf' => 'pdf/view',
+                'pdf/<slug:[\w-]+>' => 'pdf/view',
                 'post/message' => 'post/message',
                 'post/delete-message' => 'post/delete-message',
                 // 'post/edit-message' => 'post/edit-message',
