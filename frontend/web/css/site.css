@@ -111,3 +111,6 @@ tr:nth-child(even) {
 tr:hover {
     background-color: #ddd;
 }
+.table-wrapper {
+    overflow-x: auto;
+}
