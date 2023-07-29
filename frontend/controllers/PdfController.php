@@ -9,6 +9,7 @@ use yii\filters\AccessControl;
 use yii\web\Controller;
 use yii\web\Response;
 use yii\web\NotFoundHttpException;
+use Mpdf\Mpdf;
 
 /**
  * Site controller
@@ -44,6 +45,23 @@ class PdfController extends Controller
                 ],
             ],
         ];
+    }
+
+    private function extractDataFromPDF($pdfFilePath) {
+        $mpdf = new Mpdf();
+        $mpdf->SetImportUse();
+    
+        $pageCount = $mpdf->SetSourceFile($pdfFilePath);
+        $textData = '';
+    
+        for ($pageNumber = 1; $pageNumber <= $pageCount; $pageNumber++) {
+            $pageData = $mpdf->ImportPage($pageNumber);
+            $textData .= $pageData;
+        }
+    
+        $mpdf->close();
+    
+        return $textData;
     }
 
     public function actionView($slug)

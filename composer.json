@@ -21,7 +21,8 @@
         "dmstr/yii2-adminlte-asset": "^2.1",
         "mihaildev/yii2-ckeditor": "*",
         "yiisoft/yii2-imagine": "^2.3",
-        "mlocati/ip-lib": "^1.18"
+        "mlocati/ip-lib": "^1.18",
+        "mpdf/mpdf": "^8.0"
     },
     "require-dev": {
         "yiisoft/yii2-debug": "~2.1.0",
