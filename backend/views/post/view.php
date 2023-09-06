@@ -27,7 +27,7 @@ $this->params['breadcrumbs'][] = $this->title;
             <?= Html::a('Редактировать предыдущую статью', ['update', 'id' => $model->parent_id], ['class' => 'btn btn-primary']) ?>
         <?php endif; ?>
         <?php if (\backend\models\Post::find()->where(['parent_id' => $model->id])->exists()): ?>
-            <?= Html::a('Редактировать следующую статью', ['update', 'id' => $model->id], ['class' => 'btn btn-primary']) ?>
+            <?= Html::a('Редактировать следующую статью', ['update', 'id' => \backend\models\Post::find()->where(['parent_id' => $model->id])->one()->id], ['class' => 'btn btn-primary']) ?>
         <?php else: ?>
             <?= Html::a('Добавить следоащую статью', ['/post/create', 'id' => $model->category_id, 'parent' => $model->id], ['class' => 'btn btn-primary']) ?>
         <?php endif; ?>
