@@ -157,6 +157,11 @@ class Post extends \yii\db\ActiveRecord
         return $this->hasOne(Poll::class, ['post_id' => 'id'])->andWhere(['active' => 1]);
     }
 
+    public function getPolls()
+    {
+        return $this->hasMany(Poll::class, ['post_id' => 'id'])->andWhere(['active' => 1]);
+    }
+
     /**
      * Gets query for [[Iframe]].
      *

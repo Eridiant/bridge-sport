@@ -248,16 +248,109 @@ document.addEventListener('DOMContentLoaded', () => {
 
     ///////////////////////////
 
-    let poll = document.querySelector('.poll');
-    if (poll) {
-        // poll.addEventListener('click', (e) => {
-        //     let target = e.target;
-        //     let lock = document.querySelector('.lock');
-        //     if (lock) {
-        //         target.closest('label').classList.add('click');
-        //     }
-        // })
-        let submit = document.querySelector('#poll-submit');
+    let polls = document.querySelector('.poll-wrapper');
+    if (polls) {
+        polls.addEventListener('click', (e) => {
+            let target = e.target;
+            if (!target.closest('.poll-submit')) return;
+
+            let poll = target.closest('.poll');
+            e.preventDefault();
+            let flag = true;
+            let error = poll.querySelectorAll('.fill-error');
+            error.forEach(element => {
+                element.classList.remove('fill-error');
+            })
+
+            let checkAnswer = poll.querySelectorAll('.poll .poll-question');
+            let checked = poll.querySelectorAll('.poll input:checked');
+            let data = new Object();
+            data['poll'] = poll.dataset.id;
+
+            checkAnswer.forEach(element => {
+                let currentAnswers = element.querySelectorAll('input');
+                let currentAnswersChecked = element.querySelectorAll('input:checked');
+                let arr = [];
+                currentAnswers.forEach(element => {
+                    // console.log('qwerqw', element.value);
+                    if (element.checked) {
+                        arr.push(element.value);
+                    }
+                })
+                data[element.closest('.poll-question').dataset.id] = arr;
+                // console.log('length', currentAnswers.length);
+
+                // fix count for input text and num
+                if (currentAnswersChecked.length) return;
+
+                flag = false;
+                element.scrollIntoView({block: "center"});
+                element.querySelector('.poll-answer').classList.add('fill-error');
+            });
+
+            if (!flag) return;
+
+            xhRequest(data, '/poll/results')
+                .then(response => {
+                    let obj = JSON.parse(response);
+
+                    obj.rslt.forEach(el => {
+                        // console.log('el', el.type);
+                        let question = poll.querySelector(`.poll-question[data-id="${el.id}"]`);
+                        // question.querySelector('.poll-answer').innerHTML = el.answers[0].description;
+                        // question.querySelector('.poll-answer').classList.add('fill-success');
+                        // console.log('question', question);
+                        let comment = document.createElement("p");
+                        comment.textContent = el.comment;
+                        question.insertAdjacentElement("beforeend", comment);
+                        if (el.type < 2) {
+                            let sum = 0;
+                            el.answers.forEach(answer => {
+                                // sum += answer.result.result_count + obj.show_only_user_result * answer.result.result_guest_count;
+                                sum += Number(answer.result.result_count) + (Number(obj.show_only_user_result) * Number(answer.result.result_guest_count));
+
+                            });
+
+                            el.answers.forEach(answer => {
+                                let answr = question.querySelector(`.poll-answer input[value="${answer.id}"]`).closest('label');
+                                let pElement = document.createElement("p");
+                                pElement.textContent = answer.result.text;
+
+                                if (obj.show_result) {
+                                    let fillerElement = document.createElement("div");
+    
+                                    fillerElement.classList.add(`answer-${answer.result.is_correct}`);
+                                    // Вычисление процента ширины строки
+                                    // let percent = Math.round(((answer.result.result_count + obj.show_only_user_result * answer.result.result_guest_count) / sum) * 100);
+                                    let percent = Math.round(((Number(answer.result.result_count) + Number(obj.show_only_user_result) * Number(answer.result.result_guest_count)) / sum) * 100);
+
+                                    // Установка стилей для заполнителя
+                                    fillerElement.style.width = percent + "%";
+                                    answr.insertAdjacentElement("afterend", fillerElement);
+                                }
+
+                                answr.insertAdjacentElement("afterend", pElement);
+                            });
+                        }
+                    });
+                    poll.querySelectorAll('.poll input').forEach(element => {
+                        if (element.checked && element.closest('label')) {
+                            element.closest('label').classList.add('checked');
+                        }
+                        element.remove();
+                    });
+                    poll.querySelector('.poll .poll-question').scrollIntoView({block: "center"});
+                    poll.querySelector('.poll').classList.add('lock');
+                    poll.querySelector('.poll button').remove();
+                })
+                .catch(error => {
+                    console.log(error);
+                    console.error('error');
+                });
+
+
+        })
+        let submit = document.querySelector('.poll-submit');
         submit?.addEventListener('click', (e) => {
             e.preventDefault();
             let flag = true;
