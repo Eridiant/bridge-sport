@@ -126,7 +126,7 @@ $this->params['breadcrumbs'][] = $this->title;
                 'format' => 'raw',
                 'value' => function($model){
                     if (\backend\models\Post::find()->where(['parent_id' => $model->id])->exists()) {
-                        return Html::a('Редактировать', ['/post/create', 'id' => \backend\models\Post::find()->where(['parent_id' => $model->id])->one()->id, 'parent' => $model->id], ['class' => 'limit']);
+                        return Html::a('Редактировать', ['/post/update', 'id' => \backend\models\Post::find()->where(['parent_id' => $model->id])->one()->id, 'parent' => $model->id], ['class' => 'limit']);
                     }
                     return Html::a('Добавить', ['/post/create', 'id' => $model->category_id, 'parent' => $model->id], ['class' => 'profile-link']);
                 },
